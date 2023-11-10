@@ -1,31 +1,89 @@
 import * as THREE from 'three';
 import WebGL from 'three/addons/capabilities/WebGL.js'
+import Game from './objects.js';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+function create_background(game) {
+	let geometry = new THREE.BoxGeometry(game.width, game.height, 1);
+	let material = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+	let cube = new THREE.Mesh(geometry, material);
+	cube.position.set(game.width / 2, game.height / 2, -1);
+	return cube;
+}
 
-const geometry = new THREE.TorusGeometry(2, 1, 12, 48);
-const material = new THREE.MeshPhongMaterial({ color: 0xeeaa00 });
-const light = new THREE.PointLight(0xffffff, 5, 10000, 1);
-const donut = new THREE.Mesh(geometry, material);
+function create_ball(ball) {
+	let geometry = new THREE.SphereGeometry( 1, 32, 16 ); 
+	let material = new THREE.MeshBasicMaterial( { color: 0xff0000 } ); 
+	let sphere = new THREE.Mesh( geometry, material ); 
+	sphere.position.set(ball.pos.x, ball.pos.y, 0);
+	return sphere;
+}
 
-scene.background = new THREE.Color(0xcccccc)
-light.position.set(0, 5, 5);
-scene.add(light);
-scene.add(donut);
-camera.position.z = 10;
+function create_paddle(paddle) {
+	let geometry = new THREE.BoxGeometry(paddle.width, paddle.height, 1);
+	let material = new THREE.MeshBasicMaterial( { color: paddle.color } );
+	let cube = new THREE.Mesh(geometry, material);
+	cube.position.set(paddle.pos.x, paddle.pos.y, 0);
+	return cube;
+}
 
-const renderer = new THREE.WebGLRenderer();
+class GameScene extends THREE.Scene {
+	constructor () {
+		super();
+		this.game = new Game();
+		this.width = window.innerWidth;
+		this.height = window.innerHeight;
+		this.renderer = new THREE.WebGLRenderer();
+		this.camera = new THREE.PerspectiveCamera(80, this.width / this.height, 0.1, 1000);
+		this.camera.position.set(this.game.width / 2, this.game.height / 2, 150);
+		this.render();
+	}
+	render() {
+		this.renderer.setSize(this.width, this.height);
+		// esta clase es la escena, asi que podemos hacer this.add de elementos
+		this.light = new THREE.PointLight(0xffFFFF, 5, 10000, 1);
+		this.light.position.set(0, 5, 5);
+		this.sphere = create_ball(this.game.ball); 
+		this.paddle1 = create_paddle(this.game.paddle1);
+		this.paddle2 = create_paddle(this.game.paddle2);
+		this.game_background = create_background(this.game);
+		this.add(this.light);
+		this.add(this.sphere);
+		this.add(this.paddle1);
+		this.add(this.paddle2);
+		this.add(this.game_background);
+		document.body.appendChild(this.renderer.domElement);
+	}
+	update() {
+		this.game.update();
+		this.sphere.position.x = this.game.ball_position.x;
+		this.sphere.position.y = this.game.ball_position.y;
+		this.paddle1.position.y = this.game.paddle1.pos.y;
+		this.paddle2.position.y = this.game.paddle2.pos.y;
+		console.log("Player 1:", this.game.goals.p1, "Player 2:", this.game.goals.p2);
+	}
+}
 
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+// Add event listener on keydown
+document.addEventListener('keydown', (event) => {
+  var name = event.key;
+	if (name == "ArrowDown")
+		scene.game.paddle2.moveDown();
+	else if (name == "ArrowUp")
+		scene.game.paddle2.moveUp();
+	else if (name == "s")
+		scene.game.paddle1.moveDown();
+	else if (name == "w")
+		scene.game.paddle1.moveUp();
+}, false);
+
+/* three.js variables */
+let scene = new GameScene();
 
 function animate()
 {
 	requestAnimationFrame(animate);
-	donut.rotation.x += 0.005;
-	donut.rotation.y += 0.01;
-	renderer.render(scene, camera);
+	scene.update();
+	scene.renderer.render((scene), scene.camera);
 }
 
 if (WebGL.isWebGLAvailable())
