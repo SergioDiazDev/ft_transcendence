@@ -1,6 +1,6 @@
 /* game logic */
 
-const GAME_WIDTH = window.innerWidth;
+const GAME_WIDTH = 1000;
 const GAME_HEIGHT = GAME_WIDTH / 16 * 9;
 
 const BALL_SPEED = 2;
@@ -8,7 +8,8 @@ const BALL_SPEED = 2;
 const PAD_H = GAME_HEIGHT / 5;
 const PAD_W = GAME_WIDTH / 100;
 const PAD_INITIAL_Y = GAME_HEIGHT / 2;
-const PAD_SPEED = 10;
+const PAD_SPEED = PAD_H / 10;
+
 const MAX_SCORE = 5;
 
 class Paddle
@@ -35,6 +36,7 @@ class Ball
 	constructor() {
 		this.pos = {"x": GAME_WIDTH / 2, "y": GAME_HEIGHT / 2};
 		this.dir = {"x": BALL_SPEED, "y": 0};
+		this.size = GAME_WIDTH / 200;
 	}
 	move()
 	{

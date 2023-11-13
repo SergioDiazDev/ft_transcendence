@@ -11,7 +11,7 @@ function create_background(game) {
 }
 
 function create_ball(ball) {
-	let geometry = new THREE.SphereGeometry( 4, 32, 16 ); 
+	let geometry = new THREE.SphereGeometry( ball.size, ball.size * 3, 16 ); 
 	let material = new THREE.MeshBasicMaterial( { color: 0x000000 } ); 
 	let sphere = new THREE.Mesh( geometry, material ); 
 	sphere.position.set(ball.pos.x, ball.pos.y, 1);
