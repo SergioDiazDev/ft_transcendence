@@ -4,7 +4,7 @@ import Game from './objects.js';
 
 function create_background(game) {
 	let geometry = new THREE.BoxGeometry(game.width, game.height, 1);
-	let material = new THREE.MeshBasicMaterial( { color: 0xFFaa00 } );
+	let material = new THREE.MeshPhongMaterial( { color: 0x000000, shininess: 10, specular: 0x222222 } );
 	let cube = new THREE.Mesh(geometry, material);
 	cube.position.set(game.width / 2, game.height / 2, 0);
 	return cube;
@@ -12,18 +12,23 @@ function create_background(game) {
 
 function create_ball(ball) {
 	let geometry = new THREE.SphereGeometry( ball.size, ball.size * 3, 16 ); 
-	let material = new THREE.MeshBasicMaterial( { color: 0x000000 } ); 
+	let material = new THREE.MeshPhongMaterial( { color: 0xffffff, shininess: 10} ); 
 	let sphere = new THREE.Mesh( geometry, material ); 
 	sphere.position.set(ball.pos.x, ball.pos.y, 1);
 	return sphere;
 }
 
 function create_paddle(paddle) {
-	let geometry = new THREE.BoxGeometry(paddle.width, paddle.height, 1);
-	let material = new THREE.MeshBasicMaterial( { color: paddle.color } );
+	let geometry = new THREE.CapsuleGeometry(paddle.width, paddle.height, 2, 10);
+	let material = new THREE.MeshPhongMaterial( { color: paddle.color, shininess: 80 } );
 	let cube = new THREE.Mesh(geometry, material);
 	cube.position.set(paddle.pos.x, paddle.pos.y, 0.1);
 	return cube;
+}
+
+function create_light() {
+	let light = new THREE.PointLight( 0xffffff, 1, 100000, 0);
+	return light;
 }
 
 class GameScene extends THREE.Scene {
@@ -44,10 +49,14 @@ class GameScene extends THREE.Scene {
 		this.paddle1 = create_paddle(this.game.paddle1);
 		this.paddle2 = create_paddle(this.game.paddle2);
 		this.background = create_background(this.game);
+		this.light = create_light();
+		this.light.position.set(this.width / 2, this.height / 2, 1000);
+		this.light.target = this.background;
 		this.add(this.sphere);
 		this.add(this.paddle1);
 		this.add(this.paddle2);
 		this.add(this.background);
+		this.add(this.light);
 		document.body.appendChild(this.renderer.domElement);
 	}
 	update() {
