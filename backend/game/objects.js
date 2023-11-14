@@ -101,9 +101,9 @@ class Ball extends THREE.Mesh {
 }
 
 class Wall extends THREE.Mesh {
-	constructor() {
+	constructor(width, height) {
 		super(
-			new THREE.BoxGeometry(GAME_WIDTH, WALL_HEIGHT, 1),
+			new THREE.BoxGeometry(width, height, 1),
 			new THREE.MeshStandardMaterial({ color: COLORS.purple }),
 		);
 		this.position.set(half(GAME_WIDTH), 0, 0);
@@ -121,20 +121,23 @@ class Board extends THREE.Group {
 				metalness: 0.8,
 			}),
 		);
-		this.top_wall = new Wall();
-		this.bot_wall = new Wall();
 		floor.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), 0);
+		this.top_wall = new Wall(GAME_WIDTH, WALL_HEIGHT);
 		this.top_wall.position.set(
 			half(GAME_WIDTH),
 			GAME_HEIGHT + WALL_HEIGHT,
 			0,
 		);
+		this.bot_wall = new Wall(GAME_WIDTH, WALL_HEIGHT);
 		this.bot_wall.position.set(half(GAME_WIDTH), 0 - WALL_HEIGHT, 0);
+		this.midfield = new Wall(WALL_HEIGHT / 4, GAME_HEIGHT * 1.05);
+		this.midfield.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), -0.5);
+		this.lights = this.create_lights();
 		this.add(floor);
-		this.add(new THREE.AmbientLight(0xffffff, 0.5));
+		this.add(new THREE.AmbientLight(COLORS.white, 0.4));
 		this.add(this.top_wall);
 		this.add(this.bot_wall);
-		this.lights = this.create_lights();
+		this.add(this.midfield);
 		this.add(this.lights);
 	}
 	create_lights() {
