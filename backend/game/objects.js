@@ -1,6 +1,10 @@
 /* game logic */
 
 import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 const GAME_WIDTH = 100;
 const GAME_HEIGHT = (GAME_WIDTH / 16) * 9;
@@ -15,14 +19,25 @@ const PAD_INITIAL_Y = GAME_HEIGHT / 2;
 const PAD_SPEED = 0.5;
 const BALL_SIZE = GAME_WIDTH / 100;
 
+const WALL_HEIGHT = 1;
+
 const MAX_SCORE = 5;
+
+const COLORS = {
+	white: 0xf8f9fa,
+	purple: 0x7858dc,
+	pink: 0xc3a5ec,
+	space_cadet: 0x202646,
+	green: 0x00ff00,
+};
 
 function half(value) {
 	return value / 2.0;
 }
 
-function create_light() {
-	let light = new THREE.PointLight(0xffffff, 1, 1000, 0);
+function create_light(x, y, z, color) {
+	let light = new THREE.PointLight(color, 100);
+	light.position.set(x, y, z);
 	return light;
 }
 
@@ -31,7 +46,7 @@ class Paddle extends THREE.Mesh {
 		var capsule_length = PAD_H - PAD_W * 3;
 		super(
 			new THREE.CapsuleGeometry(PAD_W, capsule_length, 3, 10),
-			new THREE.MeshPhongMaterial({ color: color, shininess: 80 }),
+			new THREE.MeshPhongMaterial({ color: color, shininess: 50 }),
 		);
 		this.index = index;
 		this.position.set(x, PAD_INITIAL_Y, OBJECTS_Z);
@@ -57,11 +72,15 @@ class Ball extends THREE.Mesh {
 		const radius = BALL_SIZE;
 		super(
 			new THREE.SphereGeometry(radius, 32, 16),
-			new THREE.MeshStandardMaterial({ color: 0x00ff00 }),
+			new THREE.MeshStandardMaterial({ color: COLORS.pink }),
 		);
 		this.radius = radius;
 		this.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), OBJECTS_Z);
 		this.direction = new THREE.Vector3(BALL_SPEED, 0, 0);
+		this.light = create_light(0, 0, 0, COLORS.purple);
+		this.light.intensity = 100;
+		this.light.position.z = OBJECTS_Z;
+		this.add(this.light);
 	}
 	move() {
 		this.position.x += this.direction.x;
@@ -81,17 +100,55 @@ class Ball extends THREE.Mesh {
 	}
 }
 
-class Board extends THREE.Mesh {
+class Wall extends THREE.Mesh {
 	constructor() {
 		super(
+			new THREE.BoxGeometry(GAME_WIDTH, WALL_HEIGHT, 1),
+			new THREE.MeshStandardMaterial({ color: COLORS.purple }),
+		);
+		this.position.set(half(GAME_WIDTH), 0, 0);
+	}
+}
+
+class Board extends THREE.Group {
+	constructor() {
+		super();
+		const floor = new THREE.Mesh(
 			new THREE.PlaneGeometry(GAME_WIDTH, GAME_HEIGHT),
 			new THREE.MeshStandardMaterial({
-				color: 0x202646,
+				color: COLORS.space_cadet,
 				roughness: 0.1,
-				metalness: 0,
+				metalness: 0.8,
 			}),
 		);
-		this.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), 0);
+		this.top_wall = new Wall();
+		this.bot_wall = new Wall();
+		floor.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), 0);
+		this.top_wall.position.set(
+			half(GAME_WIDTH),
+			GAME_HEIGHT + WALL_HEIGHT,
+			0,
+		);
+		this.bot_wall.position.set(half(GAME_WIDTH), 0 - WALL_HEIGHT, 0);
+		this.add(floor);
+		this.add(new THREE.AmbientLight(0xffffff, 0.5));
+		this.add(this.top_wall);
+		this.add(this.bot_wall);
+		this.lights = this.create_lights();
+		this.add(this.lights);
+	}
+	create_lights() {
+		const offset = 2;
+		const z = 2;
+		const color = COLORS.purple;
+		var group = new THREE.Group();
+		group.add(create_light(-offset, -offset, z, color));
+		group.add(create_light(GAME_WIDTH + offset, -offset, z, color));
+		group.add(create_light(-offset, GAME_HEIGHT + offset, z, color));
+		group.add(
+			create_light(GAME_WIDTH + offset, GAME_HEIGHT + offset, z, color),
+		);
+		return group;
 	}
 }
 
@@ -106,22 +163,37 @@ class Game extends THREE.Scene {
 		this.pad2 = new Paddle(GAME_WIDTH - PAD_OFFSET_X, 0x0000ff, 2);
 		this.ball = new Ball();
 		this.renderer = new THREE.WebGLRenderer({ antialias: true });
+		this.renderer.setPixelRatio(window.devicePixelRatio);
+		this.renderer.toneMapping = THREE.ReinhardToneMapping;
 		this.camera = new THREE.PerspectiveCamera(40, this.width / this.height);
 		this.camera.position.set(half(this.width), half(this.height), 100);
 		this.render();
 	}
 	render() {
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
-		// esta clase es la escena, asi que podemos hacer this.add de elementos
-		this.light = create_light();
-		this.light.position.set(this.width / 2, this.height / 2, 100);
-		this.light.target = this.sphere;
+
 		this.add(this.ball);
 		this.add(this.pad1);
 		this.add(this.pad2);
 		this.add(this.board);
-		this.add(this.light);
+		//this.add(new THREE.AmbientLight(0xcccccc, 0.3));
 		document.body.appendChild(this.renderer.domElement);
+		// Neon style effect
+		const renderScene = new RenderPass(this, this.camera);
+		const bloomPass = new UnrealBloomPass(
+			new THREE.Vector2(window.innerWidth, window.innerHeight),
+		);
+		bloomPass.threshold = 0;
+		bloomPass.strength = 0.15;
+		bloomPass.radius = 0.1;
+
+		const outputPass = new OutputPass();
+
+		this.composer = new EffectComposer(this.renderer);
+		this.composer.addPass(renderScene);
+		this.composer.addPass(bloomPass);
+		this.composer.addPass(outputPass);
+		this.renderer.toneMappingExposure = 16;
 	}
 	update() {
 		if (!this.check_game_end()) {

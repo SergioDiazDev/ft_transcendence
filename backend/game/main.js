@@ -30,7 +30,7 @@ function animate() {
 		prevTime = time;
 		frames = 0;
 	}
-	scene.renderer.render(scene, scene.camera);
+	scene.composer.render(scene, scene.camera);
 }
 
 if (WebGL.isWebGLAvailable()) animate();
