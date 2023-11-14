@@ -1,9 +1,9 @@
 /* game logic */
 
-const GAME_WIDTH = 1000;
+const GAME_WIDTH = 100;
 const GAME_HEIGHT = GAME_WIDTH / 16 * 9;
 
-const BALL_SPEED = 2;
+const BALL_SPEED = 1;
 
 const PAD_H = GAME_HEIGHT / 5;
 const PAD_W = GAME_WIDTH / 100;
@@ -36,7 +36,7 @@ class Ball
 	constructor() {
 		this.pos = {"x": GAME_WIDTH / 2, "y": GAME_HEIGHT / 2};
 		this.dir = {"x": BALL_SPEED, "y": 0};
-		this.size = GAME_WIDTH / 200;
+		this.size = GAME_WIDTH / 100;
 	}
 	move()
 	{
@@ -51,8 +51,9 @@ class Game
 		this.score = {"p1": 0, "p2": 0}
 		this.width = GAME_WIDTH;
 		this.height = GAME_HEIGHT;
-		this.paddle1 = new Paddle(0 + PAD_W * 4, 0xff0000);
-		this.paddle2 = new Paddle(GAME_WIDTH - PAD_W * 4, 0x0000ff);
+		var offset_x = PAD_W * 5;
+		this.paddle1 = new Paddle(0 + offset_x, 0xff0000);
+		this.paddle2 = new Paddle(GAME_WIDTH - offset_x, 0x0000ff);
 		this.ball = new Ball();
 	}
 	update() {
@@ -114,19 +115,17 @@ class Game
 		return (0);
 	}
 	check_board_collision() {
-		var ball_y = Math.round(this.ball_pos.y);
-
-		if (ball_y <= 0 || ball_y >= GAME_HEIGHT)
+		if (this.ball_pos.y <= 0 || this.ball_pos.y >= GAME_HEIGHT)
 			return (true);
 		return (false);
 	}
 	calculate_ball_dir(pad_hit) {
 		if (pad_hit == -1)
 			this.ball.dir = {"x": -this.ball.dir.x,
-							 "y": (this.ball_pos.y - this.pad1_pos.y) / 20};
+							 "y": (this.ball_pos.y - this.pad1_pos.y) / PAD_H};
 		if (pad_hit == 1)
 			this.ball.dir = {"x": -this.ball.dir.x,
-							 "y": (this.ball_pos.y - this.pad2_pos.y) / 20};
+							 "y": (this.ball_pos.y - this.pad2_pos.y) / PAD_H};
 	}
 	check_game_end() {
 		if (this.score.p1 >= MAX_SCORE || this.score.p2 >= MAX_SCORE)

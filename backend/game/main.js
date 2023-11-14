@@ -3,31 +3,33 @@ import WebGL from 'three/addons/capabilities/WebGL.js'
 import Game from './objects.js';
 
 function create_background(game) {
-	let geometry = new THREE.BoxGeometry(game.width, game.height, 1);
-	let material = new THREE.MeshPhongMaterial( { color: 0x000000, shininess: 10, specular: 0x222222 } );
+	let geometry = new THREE.PlaneGeometry(game.width, game.height);
+	let material = new THREE.MeshStandardMaterial(
+			{ color: 0x202646, roughness: 0.1, metalness: 0}
+		);
 	let cube = new THREE.Mesh(geometry, material);
 	cube.position.set(game.width / 2, game.height / 2, 0);
 	return cube;
 }
 
 function create_ball(ball) {
-	let geometry = new THREE.SphereGeometry( ball.size, ball.size * 3, 16 ); 
-	let material = new THREE.MeshPhongMaterial( { color: 0xffffff, shininess: 10} ); 
+	let geometry = new THREE.SphereGeometry(ball.size, ball.size * 3, 16 ); 
+	let material = new THREE.MeshStandardMaterial( { color: 0xffffff} ); 
 	let sphere = new THREE.Mesh( geometry, material ); 
-	sphere.position.set(ball.pos.x, ball.pos.y, 1);
+	sphere.position.set(ball.pos.x, ball.pos.y, 5);
 	return sphere;
 }
 
 function create_paddle(paddle) {
-	let geometry = new THREE.CapsuleGeometry(paddle.width, paddle.height, 2, 10);
+	let geometry = new THREE.CapsuleGeometry(paddle.width, paddle.height - paddle.width, 2, 10);
 	let material = new THREE.MeshPhongMaterial( { color: paddle.color, shininess: 80 } );
 	let cube = new THREE.Mesh(geometry, material);
-	cube.position.set(paddle.pos.x, paddle.pos.y, 0.1);
+	cube.position.set(paddle.pos.x, paddle.pos.y, 5);
 	return cube;
 }
 
 function create_light() {
-	let light = new THREE.PointLight( 0xffffff, 1, 100000, 0);
+	let light = new THREE.PointLight( 0xffffff, 1, 1000, 0);
 	return light;
 }
 
@@ -35,11 +37,11 @@ class GameScene extends THREE.Scene {
 	constructor () {
 		super();
 		this.game = new Game();
-		this.width = this.game.width;
-		this.height = this.game.height;
-		this.renderer = new THREE.WebGLRenderer();
-		this.camera = new THREE.PerspectiveCamera(70, this.width / this.height, 0.1, 1000);
-		this.camera.position.set(this.width / 2, this.height / 2, 500);
+		this.width = this.game.width * 10;
+		this.height = this.game.height * 10;
+		this.renderer = new THREE.WebGLRenderer({antialias: true});
+		this.camera = new THREE.PerspectiveCamera(40, this.game.width / this.game.height, 0.1, 1000);
+		this.camera.position.set(this.game.width / 2, this.game.height / 2, 100);
 		this.render();
 	}
 	render() {
@@ -50,8 +52,8 @@ class GameScene extends THREE.Scene {
 		this.paddle2 = create_paddle(this.game.paddle2);
 		this.background = create_background(this.game);
 		this.light = create_light();
-		this.light.position.set(this.width / 2, this.height / 2, 1000);
-		this.light.target = this.background;
+		this.light.position.set(this.game.width / 2, this.game.height / 2, 100);
+		this.light.target = this.sphere;
 		this.add(this.sphere);
 		this.add(this.paddle1);
 		this.add(this.paddle2);
@@ -85,12 +87,22 @@ document.addEventListener('keydown', (event) => {
 
 /* three.js variables */
 let scene = new GameScene();
+let frames = 0;
+let prevTime = performance.now();
 
 function animate()
 {
 	requestAnimationFrame(animate);
 	scene.update();
-	scene.renderer.render((scene), scene.camera);
+	frames++;
+	const time = performance.now();
+	if (time >= prevTime + 1000) 
+	{
+		console.log("FPS:", Math.round((frames * 1000) / (time - prevTime)));
+		prevTime = time;
+		frames = 0;
+	}
+	scene.renderer.render(scene, scene.camera);
 }
 
 if (WebGL.isWebGLAvailable())
