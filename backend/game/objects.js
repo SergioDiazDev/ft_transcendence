@@ -81,6 +81,9 @@ class Ball extends THREE.Mesh {
 		this.light.intensity = 100;
 		this.light.position.z = OBJECTS_Z;
 		this.add(this.light);
+		if (Date.now() % 2 == 0) {
+			this.direction.x *= -1;
+		}
 	}
 	move() {
 		this.position.x += this.direction.x;
