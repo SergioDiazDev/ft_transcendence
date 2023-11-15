@@ -1,5 +1,5 @@
 # docker build -f Dockerfile_game_3d_dev -t game_3d .
-# docker run -it -v /Users/franmart/ft_transcendence:/usr/src/app/transcendence -p 5173:5173 game_3d
+# docker run -it -v $PWD:/usr/src/app/transcendence -p 5173:5173 game_3d
 # http://localhost:5173/transcendence/backend/game/index.html
 
 FROM node:21-alpine3.17
