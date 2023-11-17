@@ -7,7 +7,7 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 const GAME_WIDTH = 100;
-const GAME_HEIGHT = (GAME_WIDTH / 16) * 9;
+const GAME_HEIGHT = height_aspect_ratio(GAME_WIDTH);
 
 const BALL_SPEED = 0.5;
 const OBJECTS_Z = 0;
@@ -33,6 +33,10 @@ const COLORS = {
 
 function half(value) {
 	return value / 2.0;
+}
+
+function height_aspect_ratio(width) {
+	return (width / 16) * 9;
 }
 
 function create_light(x, y, z, color) {
@@ -176,7 +180,10 @@ class Game extends THREE.Scene {
 		this.render();
 	}
 	render() {
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
+		this.renderer.setSize(
+			window.innerWidth,
+			height_aspect_ratio(window.innerWidth),
+		);
 
 		this.add(this.ball);
 		this.add(this.pad1);
@@ -187,7 +194,10 @@ class Game extends THREE.Scene {
 		// Neon style effect
 		const renderScene = new RenderPass(this, this.camera);
 		const bloomPass = new UnrealBloomPass(
-			new THREE.Vector2(window.innerWidth, window.innerHeight),
+			new THREE.Vector2(
+				window.innerWidth,
+				height_aspect_ratio(window.innerWidth),
+			),
 		);
 		bloomPass.threshold = 0;
 		bloomPass.strength = 0.15;
