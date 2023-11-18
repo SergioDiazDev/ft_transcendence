@@ -25,17 +25,19 @@
 ## Guia Frontend
 [Tabla de contenidos](#tabla-de-contenidos)
 - He creado una funcion para crear elementos html desde una clase de Javascript
-Ejemplo de uso:
+1. Hay que exportar los script:
+```html
+<script src="assets/js/CustomElement.js"></script>
+<script src="assets/js/CreateElement.js"></script>
+```
+2. Ejemplo de uso:
 ```js
-document.addEventListener('DOMContentLoaded', function () {
-const attributes = {
+const objeto = {
     class: "title",
     style: "color: red;",
     id: "mi-title"
-    // Agrega más atributos según sea necesario
 };
-const customElement = new CustomElement('h1', 'titulo', attributes);
-customElement.appendTo('container');
-});
+
+createElement(objeto);
 ```
 

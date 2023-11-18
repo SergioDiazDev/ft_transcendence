@@ -1,7 +1,6 @@
 class CustomElement {
-    constructor(tagName, content, attributes) {
+    constructor(tagName, attributes) {
         this.element = document.createElement(tagName);
-        this.element.innerHTML = content;
 
         if (attributes) {
             this.setAttributes(attributes);
@@ -25,5 +24,4 @@ class CustomElement {
         }
     }
 }
-
 
