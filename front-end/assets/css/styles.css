@@ -4,4 +4,62 @@ body {
     background-attachment: fixed;
     background-position: center;
     background-color: #f5f5f5;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    width: 80%;
+}
+
+* {
+    font-family: 'IBM Plex Mono';
+}
+
+#navbar {
+    border-bottom: 2px solid #C3A5EC;
+}
+
+/* LOGIN */
+
+h1 {
+    width: 80%;
+}
+
+article > h3 , article > section > h3{
+    display: none;
+}
+
+fieldset, .login {
+    border: 3px solid #495057;
+    border-radius: 15px;
+    background-color: #212429;
+}
+
+.login {
+    text-align: center;
+    background-color: black;
+}
+
+#username, #password {
+    background-color: #495057;
+}
+
+section>h1 {
+    font-weight: bold;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 1em;
+}
+
+article > section > a {
+    font-size: 8px;
+}
+
+article section input{
+    height: 2em;
+}
+
+.btn-purple {
+    background-color: #7858DC;
+    border-radius: 7px;
+    color: white;
 }
