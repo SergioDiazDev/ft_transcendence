@@ -1,10 +1,10 @@
 function displayDivFluid(params) {
   const divFluid = {
     class: "container-fluid",
-    id: "div-nav"
+    id: "section-nav"
   };
   
-  createElement("div", divFluid, "menu")
+  createElement("section", divFluid, "menu")
 }
 
 

@@ -1,3 +1,0 @@
-function displayA(params) {
-    
-}
