@@ -1,28 +1,40 @@
-
 function displayNav() {
   const nav = {
-    class: "navbar navbar-expand-lg navbar-dark bg-dark",
+    class: "navbar navbar-expand-lg navbar-dark ",
     id: "menu"
   };
 
   createElement("nav", nav, null);
 }
 
-function displayDivFluid() {
+/* ARTICLE */
+function displayArticleFluid() {
   const divFluid = {
     class: "container-fluid",
-    id: "section-nav"
+    id: "article-nav"
   };
 
-  createElement("section", divFluid, "menu")
+  createElement("article", divFluid, "menu")
 }
+
+/* FT_TRANSCENDENCE */
 
 function displayAIndex(text) {
   const aIndex = {
     class: "navbar-brand",
     href: "#"
   };
-  createElement("a", aIndex, "section-nav", text)
+  createElement("a", aIndex, "article-nav", text)
+}
+
+/* BUTTON MENU RESPONSIVE */
+function displayButtonMenu() {
+  const button = {
+    class: "navbar-toggler",
+    type: "button",
+    dataBsToogle: "collapse",
+  }
+  createElement("button", button, "article-nav")
 }
 
 function displayAHome(text) {
@@ -31,7 +43,7 @@ function displayAHome(text) {
     id: "home",
     href: "#"
   };
-  createElement("a", aHome, "section-nav", text)
+  createElement("a", aHome, "article-nav", text)
 }
 
 function displayAProfile(text) {
@@ -40,7 +52,7 @@ function displayAProfile(text) {
     id: "profile",
     href: "#"
   }
-  createElement("a", profile, "section-nav", text)
+  createElement("a", profile, "article-nav", text)
 }
 
 function displayIconUsers(text) {
@@ -49,7 +61,7 @@ function displayIconUsers(text) {
     id: "icon-users",
     href: "#"
   }
-  createElement("a", iconUsers, "section-nav", text)
+  createElement("a", iconUsers, "article-nav", text)
 }
 
 function displayUserAccount(path, user, altImg) {
@@ -86,10 +98,11 @@ function displayUserAccount(path, user, altImg) {
 
 document.addEventListener('DOMContentLoaded', function () {
   displayNav();
-  displayDivFluid();
+  displayArticleFluid();
   displayAIndex("ft_transcendence");
-  displayAHome("Home");
-  displayAProfile("profile");
-  displayIconUsers("icon");
-  displayUserAccount("./assets/img/LOGIN.svg", "Limones")
+  displayButtonMenu();
+  // displayAHome("Home");
+  // displayAProfile("profile");
+  // displayIconUsers("icon");
+  // displayUserAccount("./assets/img/LOGIN.svg", "Limones")
 })
