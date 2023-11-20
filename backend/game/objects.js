@@ -81,7 +81,7 @@ class Ball extends THREE.Mesh {
 		this.radius = radius;
 		this.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), 1);
 		this.direction = new THREE.Vector3(BALL_SPEED, 0, 0);
-		this.light = create_light(0, 0, 0, COLORS.purple, 100);
+		this.light = create_light(0, 0, 0, COLORS.purple, 60);
 		this.light.position.z = OBJECTS_Z;
 		this.add(this.light);
 		if (Date.now() % 2 == 0) {
@@ -186,8 +186,8 @@ class Game extends THREE.Scene {
 				height_aspect_ratio(window.innerWidth),
 			),
 		);
-		bloomPass.threshold = 0;
-		bloomPass.strength = 0.25;
+		bloomPass.threshold = 0.1;
+		bloomPass.strength = 0.1;
 		bloomPass.radius = 0.1;
 
 		const outputPass = new OutputPass();
