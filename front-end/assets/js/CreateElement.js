@@ -4,7 +4,7 @@ function convertToSnakeCase(str) {
   });
 }
 
-function convertToSnakeCaseAttributes(attributes) {
+function convertToSnakeAltCaseAttributes(attributes) {
   const snakeCaseAttributes = {};
   for (const key in attributes) {
       if (attributes.hasOwnProperty(key)) {
@@ -25,7 +25,7 @@ function applyAttributes(element, attributes) {
 
 function createElement(tagName, attributes, father, text) {
   if (father != null) {
-      const element = new CustomElement(tagName, convertToSnakeCaseAttributes(attributes));
+      const element = new CustomElement(tagName, convertToSnakeAltCaseAttributes(attributes));
       element.appendTo(father);
       if (text) {
           element.setTextContent(text);
@@ -34,7 +34,7 @@ function createElement(tagName, attributes, father, text) {
       const elementNew = document.createElement(tagName);
       const firstElement = document.body.firstChild;
       document.body.insertBefore(elementNew, firstElement);
-      applyAttributes(elementNew, convertToSnakeCaseAttributes(attributes));
+      applyAttributes(elementNew, convertToSnakeAltCaseAttributes(attributes));
       if (text) {
           elementNew.textContent = text;
       }

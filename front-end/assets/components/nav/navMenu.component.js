@@ -32,47 +32,90 @@ function displayButtonMenu() {
   const button = {
     class: "navbar-toggler",
     type: "button",
+    id: "navTo",
     dataBsToogle: "collapse",
+    dataBsTarget: "navbarNavAltMarkup",
+    ariaControls: "navbarNavAltMarkup",
+    ariaExpanded: "false",
+    ariaLabel: "Toogle navigation",
+  }
+  const span = {
+    class: "navbar-toggler-icon"
   }
   createElement("button", button, "article-nav")
+  createElement("span", span, button.id)
+}
+
+
+/* HOME, PROFILE... */
+
+function displaySectionNav() {
+  const section = {
+    class: "collapse navbar-collapse",
+    id: "navbarNavAltMarkup",
+  }
+  createElement("section", section, "article-nav");
 }
 
 function displayAHome(text) {
   const aHome = {
-    class: "btn btn-primary active border rouded-5",
+    class: "nav-link btn ms-4 me-3",
     id: "home",
     href: "#"
   };
-  createElement("a", aHome, "article-nav", text)
+  const p = {
+
+  }
+
+  createElement("a", aHome, "navbarNavAltMarkup")
+  createElement("p", p, aHome.id, text)
 }
 
 function displayAProfile(text) {
   const profile = {
-    class: "btn btn-primary active border rouded-5",
+    class: "nav-link btn",
     id: "profile",
     href: "#"
   }
-  createElement("a", profile, "article-nav", text)
+  const p = {
+
+  }
+  createElement("a", profile, "navbarNavAltMarkup")
+  createElement("p", p, profile.id, text)
 }
 
-function displayIconUsers(text) {
+
+function displayIconUsers() {
+
   const iconUsers = {
-    class: "nav-link",
+    class: "nav-link btn",
     id: "icon-users",
+    src: "./assets/img//Users.png",
     href: "#"
   }
-  createElement("a", iconUsers, "article-nav", text)
+  createElement("img", iconUsers, "navbarNavAltMarkup")
 }
+/************************************** */
 
 function displayUserAccount(path, user, altImg) {
+  const spanProfile = {
+      class: "span-profile pe-3 position-absolute me-2 end-0",
+      id: "span-profile",
+      href: "#"
+  }
+
   const userAccount = {
-    class: "btn btn-primary img-profile p-0",
+    class: "img-profile p-0 text-decoration-none",
     id: "user-account",
     href: "#"
   }
+  const picture = {
+    class: "picture",
+    id: "picture"
+  }
   const imgProfile = {
     class: "img-user",
-    id: "img-profile",
+    id: "img-user",
     src: path,
     alt: altImg
   }
@@ -81,16 +124,14 @@ function displayUserAccount(path, user, altImg) {
     id: "span-profile"
   }
   const spanImg = {
-    class: "spanImg",
-    id: "spanImg"
+    class: "span-img d-inline-block",
+    id: "span-img"
   }
-  const picture = {
-    class: "picture",
-    id: "picture"
-  }
+ 
 
-  createElement("span", span, "section-nav")
-  createElement("button", userAccount, span.id);
+  createElement("span", spanProfile, "navbarNavAltMarkup")
+  createElement("a", span, "navbarNavAltMarkup")
+  createElement("a", userAccount, span.id);
   createElement("picture", picture, userAccount.id);
   createElement("img", imgProfile, picture.id);
   createElement("span", spanImg, userAccount.id, user);
@@ -101,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function () {
   displayArticleFluid();
   displayAIndex("ft_transcendence");
   displayButtonMenu();
-  // displayAHome("Home");
-  // displayAProfile("profile");
-  // displayIconUsers("icon");
-  // displayUserAccount("./assets/img/LOGIN.svg", "Limones")
+  displaySectionNav();
+  displayAHome("home");
+  displayAProfile("profile");
+  displayIconUsers();
+  displayUserAccount("./assets/img/icon1.png", "limones")
 })
