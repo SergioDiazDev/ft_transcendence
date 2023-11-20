@@ -9,14 +9,14 @@ import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 const GAME_WIDTH = 100;
 const GAME_HEIGHT = height_aspect_ratio(GAME_WIDTH);
 
-const BALL_SPEED = 0.5;
+const BALL_SPEED = 1;
 const OBJECTS_Z = 0;
 
 const PAD_H = GAME_HEIGHT / 5;
 const PAD_W = GAME_WIDTH / 100;
 const PAD_OFFSET_X = PAD_W * 5;
 const PAD_INITIAL_Y = GAME_HEIGHT / 2;
-const PAD_SPEED = 0.5;
+const PAD_SPEED = 1;
 const BALL_SIZE = GAME_WIDTH / 100;
 
 const WALL_HEIGHT = 1;
@@ -39,8 +39,8 @@ function height_aspect_ratio(width) {
 	return (width / 16) * 9;
 }
 
-function create_light(x, y, z, color) {
-	let light = new THREE.PointLight(color, 100);
+function create_light(x, y, z, color, intensity) {
+	let light = new THREE.PointLight(color, intensity);
 	light.position.set(x, y, z);
 	return light;
 }
@@ -50,7 +50,7 @@ class Paddle extends THREE.Mesh {
 		var capsule_length = PAD_H - PAD_W * 3;
 		super(
 			new THREE.CapsuleGeometry(PAD_W, capsule_length, 3, 10),
-			new THREE.MeshPhongMaterial({ color: color, shininess: 50 }),
+			new THREE.MeshPhongMaterial({ color: color, shininess: 100}),
 		);
 		this.index = index;
 		this.position.set(x, PAD_INITIAL_Y, OBJECTS_Z);
@@ -76,13 +76,12 @@ class Ball extends THREE.Mesh {
 		const radius = BALL_SIZE;
 		super(
 			new THREE.SphereGeometry(radius, 32, 16),
-			new THREE.MeshStandardMaterial({ color: COLORS.pink }),
+			new THREE.MeshPhongMaterial({ color: COLORS.pink, shininess: 100}),
 		);
 		this.radius = radius;
-		this.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), OBJECTS_Z);
+		this.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), 1);
 		this.direction = new THREE.Vector3(BALL_SPEED, 0, 0);
-		this.light = create_light(0, 0, 0, COLORS.purple);
-		this.light.intensity = 100;
+		this.light = create_light(0, 0, 0, COLORS.purple, 100);
 		this.light.position.z = OBJECTS_Z;
 		this.add(this.light);
 		if (Date.now() % 2 == 0) {
@@ -113,7 +112,10 @@ class Wall extends THREE.Mesh {
 			new THREE.BoxGeometry(width, height, 1),
 			new THREE.MeshStandardMaterial({ color: COLORS.purple }),
 		);
-		this.position.set(half(GAME_WIDTH), 0, 0);
+		const rect_light = new THREE.RectAreaLight(COLORS.space_cadet, 50, width, height);
+		rect_light.position.set(0, 0, 0.5);
+		rect_light.lookAt(0, 0, 0);
+		this.add(rect_light);
 	}
 }
 
@@ -139,26 +141,11 @@ class Board extends THREE.Group {
 		this.bot_wall.position.set(half(GAME_WIDTH), 0 - WALL_HEIGHT, 0);
 		this.midfield = new Wall(WALL_HEIGHT / 4, GAME_HEIGHT * 1.05);
 		this.midfield.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), -0.5);
-		this.lights = this.create_lights();
 		this.add(floor);
 		this.add(new THREE.AmbientLight(COLORS.white, 0.4));
 		this.add(this.top_wall);
 		this.add(this.bot_wall);
 		this.add(this.midfield);
-		this.add(this.lights);
-	}
-	create_lights() {
-		const offset = 2;
-		const z = 2;
-		const color = COLORS.purple;
-		var group = new THREE.Group();
-		group.add(create_light(-offset, -offset, z, color));
-		group.add(create_light(GAME_WIDTH + offset, -offset, z, color));
-		group.add(create_light(-offset, GAME_HEIGHT + offset, z, color));
-		group.add(
-			create_light(GAME_WIDTH + offset, GAME_HEIGHT + offset, z, color),
-		);
-		return group;
 	}
 }
 
@@ -200,7 +187,7 @@ class Game extends THREE.Scene {
 			),
 		);
 		bloomPass.threshold = 0;
-		bloomPass.strength = 0.15;
+		bloomPass.strength = 0.25;
 		bloomPass.radius = 0.1;
 
 		const outputPass = new OutputPass();
