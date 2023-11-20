@@ -7,15 +7,44 @@ body {
     align-items: center;
     justify-content: center;
     margin: auto;
-    width: 80%;
 }
+
+.img-user{
+    height: 100%;
+}
+
+.user-account {
+    display: inline-flex;
+    align-items: center;
+    border: 2px solid #007bff; /* Cambia el color del borde según tus preferencias */
+    padding: 5px 10px; /* Ajusta el relleno según tus necesidades */
+    height: 40px; /* Ajusta la altura del botón según tus necesidades */
+  }
+
+  .user-account {
+    max-height: 100%;
+    height: 100%; /* Ajusta la altura de la imagen para que coincida con la del botón */
+    width: auto; /* Garantiza que la imagen no se distorsione */
+    margin-right: 10px; /* Ajusta el margen derecho según tus necesidades */
+  }
+
+
 
 * {
     font-family: 'IBM Plex Mono';
 }
 
-#navbar {
+/* NAV */
+#menu {
     border-bottom: 2px solid #C3A5EC;
+}
+
+nav > a {
+    font-size: 18px;
+}
+
+#img-profile {
+    width: 30px;
 }
 
 /* LOGIN */

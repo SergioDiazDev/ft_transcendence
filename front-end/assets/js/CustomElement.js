@@ -14,6 +14,10 @@ class CustomElement {
             }
         }
     }
+    
+    setTextContent(text) {
+        this.element.textContent = text;
+    }
 
     appendTo(containerId) {
         const container = document.getElementById(containerId);
