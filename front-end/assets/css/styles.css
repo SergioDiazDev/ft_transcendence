@@ -16,73 +16,86 @@ body {
     display: none;
 }
 
+/**/
+
 @media screen and (min-width: 990px) {
-.user-account {
-    display: inline-flex;
-    align-items: center;
-    border: 2px solid #007bff;
-    padding: 5px 10px; 
-    height: 40px; 
-  }
+    .user-account {
+        display: inline-flex;
+        align-items: center;
+        border: 2px solid #007bff;
+        padding: 5px 10px; 
+        height: 40px; 
+    }
 
-  .user-account {
-    max-height: 100%;
-    height: 100%;
-    width: auto;
-    margin-right: 10px; 
-  }
+    .user-account {
+        max-height: 100%;
+        height: 100%;
+        width: auto;
+        margin-right: 10px; 
+    }
 
-/* NAV */
-#menu {
-    border-bottom: 2px solid #C3A5EC;
-    height: 5em;
-}
+    /* NAV */
+    #menu {
+        border-bottom: 2px solid #C3A5EC;
+        height: 5em;
+    }
 
-nav > a {
-    font-size: 18px;
-}
-
-section > a{
-    max-height: 2em;
-    width: 8em;
+ 
     
-}
+    section > a{
+        font-size: 18px;
+        max-height: 2em;
+        width: 8em;
+        justify-content: center;
+    }
 
-/* BUTTON USER*/
-.span-profile {
-    display:grid;
-    max-height: 2em;
-    min-width: 15em;
-    border: 1px solid #f5f5f5;
-    border-radius: 7px;
-    background-color: #3AAEE0;
-}
+    /* BUTTON USER*/
+    .span-profile {
+        display:grid;
+        max-height: 2em;
+        min-width: 15em;
+        border: 1px solid #f5f5f5;
+        border-radius: 7px;
+        background-color: #3AAEE0;
+    }
 
 
 
-.span-img {
-    color: #f5f5f5;
-    max-width: 6em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    position: relative;
-    top: 2px;
-}
+    .span-img {
+        color: #f5f5f5;
+        max-width: 6em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: relative;
+        top: 2px;
+    }
 
-#img-profile {
-    position: relative;
-    top: -5px;
-    left: -2px;
-    width: 2em;
-}
+    #img-profile {
+        position: relative;
+        top: -5px;
+        left: -2px;
+        width: 2em;
+    }
 
-/* BUTTON HOME */
+    /* BUTTON HOME */
 
-#home {
-    background-color: #C3A5EC;
-    color: white;
-}
+    a > p {
+        color: white;
+        position: relative;
+        margin: 0;
+        top: -7px;
+        
+    }
+
+    #home {
+        background-color: #C3A5EC;
+    }
+
+    #profile {
+        background-color: #7857DC;
+        color: white;
+    }
 }
 /* LOGIN */
 
