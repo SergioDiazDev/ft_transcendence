@@ -17,40 +17,26 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="menu">
-        <section class="container-fluid" id="section-nav">
+        <article class="container-fluid" id="section-nav">
             <a class="navbar-brand" href="#">ft_transcendence</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="btn btn-primary active border rouded-5" id="home" href="#">Home</a>
-            <a class="btn btn-primary active border rouded-5" id="profile" href="#">profile</a>
-            <a class="nav-link" id="icon-users" href="#">icon</a><span class="span-profile" id="span-profile">
-                <button class="btn btn-primary img-profile p-0" id="user-account" href="#">
-                    <picture class="picture" id="picture">
-                        <img class="img-user" id="img-profile" src="./assets/img/LOGIN.svg" alt="undefined">
-                    </picture>
-                    <span class="spanImg" id="spanImg">Limones</span>
-                </button>
-            </span>
-        </section>
-    </nav>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    <a class="nav-link" href="#">Features</a>
-                    <a class="nav-link" href="#">Pricing</a>
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </div>
-            </div>
-        </div>
+            <section class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <a class="nav-link btn " id="home" href="#">Home</a>
+                <a class="nav-link btn" id="profile" href="#">profile</a>
+                <a class="nav-link btn" id="icon-users" href="#">icon</a>
+                <span class="span-profile pe-3 position-absolute me-2  end-0 " id="span-profile">
+                    <a class="img-profile p-0 text-decoration-none" id="user-account" href="#">
+                        <picture class="picture " id="picture">
+                            <img class="img-user" id="img-profile" src="./assets/img/icon1.png" alt="undefined">
+                        </picture>
+                        <span class="span-img d-inline-block" id="spanImg">Limones</span>
+                    </a>
+                </span>
+            </section>
+        </article>
     </nav>
     <!-- <main class="container " id="container">
         <section class="row">
