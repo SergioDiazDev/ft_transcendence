@@ -23,12 +23,23 @@ const WALL_HEIGHT = 1;
 
 const MAX_SCORE = 5;
 
+const PLAYER_COLORS = {
+	mindaro: 0xe2ef70,
+	verdigris: 0x16bac5,
+	jade: 0x00a878,
+	golden_gate: 0xeb4511,
+	pear: 0xd1d646,
+	sunset: 0xffcb77,
+	aqua: 0x42f2f7,
+	persian_blue: 0x072ac8,
+	emerald: 0x48bf84,
+}
+
 const COLORS = {
 	white: 0xf8f9fa,
 	purple: 0x7858dc,
 	pink: 0xc3a5ec,
 	space_cadet: 0x202646,
-	green: 0x00ff00,
 };
 
 function half(value) {
@@ -45,16 +56,28 @@ function create_light(x, y, z, color, intensity) {
 	return light;
 }
 
+function random_choice(object) {
+	var keys = Object.keys(object);
+	var index = Math.floor(Math.random() * keys.length);
+	return object[keys[index]];
+}
+
 class Paddle extends THREE.Mesh {
 	constructor(x, color, index) {
 		var capsule_length = PAD_H - PAD_W * 3;
 		super(
 			new THREE.CapsuleGeometry(PAD_W, capsule_length, 3, 10),
-			new THREE.MeshPhongMaterial({ color: color, shininess: 100}),
+			new THREE.MeshStandardMaterial({color: color}),
 		);
 		this.index = index;
 		this.position.set(x, PAD_INITIAL_Y, OBJECTS_Z);
 		this.initial_pos = new THREE.Vector3(x, PAD_INITIAL_Y, OBJECTS_Z);
+		this.rect_light = new THREE.RectAreaLight(color, 5, PAD_W, PAD_H);
+		this.rect_light.position.set(half(PAD_W), 0, OBJECTS_Z + 1);
+		this.rect_light.lookAt(0, 0, 0);
+		if (index == 2)
+			this.rotateZ(Math.PI);
+		this.add(this.rect_light);
 		this.color = color;
 		this.width = PAD_W;
 		this.height = PAD_H;
@@ -68,6 +91,9 @@ class Paddle extends THREE.Mesh {
 		if (this.position.y > 0 + half(PAD_H)) {
 			this.position.y -= PAD_SPEED;
 		}
+	}
+	reset() {
+		this.position.y = this.initial_pos.y;
 	}
 }
 
@@ -91,6 +117,10 @@ class Ball extends THREE.Mesh {
 	move() {
 		this.position.x += this.direction.x;
 		this.position.y += this.direction.y;
+	}
+	reset(direction) {
+		this.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), 1);
+		this.direction = new THREE.Vector3(BALL_SPEED * direction, 0, 0);
 	}
 	get lower_y() {
 		return this.position.y - this.radius;
@@ -156,8 +186,8 @@ class Game extends THREE.Scene {
 		this.width = GAME_WIDTH;
 		this.height = GAME_HEIGHT;
 		this.board = new Board();
-		this.pad1 = new Paddle(0 + PAD_OFFSET_X, 0xff0000, 1);
-		this.pad2 = new Paddle(GAME_WIDTH - PAD_OFFSET_X, 0x0000ff, 2);
+		this.pad1 = new Paddle(0 + PAD_OFFSET_X, random_choice(PLAYER_COLORS), 1);
+		this.pad2 = new Paddle(GAME_WIDTH - PAD_OFFSET_X, random_choice(PLAYER_COLORS), 2);
 		this.ball = new Ball();
 		this.renderer = new THREE.WebGLRenderer({ antialias: true });
 		this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -171,7 +201,6 @@ class Game extends THREE.Scene {
 			window.innerWidth,
 			height_aspect_ratio(window.innerWidth),
 		);
-
 		this.add(this.ball);
 		this.add(this.pad1);
 		this.add(this.pad2);
@@ -209,10 +238,9 @@ class Game extends THREE.Scene {
 		}
 	}
 	reset_board(direction) {
-		this.ball.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), OBJECTS_Z);
-		this.ball.direction.set(direction * BALL_SPEED, 0, 0);
-		this.pad1.position.setY(this.pad1.initial_pos.y);
-		this.pad2.position.setY(this.pad2.initial_pos.y);
+		this.ball.reset(direction);
+		this.pad1.reset();
+		this.pad2.reset();
 	}
 	check_goal() {
 		if (this.ball.position.x > GAME_WIDTH) {
