@@ -244,7 +244,13 @@ class Game extends THREE.Scene {
 		}
 	}
 	update_score() {
-		document.getElementById("score").innerText = `${this.score.p1}\u00A0\u00A0${this.score.p2}`;
+		if (this.score.p1 == MAX_SCORE - 1 && this.score.p2 == MAX_SCORE - 1)
+		{
+			document.getElementById("score").innerText = "MATCH POINT";
+		}
+		else {
+			document.getElementById("score").innerText = `${this.score.p1}\u00A0\u00A0${this.score.p2}`;
+		}
 	}
 	reset_board(direction) {
 		this.ball.reset(direction);
