@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  postgresql:
+    image: postgres:15.5-alpine3.18
+    environment:
+      POSTGRES_PASSWORD: prueba
+      POSTGRES_USER: prueba
+    restart: on-failure
+    ports:
+      - "8000:5432"
+      
+
+
