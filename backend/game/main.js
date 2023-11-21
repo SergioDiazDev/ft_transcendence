@@ -7,22 +7,28 @@ document.addEventListener(
 	"keydown",
 	(event) => {
 		var name = event.key;
-		if (name == "ArrowDown") scene.pad1.moveDown();
-		if (name == "ArrowUp") scene.pad1.moveUp();
-		if (name == "s") scene.pad2.moveDown();
-		if (name == "w") scene.pad2.moveUp();
+		if (name == "ArrowDown") game.pad1.moveDown();
+		if (name == "ArrowUp") game.pad1.moveUp();
+		if (name == "s") game.pad2.moveDown();
+		if (name == "w") game.pad2.moveUp();
 	},
 	false,
 );
 
+function onWindowResize(){
+    game.renderer.setSize( window.innerWidth, window.innerWidth / 16 * 9 );
+}
+
+window.addEventListener("resize", onWindowResize, false);
+
 /* three.js variables */
-let scene = new Game();
+let game = new Game();
 let frames = 0;
 let prevTime = performance.now();
 
 function animate() {
 	requestAnimationFrame(animate);
-	scene.update();
+	game.update();
 	frames++;
 	const time = performance.now();
 	if (time >= prevTime + 1000) {
@@ -30,7 +36,7 @@ function animate() {
 		prevTime = time;
 		frames = 0;
 	}
-	scene.composer.render(scene, scene.camera);
+	game.composer.render(game, game.camera);
 }
 
 if (WebGL.isWebGLAvailable()) animate();

@@ -206,6 +206,8 @@ class Game extends THREE.Scene {
 		this.add(this.pad2);
 		this.add(this.board);
 		//this.add(new THREE.AmbientLight(0xcccccc, 0.3));
+		this.update_score();
+		this.renderer.domElement.setAttribute("id", "game");
 		document.body.appendChild(this.renderer.domElement);
 		// Neon style effect
 		const renderScene = new RenderPass(this, this.camera);
@@ -230,12 +232,19 @@ class Game extends THREE.Scene {
 	update() {
 		if (!this.check_game_end()) {
 			var goal = this.check_goal();
-			if (goal != 0) this.reset_board(goal);
+			if (goal != 0)
+			{
+				this.reset_board(goal);
+				this.update_score();
+			}
 			var pad_hit = this.check_pad_collisions();
 			if (pad_hit != 0) this.calculate_ball_dir(pad_hit);
 			if (this.check_board_collision()) this.ball.direction.y *= -1;
 			this.ball.move();
 		}
+	}
+	update_score() {
+		document.getElementById("score").innerText = `${this.score.p1}\u00A0\u00A0${this.score.p2}`;
 	}
 	reset_board(direction) {
 		this.ball.reset(direction);
@@ -245,11 +254,9 @@ class Game extends THREE.Scene {
 	check_goal() {
 		if (this.ball.position.x > GAME_WIDTH) {
 			this.score.p1 += 1;
-			console.log("Player 1:", this.score.p1, "Player 2:", this.score.p2);
 			return 1;
 		} else if (this.ball.position.x < 0) {
 			this.score.p2 += 1;
-			console.log("Player 1:", this.score.p1, "Player 2:", this.score.p2);
 			return -1;
 		}
 		return 0;
