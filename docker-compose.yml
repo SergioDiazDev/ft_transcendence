@@ -8,7 +8,12 @@ services:
       POSTGRES_USER: prueba
     restart: on-failure
     ports:
-      - "8000:5432"
+      - "9000:5432"
+
+
+volumes:
+  database:
+    external: true
       
 
 
