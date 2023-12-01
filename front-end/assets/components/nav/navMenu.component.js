@@ -32,12 +32,12 @@ function displayButtonMenu() {
   const button = {
     class: "navbar-toggler",
     type: "button",
-    id: "navTo",
-    dataBsToogle: "collapse",
-    dataBsTarget: "navbarNavAltMarkup",
+    dataBsToggle: "collapse",
+    dataBsTarget: "#navbarNavAltMarkup",
     ariaControls: "navbarNavAltMarkup",
     ariaExpanded: "false",
     ariaLabel: "Toogle navigation",
+    id: "navButton",
   }
   const span = {
     class: "navbar-toggler-icon"
@@ -63,12 +63,9 @@ function displayAHome(text) {
     id: "home",
     href: "#"
   };
-  const p = {
-
-  }
 
   createElement("a", aHome, "navbarNavAltMarkup")
-  createElement("p", p, aHome.id, text)
+  createElement("p", null, aHome.id, text)
 }
 
 function displayAProfile(text) {
@@ -77,31 +74,33 @@ function displayAProfile(text) {
     id: "profile",
     href: "#"
   }
-  const p = {
-
-  }
-  createElement("a", profile, "navbarNavAltMarkup")
-  createElement("p", p, profile.id, text)
-}
+  createElement("a", profile, "navbarNavAltMarkup");
+  createElement("p", null, profile.id, text);
+};
 
 
 function displayIconUsers() {
 
-  const iconUsers = {
-    class: "nav-link btn",
+  const iconLink = {
+    class: "nav-link btn ",
     id: "icon-users",
-    src: "./assets/img//Users.png",
-    href: "#"
+    href: "#",
+    
   }
-  createElement("img", iconUsers, "navbarNavAltMarkup")
+
+  const iconImg = {
+    src: "./assets/img//Users.png",
+    alt: "Icon users"
+  }
+  createElement("a", iconLink, "navbarNavAltMarkup")
+  createElement("img", iconImg, "icon-users");
 }
 /************************************** */
 
 function displayUserAccount(path, user, altImg) {
   const spanProfile = {
       class: "span-profile pe-3 position-absolute me-2 end-0",
-      id: "span-profile",
-      href: "#"
+      id: "span-profile"
   }
 
   const userAccount = {
@@ -119,10 +118,6 @@ function displayUserAccount(path, user, altImg) {
     src: path,
     alt: altImg
   }
-  const span = {
-    class: "span-profile",
-    id: "span-profile"
-  }
   const spanImg = {
     class: "span-img d-inline-block",
     id: "span-img"
@@ -130,8 +125,7 @@ function displayUserAccount(path, user, altImg) {
  
 
   createElement("span", spanProfile, "navbarNavAltMarkup")
-  createElement("a", span, "navbarNavAltMarkup")
-  createElement("a", userAccount, span.id);
+  createElement("a", userAccount, spanProfile.id);
   createElement("picture", picture, userAccount.id);
   createElement("img", imgProfile, picture.id);
   createElement("span", spanImg, userAccount.id, user);
