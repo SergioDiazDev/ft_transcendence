@@ -37,13 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'tokens',
-    'accounts',
+    'corsheaders', # This app is for handling cors
+    'rest_framework', # This handles APIs
+    'tokens', # This is for getting tokens
+    'accounts', # This is for auth purposes
 ]
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # This middleware handle cors
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -124,6 +126,12 @@ USE_I18N = True
 USE_TZ = True
 
 
+# Setting up Cors params
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+       'http://localhost:5500',
+       'http://127.0.0.1:5500',
+)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -136,3 +144,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Setting up CSRF Token
 CSRF_COOKIE_AGE = 86400
+CSRF_TRUSTED_ORIGINS = [ 'http://localhost:5500', 'http://127.0.0.1:5500', ]
