@@ -11,6 +11,10 @@ body {
     margin: auto;
 }
 
+h6 {
+    display: none;
+}
+
 .span-profile {
     display: none;
 }

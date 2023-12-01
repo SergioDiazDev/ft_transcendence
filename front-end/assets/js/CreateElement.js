@@ -1,20 +1,3 @@
-function convertToSnakeCase(str) {
-  return str.replace(/[A-Z]/g, function (letter) {
-      return '-' + letter.toLowerCase();
-  });
-}
-
-function convertToSnakeAltCaseAttributes(attributes) {
-  const snakeCaseAttributes = {};
-  for (const key in attributes) {
-      if (attributes.hasOwnProperty(key)) {
-          const snakeCaseKey = convertToSnakeCase(key);
-          snakeCaseAttributes[snakeCaseKey] = attributes[key];
-      }
-  }
-  return snakeCaseAttributes;
-}
-
 function applyAttributes(element, attributes) {
   for (const key in attributes) {
       if (attributes.hasOwnProperty(key)) {
@@ -40,5 +23,6 @@ function createElement(tagName, attributes, father, text) {
       }
   }
 }
+
 
 
