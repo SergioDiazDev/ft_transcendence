@@ -32,7 +32,7 @@ function convertToSnakeCase(str) {
 }
 
 
-function createHeaders(type, className, idName, father, text) {
+function createHeaders(type, className, idName, father, text, typeInput) {
     const h = {
 
     }
@@ -41,6 +41,9 @@ function createHeaders(type, className, idName, father, text) {
     }
     if (className) {
         h.class = className
+    }
+    if (typeInput) {
+        h.type = typeInput
     }
     createElement(type, h, father, text);
 }

@@ -1,12 +1,10 @@
 const fieldsLogin = {
     username: 'username',
     password: 'password',
-    submit: 'btn-submit',
-    register: 'register'
 }
 
-function createContainerInputFrom(subName, tagName ,classNameArticle, idNameInput, tagName2, classNameSection, father) {
-    createElementClassId(tagName, classNameArticle, tagName + '-' + idNameInput + subName, father);
+function createContainerInputForm(subName, tagName ,classNameArticle, idNameInput, tagName2, classNameSection, father, typeT) {
+    createElementClassId(tagName, classNameArticle, tagName + '-' + idNameInput + subName, father, typeT);
     createElementClassId(tagName2, classNameSection, tagName2 + '-' + idNameInput + subName, tagName + '-' + idNameInput + subName);
 }
 
@@ -29,12 +27,12 @@ function createButton(typeT, className, idName, father, text) {
     createElement('button', button, father, text);
 }
 
-function elementLogin(typeForm, father) {
+function createLogin(typeForm, father) {
     createForm(typeForm);
     let subName = "-" + typeForm;
     createElementSimple('fieldset', 'fieldset' + subName, 'form' + subName);    
     /* CREATE USERNAME */
-    createContainerInputFrom(subName, 'article','row ps-3 pe-3 mt-3', 'username','section','col', 'fieldset' + subName)
+    createContainerInputForm(subName, 'article','row ps-3 pe-3 mt-3', 'username','section','col', 'fieldset' + subName)
     createLabel(fieldsLogin.username, 'form-label', 'label-username' + subName, 'section-username' + subName, 'Username or email');
     createInput('text', 'form-control', fieldsLogin.username, 'section-username' + subName);
     

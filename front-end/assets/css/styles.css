@@ -15,6 +15,10 @@ h6 {
     display: none;
 }
 
+main {
+    margin-top: 8em;
+}
+
 .span-profile {
     display: none;
 }
@@ -117,10 +121,25 @@ article > h3 , article > section > h3{
     display: none;
 }
 
-fieldset, .login {
+fieldset, .login, #section-bottom {
     border: 3px solid #495057;
     border-radius: 15px;
     background-color: #212429;
+}
+
+#section-bottom {
+    margin-top: 1em;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    text-align: center;
+}
+
+.p-logup {
+    margin-bottom: 0px;
+}
+
+.a-logup {
+    font-size: 15px;
 }
 
 .login {
@@ -128,7 +147,7 @@ fieldset, .login {
     background-color: black;
 }
 
-#username, #password {
+.form-control {
     background-color: #495057;
 }
 

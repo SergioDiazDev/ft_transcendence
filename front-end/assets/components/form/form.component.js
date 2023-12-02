@@ -1,4 +1,4 @@
-function createForm (typeForm) {
+function createForm (typeForm, haveHeader) {
     /* CREATE STRUC */
     createElementClassId('main', 'conatiner container', 'main-container', null);
     createElementClassId('section', 'row', 'section' + "-" + typeForm, 'main-container');
@@ -13,6 +13,8 @@ function createForm (typeForm) {
     createHeaders('h6', null, null, 'section-right', 'Empty');
 
     /* CREATE LOGIN */
-    createHeaders('h1', null, null, 'section-center','Are you transcending?');
+    if (haveHeader) {
+        createHeaders('h1', null, null, 'section-center','Are you transcending?');
+    }
     CreateFormContainer('form' + "-" + typeForm, 'post', '#', 'section-center');
 }
