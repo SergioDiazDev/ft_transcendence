@@ -16,9 +16,7 @@ class Request {
 
     //--------------- Static methods -----------------
     static checkXCSRFToken() {
-        Cookie.setCookie("sasdasdasdsadasdasd3123123g12hb3v", 86400);  
-        Cookie.getCookie("asdas")
-
+        console.log(Cookie.getCookie("prueba2"));
     }
 
     //Setter and getter for url endpoint
