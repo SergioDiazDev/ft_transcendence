@@ -14,12 +14,17 @@
             Password:<input type="password">
         </label>
     </form>
-
     <script src="assets/js/Request.js"></script>
     <script src="assets/js/Cookie.js"></script>
     <script>
-        const r = new Request()
-        r.Post()
+        
+        persona = {
+            email: `prueba@gmail.com`,
+            password: `1234`,
+        };
+
+        const r = new Request(`http://localhost:8000/accounts/register/`, persona);
+        r.Post(json = true);
     </script>
 </body>
 </html>

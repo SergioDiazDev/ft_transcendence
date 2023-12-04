@@ -12,7 +12,7 @@ class Cookie {
             throw new CookieError(`Data type of cookie name or value not valid!`)
         
         //Value of new_cookie
-        let new_cookie = `${name}=${value};`;
+        let new_cookie = `${name}=${value}; SameSite=None; Secure;`;
         
         //Checking if it has an expires date
         if(expires && (typeof expires === `number`) && expires >= 0) {

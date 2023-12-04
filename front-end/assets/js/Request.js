@@ -1,6 +1,8 @@
 //Class to make web request, its a wrapper
 class Request {
 
+    static csrf_token = `X-CSRFToken`;
+    static #URL_CSRF_TOKEN = `http://localhost:8000/token/csrf_token/`
     /**
      * 
      * @param {String} _url - Url to hit in web request
@@ -8,17 +10,32 @@ class Request {
      * @param {Object} _body - Data which will be used in request body
      *
      */
-    constructor(_url = undefined, _method = undefined, _body = {}) {
+    constructor(_url = undefined, _body = {}) {
         this._url = _url;
-        this._method = _method;
         this._body = _body;
+        this._headers = {};
     }
 
     //--------------- Static methods -----------------
     static checkXCSRFToken() {
-        console.log(Cookie.getCookie("prueba2"));
+        return Cookie.getCookie(Request.csrf_token) ? true : false;
     }
 
+    static obtainXCSRFToken() {
+        fetch(Request.#URL_CSRF_TOKEN).
+        then(res => res.json())
+        .then(({token, expire}) => 
+        {
+            Cookie.setCookie(`X-CSRFToken`, token)
+            Cookie.setCookie(`csrftoken`, token)
+        })
+        .catch(err =>{
+            console.error(err);
+            throw new RequestError("obtainXCSRFToken Error: Fetching X-CSRFToken has failed");
+        });
+    }
+    //--------------- End Static methods -------------
+    
     //Setter and getter for url endpoint
     set url(_url) {
         this._url = _url;
@@ -28,13 +45,50 @@ class Request {
         return this._url;
     }
 
-    //Setter and getter for method to use
-    set method(_method) {
-        this._method = _method;
+    //Method to add headers to request
+    setHeader(_header_name = undefined, _header_value = undefined) {
+
+        if(!_header_name || !_header_value)
+            throw new RequestError(`setHeader Error: _header_name or _header_value is undefined!`)
+        if(typeof _header_name !== `string` || typeof _header_value !== `string`)
+        throw RequestError(`setHeader Error: _header_name or _header_value data type is incorrect!`)
+
+        this._headers[_header_name] = _header_value;
     }
 
-    get method() {
-        return this._method;
+    //Get specific list of header passed as parameter
+    getHeader(_name_header){
+        if(!_header_name)
+        throw RequestError(`getHeader Error: _header_name is undefined!`)
+        if(typeof _header_name !== `string`)
+            throw RequestError(`getHeader Error: _header_name data type is incorrect!`)
+
+        return this._headers[_name_header];
+    }
+    //Get full list of headers
+    get headers(){
+        const clone_headers = Object.assign({}, this._headers);
+        return clone_headers;
+    }
+
+    //This method clear all headers present in request
+    clearHeaders() {
+        this._headers = {};
+    }
+
+    //Method to obtain body
+    setBody(_body){
+        this._body = _body; 
+    }
+
+    //Method to obtain body
+    get body(){
+        return this._body;
+    }
+
+    //Clear the body with this method
+    clearBody(){
+        this._body = {};
     }
 
     //Get method to retrieve info
@@ -44,15 +98,40 @@ class Request {
     }
 
     //Post method to send information to backend
-    Post = () => {
-        console.log(Request.checkXCSRFToken());
-        /*
-        if (Request.checkXCSRFToken()) {
-            console.log(`We have token...`)
-        }else
+    Post = (json = true) => {
+        if (!Request.checkXCSRFToken())
+            Request.obtainXCSRFToken();
+        const {cookie_value} = Cookie.getCookie(Request.csrf_token);
+        this.setHeader(Request.csrf_token, cookie_value);
+
+        if(json)
         {
-            //To-Do
+            this._body = JSON.stringify(this._body);
+            this.setHeader(`Content-Type`, `application/json`   )
         }
-        */
+
+        fetch(this._url, {
+            method: `POST`,
+            headers: {
+                ...this._headers
+            },
+            credentials: `include`,
+            body: this._body,
+        }).then(res => 
+            {
+                return res.json();
+            })
+        .then(data => console.log(data));
+    }
+
+}//End Request class
+
+//------------------------------------------------------
+//Class for custom Request erros
+class RequestError extends Error {
+
+    constructor(_message) {
+        super(_message);
+        this._message;
     }
 }
