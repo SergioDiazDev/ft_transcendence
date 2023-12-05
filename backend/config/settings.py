@@ -127,11 +127,16 @@ USE_TZ = True
 
 
 # Setting up Cors params
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = (
-       'http://localhost:5500',
-       'http://127.0.0.1:5500',
-)
+CORS_ALLOWED_ORIGINS = [
+        "http://localhost:5500",
+        "http://127.0.0.1:5500"
+]
+CORS_ALLOW_CREDENTIALS = True
+# Setting up CSRF Token
+CSRF_COOKIE_AGE = 86400
+CSRF_TRUSTED_ORIGINS = [ 'http://localhost:5500', 'http://127.0.0.1:5500', ]
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -142,6 +147,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Setting up CSRF Token
-CSRF_COOKIE_AGE = 86400
-CSRF_TRUSTED_ORIGINS = [ 'http://localhost:5500', 'http://127.0.0.1:5500', ]
