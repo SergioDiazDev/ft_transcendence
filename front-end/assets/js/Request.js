@@ -92,36 +92,60 @@ class Request {
     }
 
     //Get method to retrieve info
-    Get = () => {
+    get = () => {
 
         //TO-DO
     }
 
     //Post method to send information to backend
-    Post = (json = true) => {
+    post = (json = true) => {
+        let res = undefined;
+
         if (!Request.checkXCSRFToken())
             Request.obtainXCSRFToken();
-        const {cookie_value} = Cookie.getCookie(Request.csrf_token);
-        this.setHeader(Request.csrf_token, cookie_value);
+        
+        return new Promise((resolve, reject) => {
+            const cookie_tries = 0;
 
-        if(json)
-        {
-            this._body = JSON.stringify(this._body);
-            this.setHeader(`Content-Type`, `application/json`   )
-        }
+            const id_interval = setInterval(()=> {
+                try{
+                    const {cookie_value} = Cookie.getCookie(Request.csrf_token);
+                    if (cookie_value){
+                        clearInterval(id_interval);
+                        resolve(cookie_value);                   
+                    }
+                } catch(error)
+                {
+                    if(cookie_tries > 10)
+                        reject(`post Error: CSRFToken cookie is not available after several tries!`);
+                    console.error(`Cookie still no available`);
+                }
 
-        fetch(this._url, {
-            method: `POST`,
-            headers: {
-                ...this._headers
-            },
-            credentials: `include`,
-            body: this._body,
-        }).then(res => 
-            {
-                return res.json();
-            })
-        .then(data => console.log(data));
+                }, 20);
+            }).then(cookie_value => {
+                this.setHeader(Request.csrf_token, cookie_value);
+
+                if(json)
+                {
+                    this._body = JSON.stringify(this._body);
+                    this.setHeader(`Content-Type`, `application/json`   )
+                }
+        
+                const response = fetch(this._url, {
+                    method: `POST`,
+                    headers: {
+                        ...this._headers
+                    },
+                    credentials: `include`,
+                    body: this._body,
+                })
+        
+                return response;
+
+            }).catch(error => {
+                throw new Request(`${error}`);
+            });
+
     }
 
 }//End Request class

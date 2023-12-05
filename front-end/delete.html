@@ -6,14 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="#" method="post">
-        <label>
-            Email:<input type="email">
-        </label>
-        <label >
-            Password:<input type="password">
-        </label>
-    </form>
     <script src="assets/js/Request.js"></script>
     <script src="assets/js/Cookie.js"></script>
     <script>
@@ -24,7 +16,12 @@
         };
 
         const r = new Request(`http://localhost:8000/accounts/register/`, persona);
-        r.Post(json = true);
+        const res = r.post();
+
+        res.then(res => res.text())
+        .then(data => console.log(data));
+
+
     </script>
 </body>
 </html>
