@@ -16,5 +16,5 @@ function createForm (typeForm, haveHeader) {
     if (haveHeader) {
         createHeaders('h1', null, null, 'section-center','Are you transcending?');
     }
-    CreateFormContainer('form' + "-" + typeForm, 'post', '#', 'section-center');
+    CreateFormContainer('form' + "-" + typeForm, '#', 'POST', 'section-center');
 }
