@@ -5,11 +5,6 @@ document.getElementById("form-logup").addEventListener("submit", function (event
   var pass = document.getElementById("password-logup").value;
   var confirm_pass = document.getElementById("confirm-password-logup").value;
 
-  console.log("Username: " + username);
-  console.log("Email: " + email);
-  console.log("pass: " + pass);
-  console.log("confirm_pass: " + confirm_pass);
-
   user = {
     'email': email,
     'username': username,
