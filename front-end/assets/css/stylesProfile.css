@@ -8,7 +8,7 @@
 }
 
 #article-profile {
-    height: 80%;
+    min-height: 80%;
     border: 3px solid #C3A5EC;
     background-color: #302D3D;
     border-radius: 10px;
@@ -22,7 +22,7 @@
 }
 
 #section-history {
-    background-color: #202646;
+    background-color: #110E1F;
     border-right: 3px solid #C3A5EC;
     text-align: center;
     align-items: center;
@@ -33,8 +33,63 @@
     font-size: 25px;
     font-weight: bold;
     margin-top: 18px;
+    margin-top: 0;
 }
 
-#spanprofile {
+section > span {
+    display: block;
+    min-height: 33%;
+    border-bottom: 2px solid #C3A5EC;
+
+}
+
+#span-profile-game {
+    min-height: 8em;
+    border-right: 3px solid #C3A5EC;
+    border-left: 3px solid #C3A5EC;
+    border-bottom: 4px solid #C3A5EC;
+    border-top: 4px solid #C3A5EC;
+}
+
+#section-profile-tournament {
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-right: 3px solid #C3A5EC;
+    border-left: 3px solid #C3A5EC;
+}
+
+#span-profile-img {
+    display: inline;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
     
 }
+
+span > picture > img {
+    max-width: 100%;
+}
+
+span > p {
+    margin: 0 auto;
+    font-size: 22px;
+}
+
+span > p:first-child {
+    color: white;
+}
+
+span > p:last-child, span > p:nth-child(2) {
+    color: green;
+}
+
+#section-profile-tournament > p:nth-child(3) {
+    color: #FFF500;
+}
+#section-profile-tournament > p:nth-child(4) {
+    color: #A9A9A9;
+}
+#section-profile-tournament > p:nth-child(5) {
+    color: #FFBB00;
+}
+
+
