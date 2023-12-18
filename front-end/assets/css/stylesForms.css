@@ -2,7 +2,6 @@
     font-family: 'IBM Plex Mono';
 }
 body {
-    background-image: url('../img/LOGIN.svg');
     background-size: cover;
     background-attachment: fixed;
     background-position: center;
@@ -43,7 +42,7 @@ main {
 
     /* NAV */
     #menu {
-        border-bottom: 2px solid #C3A5EC;
+        border-bottom: 3px solid #C3A5EC;
         height: 5em;
         background-color: #202646;
     }
