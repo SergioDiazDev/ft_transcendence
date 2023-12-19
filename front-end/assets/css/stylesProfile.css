@@ -127,6 +127,8 @@ span > p:last-child, span > p:nth-child(2) {
     padding: 0;
 }
 
+/* Table match history */
+
 .table-split {
     margin-bottom: 0.4em;
 }
@@ -139,6 +141,7 @@ td {
     color: white;
     font-size: 14px;
     text-align: center;
+    justify-content: center;
     border-left: none;
     border-right: none;
 }
@@ -151,3 +154,40 @@ td {
     width: 25%;
     margin-left: 1em;
 }
+
+/* aside right */
+
+#section-profile-right > h3 {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    color: #3AAEE0;
+    font-size: 20px;
+    text-align: center;
+}
+
+#section-profile-right > section {
+    height: 2em;
+    border: 1px solid #C3A5EC;
+}
+
+
+#section-profile-right > section > article {
+    display: flex;
+    background-color: #302D3D;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    font-size: 15px;
+}
+
+#section-profile-right > section > article:first-child {
+    display: flex;
+    background-color: #7857DC;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+/* Medida a la que se rompe 950*/
