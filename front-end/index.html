@@ -17,14 +17,16 @@
 
 <body>
     <main class="row" id="main-profile">
-        <aside class="col-2" id="section-profile-left"></aside>
-        <aside class="col-7" id="section-profile-mid">
+        <aside class="col-2 " id="section-profile-left">
+            
+        </aside>
+        <main class="col-7 " id="section-profile-mid">
             <article class="row me-1" id="article-profile">
-                <section class="col-4 container-fluid p-4" id="section-history">
+                <section class="col-4 container-fluid p-4" id="section-games">
                     <h2 id="h2-name-profile" class="fw-bold">nanoldiho</h2>
-                    <span class="col-12" id="span-profile-img">
+                    <span class="col-12 " id="span-profile-img">
                         <picture>
-                            <img src="assets/img/profile_pic.png" alt="">
+                            <img src="assets/img/profile_pic.png" alt="" class="">
                         </picture>
                     </span>
                     <span id="span-profile-game" class="col-12">
@@ -40,10 +42,28 @@
                         <p>8 3rd places</p>
                     </span>
                 </section>
-                <section class="col-8" id=""></section>
+                <section class="col-8" id="section-match-history">
+                    <h2 id="h2-name-profile" class="fw-bold">Match history</h2>
+                    <span class="container mt-3" id="span-history">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-split">
+                                <tbody>
+                                    <tr class="mb-3">
+                                        <td id="table-history-res"><img src="assets/img/match_lose.png" alt=""></td>
+                                        <td id="table-history-player1">Player2</td>
+                                        <td>VS</td>
+                                        <td id="table-history-player2">Player1</td>
+                                        <td id="table-history-date">26/12/2023</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </span>
+                </section>
             </article>
+        </main>
+        <aside class="col-3" id="section-profile-right">
         </aside>
-        <section class="col-3" id="section-profile-right"></section>
     </main>
     <script src="assets/js/CustomElement.js"></script>
     <script src="assets/js/CreateElement.js"></script>
