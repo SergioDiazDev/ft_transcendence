@@ -3,7 +3,7 @@
 
 ### *Instructions to launch local django server*
 
-```1.Create a virtual environment with "python3 -m venv virtual_env_directory" ```
+```1.Create a virtual environment with "python3 -m venv virtual_env" & activate "source virtual_env/bin/activate"```
 
 ```2.Go to folder where requirements.txt file is located and 
      run the following command "pip install -r requirements.txt" ```

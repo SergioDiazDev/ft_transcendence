@@ -1,1 +1,6 @@
 backend/virtual_env
+backend/accounts/__pycache__
+backend/accounts/migrations/__pycache__
+backend/config/__pycache__
+backend/tokens/__pycache__
+backend/tokens/migrations/__pycache__
