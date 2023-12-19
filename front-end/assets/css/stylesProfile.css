@@ -4,6 +4,7 @@ body {
 
 main {
     min-height: 100%;
+    max-height: 4em;
 }
 
 #section-profile-mid > article > section {
@@ -66,11 +67,12 @@ section > span {
     border-top: 4px solid #C3A5EC;
 }
 
-#section-profile-tournament {
+#span-profile-tournament {
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     border-right: 3px solid #C3A5EC;
     border-left: 3px solid #C3A5EC;
+    min-height: 10%;
 }
 
 /* Image */
@@ -101,13 +103,13 @@ span > p:last-child, span > p:nth-child(2) {
     color: green;
 }
 
-#section-profile-tournament > p:nth-child(3) {
+#span-profile-tournament > p:nth-child(3) {
     color: #FFF500;
 }
-#section-profile-tournament > p:nth-child(4) {
+#span-profile-tournament > p:nth-child(4) {
     color: #A9A9A9;
 }
-#section-profile-tournament > p:nth-child(5) {
+#span-profile-tournament > p:nth-child(5) {
     color: #FFBB00;
 }
 
