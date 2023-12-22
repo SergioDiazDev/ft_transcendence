@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third party apps
+
     'corsheaders', # This app is for handling cors
     'rest_framework', # This handles APIs
 
