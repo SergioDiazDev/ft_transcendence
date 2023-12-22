@@ -39,15 +39,22 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders', # This app is for handling cors
     'rest_framework', # This handles APIs
+
+    # Local apps
     'tokens', # This is for getting tokens
     'accounts', # This is for auth purposes
+    'player_friends', # This contains friends of a user
+    'player_block', # This has blocked players
+    'chat', # This has chat messages???
+    'tournament', # ????
+    'game' # ????
 ]
 
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', # This middleware handle cors
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # This middleware handle cors
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -84,7 +91,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'prueba',
         'USER': 'prueba',
         'PASSWORD': 'prueba',
         'HOST': 'localhost',
@@ -128,13 +135,14 @@ USE_TZ = True
 
 # Setting up Cors params
 CORS_ALLOWED_ORIGINS = [
+        "http://127.0.0.1:5500",
         "http://localhost:5500",
-        "http://127.0.0.1:5500"
+
 ]
 CORS_ALLOW_CREDENTIALS = True
 # Setting up CSRF Token
 CSRF_COOKIE_AGE = 86400
-CSRF_TRUSTED_ORIGINS = [ 'http://localhost:5500', 'http://127.0.0.1:5500', ]
+CSRF_TRUSTED_ORIGINS = [ 'http://localhost:5500', 'http://127.0.0.1:5500' ]
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = False
 # Static files (CSS, JavaScript, Images)
