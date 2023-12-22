@@ -2,13 +2,16 @@
 
 
 ### *Instructions to launch local django server*
-
-```1.Create a virtual environment with "python3 -m venv virtual_env_directory" ```
-
-```2.Go to folder where requirements.txt file is located and 
-     run the following command "pip install -r requirements.txt" ```
-
-```3.Go to folder where manage.py is located and run python3 manage.py runserver```
+```
+1.Create a virtual environment with "python3 -m venv virtual_env_directory" 
+```
+```
+2.Go to folder where requirements.txt file is located and 
+     run the following command "pip install -r requirements.txt" 
+```
+```
+3.Go to folder where manage.py is located and run python3 manage.py runserver
+```
 
 ---
 
