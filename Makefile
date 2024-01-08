@@ -1,6 +1,5 @@
 COMPOSE_FILE = docker-compose.yml
 ENV_FILE = .env
-NETWORK_NAME = transcendence-network
 
 include $(ENV_FILE)
 
@@ -13,7 +12,6 @@ endif
 all: start
 
 start: build
-	docker network create --driver bridge $(NETWORK_NAME) || true
 	$(DOCKER_COMPOSE_CMD) --env-file $(ENV_FILE) -f $(COMPOSE_FILE) up
 
 stop:
