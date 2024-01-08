@@ -1,0 +1,193 @@
+body {
+
+}
+
+main {
+    min-height: 100%;
+    max-height: 4em;
+}
+
+#section-profile-mid > article > section {
+    min-height: 90%;
+}
+
+#section-games {
+    background-color: #110E1F;
+    border-right: 3px solid #C3A5EC;
+    text-align: center;
+    align-items: center;
+    max-height: 100%;
+}
+
+#section-profile-right, #section-profile-mid, #section-profile-left {
+    min-height: 60em;
+}
+
+#section-profile-mid {
+    padding: 0;
+    margin-top: 4em;
+    min-height: 100%;
+}
+
+#article-profile {
+    min-height: 100%;
+    border: 3px solid #C3A5EC;
+    background-color: #302D3D;
+    border-radius: 10px;
+}
+
+#section-profile-right {
+    background-color: #110E1F;
+    border: 3px solid #C3A5EC;
+    border-radius: 10px;
+    border-top: 0;
+}
+
+#h2-name-profile {
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 18px;
+    margin-top: 0;
+}
+
+section > span {
+    display: block;
+    min-height: 37%;
+    max-width: 100%;
+    border-bottom: 2px solid #C3A5EC;
+
+}
+
+#span-profile-game {
+    min-height: 8em;
+    border-right: 3px solid #C3A5EC;
+    border-left: 3px solid #C3A5EC;
+    border-bottom: 4px solid #C3A5EC;
+    border-top: 4px solid #C3A5EC;
+}
+
+#span-profile-tournament {
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-right: 3px solid #C3A5EC;
+    border-left: 3px solid #C3A5EC;
+    min-height: 10%;
+}
+
+/* Image */
+
+#span-profile-img {
+    display: inline;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    
+}
+
+span > picture > img {
+   width: 100%;
+}
+
+/* Game and Tournament */
+
+span > p {
+    margin: 0 auto;
+    font-size: 22px;
+}
+
+span > p:first-child {
+    color: white;
+}
+
+span > p:last-child, span > p:nth-child(2) {
+    color: green;
+}
+
+#span-profile-tournament > p:nth-child(3) {
+    color: #FFF500;
+}
+#span-profile-tournament > p:nth-child(4) {
+    color: #A9A9A9;
+}
+#span-profile-tournament > p:nth-child(5) {
+    color: #FFBB00;
+}
+
+/* Section match history */
+
+#section-match-history {
+    padding: 1.3em;
+}
+
+#span-history {
+    width: 100%;
+    height: 90%;
+    border: 2px solid #C3A5EC;
+    border-radius: 5px;
+    padding: 0;
+}
+
+/* Table match history */
+
+.table-split {
+    margin-bottom: 0.4em;
+}
+
+td {
+    max-width: 1em; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    justify-content: center;
+    border-left: none;
+    border-right: none;
+}
+
+.table-split > tbody > tr > td:first-child {
+    text-align: left;
+}
+
+#table-history-res > img {
+    width: 25%;
+    margin-left: 1em;
+}
+
+/* aside right */
+
+#section-profile-right > h3 {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    color: #3AAEE0;
+    font-size: 20px;
+    text-align: center;
+}
+
+#section-profile-right > section {
+    height: 2em;
+    border: 1px solid #C3A5EC;
+}
+
+
+#section-profile-right > section > article {
+    display: flex;
+    background-color: #302D3D;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    font-size: 15px;
+}
+
+#section-profile-right > section > article:first-child {
+    display: flex;
+    background-color: #7857DC;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+/* Medida a la que se rompe 950*/
