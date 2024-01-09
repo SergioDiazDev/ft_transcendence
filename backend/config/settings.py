@@ -42,12 +42,15 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    #'django.contrib.staticfiles', # this is commented because I have to add it below
 
     # Third party apps
 
+    'daphne', #This handles ASGI server, necessary for WebSockets
+    'django.contrib.staticfiles', # this is not third party but needs to init after daphne
     'corsheaders', # This app is for handling cors
     'rest_framework', # This handles APIs
+    'channels', # This handles WebSockets
 
     # Local apps
     'tokens', # This is for getting tokens
@@ -92,6 +95,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+        # it's either inmemory channel or redis, but we will stick with this now
+    }
+}
 
 
 # Database
