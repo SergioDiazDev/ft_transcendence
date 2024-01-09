@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>My first three.js app</title>
+		<style>
+			body {
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				height: 100vh;
+			}
+			#score {
+				position: absolute;
+				margin-top: 10%;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				color: #a787fa;
+				font-size: 5vw;
+				font-family: monospace;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="module" src="./main.js"></script>
+		<span id="score"></span>
+	</body>
+</html>
