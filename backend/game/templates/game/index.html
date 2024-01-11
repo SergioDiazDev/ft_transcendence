@@ -34,7 +34,6 @@
 
 		document.querySelector("#submit").onclick = function(e) {
 			var movement = document.querySelector("#movement").value;
-			console.log("Movement:", movement);
 			gameSocket.send(JSON.stringify({
 				"movement": movement
 			}));
