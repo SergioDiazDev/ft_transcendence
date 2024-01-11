@@ -4,21 +4,40 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Game</title>
+	<style>
+		div {
+			font-size: 0.8em;
+			white-space: pre-wrap;
+		}
+	</style>
 </head>
 <body>
 	<h1>Bienvenido al juego</h1>
-	<h2 id="gameId"></h2>
+	<h2 id="gameId">ID partida: </h2>
+	<h3 id="username">Nombre del usuario: </h2>
+	<p id="playingVs">Jugando contra: </p>
 	<p>Envía un movimiento</p>
 	<input type="text" name="movement" id="movement">
 	<input type="button" value="Send" id="submit">
+	<h2>Lista de movimientos</h2>
+	<div id="lastMove"></div>
     {{ game_id|json_script:"room-name" }}
 	<script>
 		const gameId = location.href.split("/")[4] ? location.href.split("/")[4] : "error";
+		{% if user.is_authenticated %}
+		const username = {{ user.get_username }}; //this should be const
+		{% else %}
+		const username = "Anonymous player";
+		{% endif %}
+		document.querySelector("#gameId").textContent += gameId;
+		document.querySelector("#username").textContent += username;
 		const gameSocket = new WebSocket(`ws://${window.location.host}/wss/game/${gameId}/`);
 
 		gameSocket.onmessage = function(e) {
 			const data = JSON.parse(e.data);
-			console.log("Socket message:", data.movement);
+			console.log(data);
+			document.querySelector("#lastMove").textContent += data.movement + '\n';
+			document.querySelector("#playingVs").innerHTML = "Jugando contra: " + data.player;
 		};
 
 		gameSocket.onclose = function(e) {

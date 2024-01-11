@@ -7,6 +7,7 @@ class GameConsumer(WebsocketConsumer):
 	def connect(self):
 		# each consumer has a scope that contains info about its connection, like game_id in the URL
 		# or the currently authenticated user
+		self.user = self.scope["user"]
 		self.room_name = self.scope["url_route"]["kwargs"]["game_id"] 
 		# construct a channel group based on the game_id (should be unique)
 		self.room_group_name = f"game_{self.room_name}"
@@ -35,9 +36,12 @@ class GameConsumer(WebsocketConsumer):
 		# events have special 'type' key, corresponding with the name of the method that should be
 		# invoked on consumers, replacing game.movement with game_movement, calling the method below
 		async_to_sync(self.channel_layer.group_send)(
-			self.room_group_name, {"type": "game.movement", "movement": movement}
+			self.room_group_name, {"type": "game.movement", "movement": movement, "player": self.user}
 		)
 
 	def game_movement(self, event):
 		movement = event["movement"]
-		self.send(text_data=json.dumps({"movement": movement}))
+		player = event["player"]
+		if not player.is_authenticated:
+			player = "Anonymous player"
+		self.send(text_data=json.dumps({"movement": movement, "player": player}))
