@@ -13,51 +13,78 @@
 </head>
 <body>
 	<h1>Bienvenido al juego</h1>
-	<h2 id="gameId">ID partida: </h2>
-	<h3 id="username">Nombre del usuario: </h2>
-	<p id="playingVs">Jugando contra: </p>
-	<p>Envía un movimiento</p>
-	<input type="text" name="movement" id="movement">
-	<input type="button" value="Send" id="submit">
-	<h2>Lista de movimientos</h2>
-	<div id="lastMove"></div>
     {{ game_id|json_script:"room-name" }}
+	<h1>N players:</h1>
+	<p id="n_players"></p>
+	<h3>Player 1:</h3>
+	<p id="player1_direction"></p>
+	<h3>Player 2:</h3>
+	<p id="player2_direction"></p>
 	<script>
 		const gameId = location.href.split("/")[4] ? location.href.split("/")[4] : "error";
-		{% if user.is_authenticated %}
-		const username = {{ user.get_username }}; //this should be const
-		{% else %}
-		const username = "Anonymous player";
-		{% endif %}
-		document.querySelector("#gameId").textContent += gameId;
-		document.querySelector("#username").textContent += username;
 		const gameSocket = new WebSocket(`ws://${window.location.host}/wss/game/${gameId}/`);
+		let player_id = "";
 
-		gameSocket.onmessage = function(e) {
-			const data = JSON.parse(e.data);
-			console.log(data);
-			document.querySelector("#lastMove").textContent += data.movement + '\n';
-			document.querySelector("#playingVs").innerHTML = "Jugando contra: " + data.player;
-		};
+		gameSocket.onmessage = messageHandler;
 
 		gameSocket.onclose = function(e) {
 			console.error("Game socket closed unexpectedly");
 		};
 
-		document.querySelector("#movement").focus();
-		document.querySelector("#movement").onkeyup = function(e) {
-			if (e.key === 'Enter') {
-				document.querySelector("#submit").click();
-			}
-		};
+		function messageHandler(event) {
+			const messageData = JSON.parse(event.data);
+			if (messageData.type === "gamestate_update") {
+				//setGameObjects(messageData.objects);
+				console.log(messageData.objects);
+				document.getElementById("player1_direction").textContent = messageData.objects[0].direction;
+				document.getElementById("player2_direction").textContent = messageData.objects[1].direction;
+				document.getElementById("n_players").textContent = messageData.objects.length;
 
-		document.querySelector("#submit").onclick = function(e) {
-			var movement = document.querySelector("#movement").value;
-			gameSocket.send(JSON.stringify({
-				"movement": movement
-			}));
-			document.querySelector("#movement").value = "";
-		};
+			} else if (messageData.type === "player_join") {
+				//setPlayerId(messageData.player_id)
+				console.log("Welcome player " + messageData.player_id + "!!");
+				player_id = messageData.player_id;
+			}
+		}
+		document.addEventListener(
+			"keydown",
+			(event) => {
+				var name = event.key;
+				if (name == "ArrowUp" || name == "w")
+				{
+					gameSocket.send(
+						JSON.stringify({ movement: "up", player: player_id })
+					)
+				}
+				if (name == "ArrowDown" || name == "s")
+				{
+					gameSocket.send(
+						JSON.stringify({ movement: "down", player: player_id })
+					)
+				}
+			},
+			false,
+		);
+		document.addEventListener(
+			"keyup",
+			(event) => {
+				var name = event.key;
+				if (name == "ArrowDown" || name == "w")
+				{
+					gameSocket.send(
+						JSON.stringify({ movement: "", player: player_id })
+					)
+				}
+				if (name == "ArrowUp" || name == "s")
+				{
+					gameSocket.send(
+						JSON.stringify({ movement: "", player: player_id })
+					)
+				}
+			},
+			false,
+		);
+
 	</script>
 </body>
 </html>
