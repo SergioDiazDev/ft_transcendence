@@ -9,7 +9,7 @@ import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 const GAME_WIDTH = 100;
 const GAME_HEIGHT = height_aspect_ratio(GAME_WIDTH);
 
-const BALL_SPEED = 1;
+const BALL_SPEED = 0.05;
 const OBJECTS_Z = 0;
 
 const PAD_H = GAME_HEIGHT / 5;
@@ -198,8 +198,8 @@ class Game extends THREE.Scene {
 	}
 	render() {
 		this.renderer.setSize(
-			window.innerWidth,
-			height_aspect_ratio(window.innerWidth),
+			window.innerWidth * 0.8,
+			height_aspect_ratio(window.innerWidth * 0.8),
 		);
 		this.add(this.ball);
 		this.add(this.pad1);
@@ -208,7 +208,7 @@ class Game extends THREE.Scene {
 		//this.add(new THREE.AmbientLight(0xcccccc, 0.3));
 		this.update_score();
 		this.renderer.domElement.setAttribute("id", "game");
-		document.body.appendChild(this.renderer.domElement);
+		document.getElementById("game-container").appendChild(this.renderer.domElement);
 		// Neon style effect
 		const renderScene = new RenderPass(this, this.camera);
 		const bloomPass = new UnrealBloomPass(

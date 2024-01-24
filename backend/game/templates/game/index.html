@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,9 +10,40 @@
 			font-size: 0.8em;
 			white-space: pre-wrap;
 		}
+		body {
+			margin: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			height: 100vh;
+		}
+		#score {
+			position: absolute;
+			margin-top: 10%;
+			width: 100%;
+			text-align: center;
+			z-index: 100;
+			color: #a787fa;
+			font-size: 5vw;
+			font-family: monospace;
+		}
+		#game-container {
+			font-size: 0.8em;
+			display: flex;
+			justify-content: center;
+		}
 	</style>
+	<script type="importmap">
+	{
+		"imports": {
+		"three": "https://unpkg.com/three@0.160.1/build/three.module.js",
+		"three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/"
+		}
+	}
+	</script>
 </head>
 <body>
+	<script type="module" src="{% static 'main.js' %}"></script>
 	<h1>Bienvenido al juego</h1>
     {{ game_id|json_script:"room-name" }}
 	<h1>N players:</h1>
@@ -86,5 +118,8 @@
 		);
 
 	</script>
+	<div id="game-container">
+		<span id="score"></span>
+	</div>
 </body>
 </html>
