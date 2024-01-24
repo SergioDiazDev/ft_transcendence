@@ -4,9 +4,11 @@ import uuid
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
+from game.game_logic import PongGame
 
 class GameConsumer(AsyncWebsocketConsumer):
 	players = {}
+	game = PongGame()
 	update_lock = asyncio.Lock()
 
 	async def connect(self):
@@ -16,6 +18,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 		# uncomment this line when users are implemented
 		# self.user = self.scope["user"]
 		self.user = str(uuid.uuid1())
+		async with self.update_lock:
+			if len(self.players) == 2:
+				return
 		await self.accept()
 
 		self.room_name = self.scope["url_route"]["kwargs"]["game_id"] 
@@ -41,7 +46,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 				"id": self.user,
 				"board_pos": len(self.players),
 				"direction": 0,
-				"y_pos": 0,
 			}
 
 		if len(self.players) == 2:
@@ -51,6 +55,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		async with self.update_lock:
 			if self.user in self.players:
 				del self.players[self.user]
+			if len(self.players) == 0:
+				self.game = PongGame()
 
 		# group_discard -> disconnect channel from the group
 		await self.channel_layer.group_discard(
@@ -79,19 +85,23 @@ class GameConsumer(AsyncWebsocketConsumer):
 				{
 					"type": "gamestate_update",
 					"objects": event["objects"],
+					"gamestate": self.game.get_gamestate(),
 				}
 			)
 		)
 
 	async def game_loop(self):
-		while len(self.players) > 0:
+		while len(self.players) == 2:
 			async with self.update_lock:
 				for player in self.players.values():
-					# game logic
-					pass
+					if player["board_pos"] == 0:
+						self.game.pad1.move(player["direction"])
+					elif player["board_pos"] == 1:
+						self.game.pad2.move(player["direction"])
+				self.game.calculate_frame()
+				await asyncio.sleep(0.016)
 
 			await self.channel_layer.group_send(
 				self.room_group_name,
-				{"type": "gamestate_update", "objects": list(self.players.values())},
+				{"type": "gamestate_update", "objects": list(self.players.values()), "gamestate": self.game.get_gamestate()},
 			)
-			await asyncio.sleep(0.05)

@@ -44,18 +44,11 @@
 </head>
 <body>
 	<script type="module" src="{% static 'main.js' %}"></script>
-	<h1>Bienvenido al juego</h1>
-    {{ game_id|json_script:"room-name" }}
-	<h1>N players:</h1>
-	<p id="n_players"></p>
-	<h3>Player 1:</h3>
-	<p id="player1_direction"></p>
-	<h3>Player 2:</h3>
-	<p id="player2_direction"></p>
 	<script>
 		const gameId = location.href.split("/")[4] ? location.href.split("/")[4] : "error";
 		const gameSocket = new WebSocket(`ws://${window.location.host}/wss/game/${gameId}/`);
-		let player_id = "";
+		var player_id = "";
+		var gamestate;
 
 		gameSocket.onmessage = messageHandler;
 
@@ -66,15 +59,9 @@
 		function messageHandler(event) {
 			const messageData = JSON.parse(event.data);
 			if (messageData.type === "gamestate_update") {
-				//setGameObjects(messageData.objects);
-				console.log(messageData.objects);
-				document.getElementById("player1_direction").textContent = messageData.objects[0].direction;
-				document.getElementById("player2_direction").textContent = messageData.objects[1].direction;
-				document.getElementById("n_players").textContent = messageData.objects.length;
-
+				// draw gamestate on screen
+				gamestate = messageData.gamestate;
 			} else if (messageData.type === "player_join") {
-				//setPlayerId(messageData.player_id)
-				console.log("Welcome player " + messageData.player_id + "!!");
 				player_id = messageData.player_id;
 			}
 		}
