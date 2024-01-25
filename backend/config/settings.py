@@ -74,11 +74,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
-
+print((str(BASE_DIR) + "/templates"))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [str(BASE_DIR) + ("/templates/")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,7 +103,7 @@ DATABASES = {
         'NAME': os.getenv("POSTGRES_DB_NAME"),
         'USER': os.getenv("POSTGRES_USER"),
         'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
-        'HOST': 'postgresql',
+        'HOST': '127.0.0.1',
         'PORT': '5432'
     }
 }
@@ -149,7 +149,8 @@ CORS_ALLOWED_ORIGINS = [
 
 ]
 CORS_ALLOW_CREDENTIALS = True
-# Setting up CSRF Token
+
+    # Setting up CSRF Token
 CSRF_COOKIE_AGE = 86400
 CSRF_TRUSTED_ORIGINS = [ 'http://localhost:5500', 'http://127.0.0.1:5500' ]
 CSRF_COOKIE_HTTPONLY = False

@@ -6,22 +6,17 @@
     <title>Document</title>
 </head>
 <body>
-    <script src="assets/js/Request.js"></script>
-    <script src="assets/js/Cookie.js"></script>
-    <script>
-        
-        persona = {
-            email: `prueba@gmail.com`,
-            password: `1234`,
-        };
+    <style>
+        form {
+            width: 50%;
+            margin: 0 auto;
+        }
 
-        const r = new Request(`http://localhost:8000/accounts/register/`, persona);
-        const res = r.post();
-
-        res.then(res => res.text())
-        .then(data => console.log(data));
-
-
-    </script>
+        form input {
+            margin-bottom: 10px;
+        }
+    </style>
+    <section id="root"></section>
 </body>
+<script src="delete.js" type="module"></script>
 </html>
