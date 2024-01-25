@@ -32,15 +32,15 @@ class PongObject:
 		return self.position["y"]
 
 	def get_x_bounds(self):
-		return [self.position["x"] - self.obj_width / 2, self.position["x"] + self.obj_width / 2]
+		return [self.position["x"] - self.obj_width, self.position["x"] + self.obj_width]
 
 	def get_y_bounds(self):
-		return [self.position["y"] - self.obj_height / 2, self.position["y"] + self.obj_height / 2]
+		return [self.position["y"] - self.obj_height, self.position["y"] + self.obj_height]
 
 
 class PongPaddle(PongObject):
-	obj_width = PAD_W
-	obj_height = PAD_H
+	obj_width = PAD_W / 2
+	obj_height = PAD_H / 2
 
 	def __init__(self, x):
 		self.INITIAL_POSITION = {"x": x, "y": PAD_INITIAL_Y}
