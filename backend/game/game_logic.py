@@ -92,12 +92,12 @@ class PongGame:
 		self.finish = False
 
 	def check_goal(self):
-		if self.ball.get_x() > GAME_WIDTH:
+		if self.ball.get_x() > GAME_WIDTH + 20:
 			self.score["p1"] += 1
 			if self.score["p1"] == 5:
 				self.finish = True
 			return 1
-		elif self.ball.get_x() < 0:
+		elif self.ball.get_x() < -20:
 			self.score["p2"] += 1
 			if self.score["p2"] == 5:
 				self.finish = True
