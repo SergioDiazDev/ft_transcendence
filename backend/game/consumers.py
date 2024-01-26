@@ -1,9 +1,7 @@
-import os
 import json
 import asyncio
 import uuid
 
-from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
 from game.game_logic import PongGame
 
@@ -16,29 +14,21 @@ class GameConsumer(AsyncWebsocketConsumer):
 		# or the currently authenticated user
 		# uncomment this line when users are implemented
 		# self.user = self.scope["user"]
-
 		self.user = str(uuid.uuid1())
-		await self.accept()
-
 		self.room_name = self.scope["url_route"]["kwargs"]["game_id"] 
-		# construct a channel group based on the game_id (should be unique)
 		self.room_group_name = f"game_{self.room_name}"
 
-		await self.channel_layer.group_add(
-			self.room_group_name, self.channel_name
-		)
-
-		print(f"Se ha unido el usuario {self.user} con el canal {self.channel_layer} al grupo {self.room_group_name}", os.getcwd(), flush=True)
-
+		await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+		await self.accept()
 		await self.send(
-            text_data=json.dumps({"type": "player_join", "player_id": self.user})
+            text_data=json.dumps({"type": "player_join", "player_id": self.user, "room_id": self.room_group_name })
         )
 
 		async with self.update_lock:
 			if self.room_group_name in self.rooms.keys():
 				self.rooms[self.room_group_name]["players"][self.user] = {
 					"id": self.user,
-					"board_pos": len(self.rooms[self.room_group_name]["players"]),
+					"board_pos": 1,
 					"direction": 0,
 				}
 			else:
@@ -92,15 +82,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 		)
 
 	async def game_loop(self):
-		print(f"Game loop for room {self.room_group_name}", os.getcwd(), flush=True)
-		#print("Rooms\n", self.rooms, "\n", os.getcwd(), flush=True)
 		room = self.rooms.get(self.room_group_name, None)
 		if room:
-			#print(room, os.getcwd(), flush=True)
 			while len(room["players"]) == 2:
 				for player_id in room["players"]:
 					player = room["players"][player_id]
-					#print(player, os.getcwd(), flush=True)
 					if player["board_pos"] == 0:
 						room["game"].pad1.move(player["direction"])
 					elif player["board_pos"] == 1:
@@ -111,4 +97,4 @@ class GameConsumer(AsyncWebsocketConsumer):
 					self.room_group_name,
 					{"type": "gamestate_update", "room": self.room_group_name, "objects": list(room["players"]), "gamestate": room["game"].get_gamestate()},
 				)
-				await asyncio.sleep(0.016)
+				await asyncio.sleep(0.015625) # 64 ticks per second
