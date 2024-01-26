@@ -1,3 +1,4 @@
+import os
 import json
 import asyncio
 import uuid
@@ -16,49 +17,53 @@ class GameConsumer(AsyncWebsocketConsumer):
 		# self.user = self.scope["user"]
 		self.user = str(uuid.uuid1())
 		self.room_name = self.scope["url_route"]["kwargs"]["game_id"] 
-		self.room_group_name = f"game_{self.room_name}"
+		self.room_id = f"game_{self.room_name}"
 
-		await self.channel_layer.group_add(self.room_group_name, self.channel_name)
-		await self.accept()
-		await self.send(
-            text_data=json.dumps({"type": "player_join", "player_id": self.user, "room_id": self.room_group_name })
-        )
+		# the second player creates the game, if the game is created, nobody can join the room
+		if self.room_id in self.rooms and "game" in self.rooms[self.room_id]:
+			return
 
 		async with self.update_lock:
-			if self.room_group_name in self.rooms.keys():
-				self.rooms[self.room_group_name]["players"][self.user] = {
-					"id": self.user,
+			# first player joins the room
+			if self.room_id not in self.rooms.keys():
+				self.rooms[self.room_id] = {"players": {self.user: {}}}
+				self.rooms[self.room_id]["players"][self.user] = {
 					"board_pos": 1,
 					"direction": 0,
 				}
+			# second player joins the room
 			else:
-				self.rooms[self.room_group_name] = {"players": {self.user: {}}}
-				self.rooms[self.room_group_name]["players"][self.user] = {
-					"id": self.user,
-					"board_pos": 0,
+				self.rooms[self.room_id]["players"][self.user] = {
+					"board_pos": 2,
 					"direction": 0,
 				}
-
-			if len(self.rooms[self.room_group_name]["players"]) == 2:
-				self.rooms[self.room_group_name]["game"] = PongGame()
+				self.rooms[self.room_id]["game"] = PongGame()
 				asyncio.create_task(self.game_loop())
 
-	async def disconnect(self, close_code):
-		async with self.update_lock:
-			if self.user in self.rooms[self.room_group_name]["players"]:
-				del self.rooms[self.room_group_name]["players"][self.user]
+		await self.accept()
+		await self.channel_layer.group_add(self.room_id, self.channel_name)
+		await self.send(
+            text_data=json.dumps({"type": "player_join", "player_id": self.user, "room_id": self.room_id })
+        )
 
+	async def disconnect(self, close_code):
 		# group_discard -> disconnect channel from the group
 		await self.channel_layer.group_discard(
-			self.room_group_name, self.channel_name
+			self.room_id, self.channel_name
 		)
+
+		async with self.update_lock:
+			if self.user in self.rooms[self.room_id]["players"]:
+				# remove the player from the room when he disconnects
+				del self.rooms[self.room_id]["players"][self.user]
+
 
 	async def receive(self, text_data):
 		text_data_json = json.loads(text_data)
 		movement = text_data_json["movement"]
 		player_id = text_data_json["player"]
 
-		player = self.rooms[self.room_group_name]["players"].get(player_id, None)
+		player = self.rooms[self.room_id]["players"].get(player_id, None)
 		if not player:
 			return
 
@@ -75,26 +80,34 @@ class GameConsumer(AsyncWebsocketConsumer):
 				{
 					"type": "gamestate_update",
 					"room": event["room"],
-					"objects": event["objects"],
 					"gamestate": event["gamestate"],
 				}
 			)
 		)
 
 	async def game_loop(self):
-		room = self.rooms.get(self.room_group_name, None)
+		# game countdown
+		await asyncio.sleep(2)
+		room = self.rooms.get(self.room_id, None)
 		if room:
-			while len(room["players"]) == 2:
+			while not room["game"].ended:
 				for player_id in room["players"]:
 					player = room["players"][player_id]
-					if player["board_pos"] == 0:
+					if player["board_pos"] == 1:
 						room["game"].pad1.move(player["direction"])
-					elif player["board_pos"] == 1:
+					elif player["board_pos"] == 2:
 						room["game"].pad2.move(player["direction"])
 				room["game"].calculate_frame()
 
+				if len(room["players"]) == 0:
+					break
+
 				await self.channel_layer.group_send(
-					self.room_group_name,
-					{"type": "gamestate_update", "room": self.room_group_name, "objects": list(room["players"]), "gamestate": room["game"].get_gamestate()},
+					self.room_id,
+					{"type": "gamestate_update", "room": self.room_id, "gamestate": room["game"].get_gamestate()},
 				)
 				await asyncio.sleep(0.015625) # 64 ticks per second
+			# game end notification
+			# should write the result in the database
+		# delete the room from the self.rooms object when the game is done
+		del self.rooms[self.room_id]

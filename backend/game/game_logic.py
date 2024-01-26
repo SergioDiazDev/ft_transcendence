@@ -87,6 +87,7 @@ class PongGame:
 		self.pad1 = PongPaddle(0 + PAD_OFFSET_X)
 		self.pad2 = PongPaddle(GAME_WIDTH - PAD_OFFSET_X)
 		self.ball = PongBall()
+		self.ended = False
 
 	def check_goal(self):
 		if self.ball.get_x() > GAME_WIDTH:
@@ -95,6 +96,8 @@ class PongGame:
 		elif self.ball.get_x() < 0:
 			self.score["p2"] += 1
 			return -1
+		if self.score["p1"] >= 5 or self.score["p2"] >= 5:
+			self.ended = True
 		return 0
 
 	def calculate_frame(self):
