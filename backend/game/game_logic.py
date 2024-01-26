@@ -18,9 +18,10 @@ BALL_SIZE = GAME_WIDTH / 100
 BALL_SPEED = 1
 
 class PongObject:
-	position = {"x": 0, "y": 0}
-	obj_height = 0
-	obj_width = 0
+	def __init__(self):
+		self.position = {"x": 0, "y": 0}
+		self.obj_height = 0
+		self.obj_width = 0
 
 	def get_position(self):
 		return self.position
@@ -39,10 +40,9 @@ class PongObject:
 
 
 class PongPaddle(PongObject):
-	obj_width = PAD_W / 2
-	obj_height = PAD_H / 2
-
 	def __init__(self, x):
+		self.obj_width = PAD_W / 2
+		self.obj_height = PAD_H / 2
 		self.INITIAL_POSITION = {"x": x, "y": PAD_INITIAL_Y}
 		self.position = {"x": x, "y": PAD_INITIAL_Y}
 
@@ -65,11 +65,12 @@ class PongPaddle(PongObject):
 
 
 class PongBall(PongObject):
-	INITIAL_POSITION = {"x": GAME_WIDTH / 2, "y": GAME_HEIGHT / 2}
-	position = {"x": GAME_WIDTH / 2, "y": GAME_HEIGHT / 2}
-	direction = {"x": BALL_SPEED * random.choice([1, -1]), "y": 0}
-	obj_width = BALL_SIZE / 2
-	obj_height = BALL_SIZE / 2
+	def __init__(self):
+		self.INITIAL_POSITION = {"x": GAME_WIDTH / 2, "y": GAME_HEIGHT / 2}
+		self.position = {"x": GAME_WIDTH / 2, "y": GAME_HEIGHT / 2}
+		self.direction = {"x": BALL_SPEED * random.choice([1, -1]), "y": 0}
+		self.obj_width = BALL_SIZE / 2
+		self.obj_height = BALL_SIZE / 2
 
 	def reset(self, direction = 1):
 		self.position = copy.deepcopy(self.INITIAL_POSITION)
@@ -81,10 +82,11 @@ class PongBall(PongObject):
 
 
 class PongGame:
-	score = {"p1": 0, "p2": 0}
-	pad1 = PongPaddle(0 + PAD_OFFSET_X)
-	pad2 = PongPaddle(GAME_WIDTH - PAD_OFFSET_X)
-	ball = PongBall()
+	def __init__(self):
+		self.score = {"p1": 0, "p2": 0}
+		self.pad1 = PongPaddle(0 + PAD_OFFSET_X)
+		self.pad2 = PongPaddle(GAME_WIDTH - PAD_OFFSET_X)
+		self.ball = PongBall()
 
 	def check_goal(self):
 		if self.ball.get_x() > GAME_WIDTH:
