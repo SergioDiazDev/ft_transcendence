@@ -67,7 +67,6 @@ class Paddle extends THREE.Mesh {
 			new THREE.CapsuleGeometry(PAD_W, capsule_length, 3, 10),
 			new THREE.MeshStandardMaterial({color: color}),
 		);
-		this.position.set(0, PAD_INITIAL_Y, OBJECTS_Z);
 		this.rect_light = new THREE.RectAreaLight(color, 5, PAD_W, PAD_H);
 		this.rect_light.position.set(half(PAD_W), 0, OBJECTS_Z + 1);
 		this.rect_light.lookAt(0, 0, 0);
@@ -76,6 +75,7 @@ class Paddle extends THREE.Mesh {
 			this.rotateZ(Math.PI);
 			*/
 		this.add(this.rect_light);
+		this.position.set(0, 0, -100);
 	}
 }
 
@@ -86,9 +86,10 @@ class Ball extends THREE.Mesh {
 			new THREE.SphereGeometry(radius, 32, 16),
 			new THREE.MeshPhongMaterial({ color: COLORS.pink, shininess: 100}),
 		);
-		this.light = create_light(0, 0, 0, COLORS.purple, 60);
-		this.light.position.z = OBJECTS_Z;
+		this.light = new THREE.PointLight(COLORS.purple, 60, 10);
+		this.light.position.set(0, 0, OBJECTS_Z + 0.5);
 		this.add(this.light);
+		this.position.set(0, 0, -100);
 	}
 }
 
@@ -138,7 +139,7 @@ class Board extends THREE.Group {
 class Game extends THREE.Scene {
 	constructor() {
 		super();
-		this.score = {p1: 0, p2: 0};
+		this.score = {p1: NaN, p2: NaN};
 		this.width = GAME_WIDTH;
 		this.height = GAME_HEIGHT;
 		this.board = new Board();
