@@ -31,12 +31,18 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"board_pos": 1,
 					"direction": 0,
 				}
+				#TODO: remove this comment when we have the user auth
+				#self.rooms[self.room_id]["player1"] = self.user
+				self.rooms[self.room_id]["player1"] = "Jugador 1"
 			# second player joins the room
 			else:
 				self.rooms[self.room_id]["players"][self.user] = {
 					"board_pos": 2,
 					"direction": 0,
 				}
+				#TODO: remove this comment when we have the user auth
+				#self.rooms[self.room_id]["player2"] = self.user
+				self.rooms[self.room_id]["player2"] = "Jugador 2"
 				self.rooms[self.room_id]["game"] = PongGame()
 				asyncio.create_task(self.game_loop())
 
@@ -53,9 +59,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 		)
 
 		async with self.update_lock:
-			if self.user in self.rooms[self.room_id]["players"]:
-				# remove the player from the room when he disconnects
-				del self.rooms[self.room_id]["players"][self.user]
+			if self.room_id in self.rooms.keys():
+				if self.user in self.rooms[self.room_id]["players"]:
+					# remove the player from the room when he disconnects
+					del self.rooms[self.room_id]["players"][self.user]
 
 
 	async def receive(self, text_data):
@@ -85,19 +92,54 @@ class GameConsumer(AsyncWebsocketConsumer):
 			)
 		)
 
+	async def goal_msg(self, event):
+		await self.send(
+			text_data = json.dumps(
+				{
+					"type": "goal_msg",
+					"player": event["player"],
+					"finish": event["finish"],
+				}
+			)
+		)
+
+	async def ready_msg(self, event):
+		await self.send(
+			text_data = json.dumps(
+				{
+					"type": "ready",
+				}
+			)
+		)
+
 	async def game_loop(self):
 		# game countdown
-		await asyncio.sleep(2)
+		await self.channel_layer.group_send(
+			self.room_id, {"type": "ready_msg"},
+		)
+		await asyncio.sleep(5)
 		room = self.rooms.get(self.room_id, None)
 		if room:
-			while not room["game"].ended:
+			while not room["game"].finish:
 				for player_id in room["players"]:
 					player = room["players"][player_id]
 					if player["board_pos"] == 1:
 						room["game"].pad1.move(player["direction"])
 					elif player["board_pos"] == 2:
 						room["game"].pad2.move(player["direction"])
-				room["game"].calculate_frame()
+
+				# delay after goals
+				goal = room["game"].calculate_frame()
+				if goal:
+					await self.channel_layer.group_send(
+						self.room_id,
+						{
+							"type": "goal_msg",
+							"player": room[f"player{goal}"],
+							"finish": room["game"].finish
+						},
+					)
+					await asyncio.sleep(1)
 
 				if len(room["players"]) == 0:
 					break
@@ -110,4 +152,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			# game end notification
 			# should write the result in the database
 		# delete the room from the self.rooms object when the game is done
+		await self.channel_layer.group_discard(
+			self.room_id, self.channel_name
+		)
 		del self.rooms[self.room_id]

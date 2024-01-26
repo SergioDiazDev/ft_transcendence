@@ -18,20 +18,33 @@
 			align-items: center;
 			height: 100vh;
 		}
-		#score {
+		.game-vars {
 			position: absolute;
-			margin-top: 10%;
 			width: 100%;
 			text-align: center;
 			z-index: 100;
 			color: #a787fa;
-			font-size: 5vw;
+			font-size: 4vw;
 			font-family: monospace;
 		}
+		#score {
+			top: 15vh;
+		}
+		#goal {
+			top: 45vh;
+			width: auto;
+			font-size: 3vw;
+		}
 		#game-container {
+			min-width: 80vw;
+			min-height: 80vh;
+			aspect-ratio: 16 / 9;
 			font-size: 0.8em;
 			display: flex;
 			justify-content: center;
+		}
+		#game {
+			aspect-ratio: 16 / 9;
 		}
 	</style>
 	<script type="importmap">
@@ -45,69 +58,9 @@
 </head>
 <body>
 	<script type="module" src="{% static 'main.js' %}"></script>
-	<script>
-		const gameId = location.href.split("/")[4] ? location.href.split("/")[4] : "error";
-		const gameSocket = new WebSocket(`ws://${window.location.host}/wss/game/${gameId}/`);
-		var player_id = "";
-		var gamestate;
-
-		gameSocket.onmessage = messageHandler;
-
-		gameSocket.onclose = function(e) {
-			console.error("Game socket closed unexpectedly");
-		};
-
-		function messageHandler(event) {
-			const messageData = JSON.parse(event.data);
-			if (messageData.type === "gamestate_update") {
-				// draw gamestate on screen
-				gamestate = messageData.gamestate;
-			} else if (messageData.type === "player_join") {
-				player_id = messageData.player_id;
-			}
-		}
-		document.addEventListener(
-			"keydown",
-			(event) => {
-				var name = event.key;
-				if (name == "ArrowUp" || name == "w")
-				{
-					gameSocket.send(
-						JSON.stringify({ movement: "up", player: player_id })
-					)
-				}
-				if (name == "ArrowDown" || name == "s")
-				{
-					gameSocket.send(
-						JSON.stringify({ movement: "down", player: player_id })
-					)
-				}
-			},
-			false,
-		);
-		document.addEventListener(
-			"keyup",
-			(event) => {
-				var name = event.key;
-				if (name == "ArrowDown" || name == "w")
-				{
-					gameSocket.send(
-						JSON.stringify({ movement: "", player: player_id })
-					)
-				}
-				if (name == "ArrowUp" || name == "s")
-				{
-					gameSocket.send(
-						JSON.stringify({ movement: "", player: player_id })
-					)
-				}
-			},
-			false,
-		);
-
-	</script>
 	<div id="game-container">
-		<span id="score"></span>
+		<p id="score" class="game-vars"></p>
+		<p id="goal" class="game-vars"></p>
 	</div>
 </body>
 </html>

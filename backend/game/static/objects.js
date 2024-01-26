@@ -13,8 +13,6 @@ const OBJECTS_Z = 0;
 
 const PAD_H = GAME_HEIGHT / 5;
 const PAD_W = GAME_WIDTH / 100;
-const PAD_OFFSET_X = PAD_W * 5;
-const PAD_INITIAL_Y = GAME_HEIGHT / 2;
 const BALL_SIZE = GAME_WIDTH / 100;
 
 const WALL_HEIGHT = 1;
@@ -46,12 +44,6 @@ function half(value) {
 
 function height_aspect_ratio(width) {
 	return (width / 16) * 9;
-}
-
-function create_light(x, y, z, color, intensity) {
-	let light = new THREE.PointLight(color, intensity);
-	light.position.set(x, y, z);
-	return light;
 }
 
 function random_choice(object) {
@@ -143,8 +135,8 @@ class Game extends THREE.Scene {
 		this.width = GAME_WIDTH;
 		this.height = GAME_HEIGHT;
 		this.board = new Board();
-		this.pad1 = new Paddle(random_choice(PLAYER_COLORS));
-		this.pad2 = new Paddle(random_choice(PLAYER_COLORS));
+		this.pad1 = new Paddle(PLAYER_COLORS.aqua);
+		this.pad2 = new Paddle(PLAYER_COLORS.pear);
 		this.ball = new Ball();
 		this.renderer = new THREE.WebGLRenderer({ antialias: true });
 		this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -155,15 +147,13 @@ class Game extends THREE.Scene {
 	}
 	render() {
 		this.renderer.setSize(
-			window.innerWidth * 0.8,
-			height_aspect_ratio(window.innerWidth * 0.8),
+			window.innerWidth,
+			height_aspect_ratio(window.innerWidth),
 		);
 		this.add(this.ball);
 		this.add(this.pad1);
 		this.add(this.pad2);
 		this.add(this.board);
-		//this.add(new THREE.AmbientLight(0xcccccc, 0.3));
-		//this.update_score();
 		this.renderer.domElement.setAttribute("id", "game");
 		document.getElementById("game-container").appendChild(this.renderer.domElement);
 		// Neon style effect
@@ -186,7 +176,9 @@ class Game extends THREE.Scene {
 		this.composer.addPass(outputPass);
 		this.renderer.toneMappingExposure = 16;
 	}
-	update_score() {
+	update_score(p1, p2) {
+		this.score.p1 = p1;
+		this.score.p2 = p2;
 		if (this.score.p1 == MAX_SCORE - 1 && this.score.p2 == MAX_SCORE - 1)
 		{
 			document.getElementById("score").innerText = "MATCH POINT";

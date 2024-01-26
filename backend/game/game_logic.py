@@ -73,6 +73,8 @@ class PongBall(PongObject):
 		self.obj_height = BALL_SIZE / 2
 
 	def reset(self, direction = 1):
+		if direction == 2:
+			direction = -1
 		self.position = copy.deepcopy(self.INITIAL_POSITION)
 		self.direction = {"x": BALL_SPEED * direction, "y": 0}
 
@@ -87,17 +89,19 @@ class PongGame:
 		self.pad1 = PongPaddle(0 + PAD_OFFSET_X)
 		self.pad2 = PongPaddle(GAME_WIDTH - PAD_OFFSET_X)
 		self.ball = PongBall()
-		self.ended = False
+		self.finish = False
 
 	def check_goal(self):
 		if self.ball.get_x() > GAME_WIDTH:
 			self.score["p1"] += 1
+			if self.score["p1"] == 5:
+				self.finish = True
 			return 1
 		elif self.ball.get_x() < 0:
 			self.score["p2"] += 1
-			return -1
-		if self.score["p1"] >= 5 or self.score["p2"] >= 5:
-			self.ended = True
+			if self.score["p2"] == 5:
+				self.finish = True
+			return 2
 		return 0
 
 	def calculate_frame(self):
@@ -110,6 +114,7 @@ class PongGame:
 		self.ball_pad_collision(self.pad1)
 		self.ball_pad_collision(self.pad2)
 		self.ball.move()
+		return goal
 
 	def ball_board_collision(self):
 		ball_bounds = self.ball.get_y_bounds()
