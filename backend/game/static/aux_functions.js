@@ -17,3 +17,20 @@ export function announceGoal(player, end) {
 	else if (player != "")
 		document.getElementById("goal").innerText = player + " won the match.";
 }
+
+export function countdown(containerId, count) {
+	const container = document.getElementById(containerId);
+
+	function updateCountdown() {
+		if (count == 0)
+				container.textContent = "";
+		if (count > 0) {
+			container.textContent = count;
+			count--;
+		}
+		else
+			clearInterval(interval);
+	}
+	updateCountdown();
+	const interval = setInterval(updateCountdown, 1000);
+}

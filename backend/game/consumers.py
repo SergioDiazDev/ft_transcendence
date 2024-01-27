@@ -117,7 +117,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.channel_layer.group_send(
 			self.room_id, {"type": "ready_msg"},
 		)
-		await asyncio.sleep(5)
+		await asyncio.sleep(4)
 		room = self.rooms.get(self.room_id, None)
 		if room:
 			while not room["game"].finish:

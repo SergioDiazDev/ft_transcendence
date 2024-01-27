@@ -1,10 +1,8 @@
 import WebGL from "three/addons/capabilities/WebGL.js";
 import Game from "./objects.js";
-import {announceGoal, getPositionVector, OBJECTS_Z} from "./aux_functions.js";
+import {announceGoal, getPositionVector, OBJECTS_Z, countdown} from "./aux_functions.js";
 
-const lerpSmoothness = 0.6;
-
-const gameId = location.href.split("/")[4] ? location.href.split("/")[4] : "error";
+const gameId = location.href.split("/")[4] ? location.href.split("/")[4] : "error"; // there could be a better way to do this
 const gameSocket = new WebSocket(`ws://${window.location.host}/wss/game/${gameId}/`);
 var game = new Game();
 var gameContainer = document.getElementById("game-container");
@@ -12,6 +10,7 @@ var gameContainer = document.getElementById("game-container");
 var player_id = "";
 var gamestate;
 var finish = false;
+const lerpSmoothness = 0.6;
 
 // Socket handling
 
@@ -31,7 +30,7 @@ gameSocket.onclose = function (e) {
 function messageHandler(event) {
 	const messageData = JSON.parse(event.data);
 	if (messageData.type === "gamestate_update") {
-		announceGoal("", finish);
+		announceGoal("", finish); // this removes the goal message only if the game has not finished
 		gamestate = messageData.gamestate;
 		// close the socket here so the last goal gets received
 		if (finish)
@@ -42,8 +41,7 @@ function messageHandler(event) {
 		finish = messageData.finish;
 		announceGoal(messageData.player, messageData.finish);
 	} else if (messageData.type === "ready") {
-		// TODO: implement countdown message
-		console.log("Game ready, 5 seconds to start");
+		countdown("countdown", 3);
 	}
 }
 
