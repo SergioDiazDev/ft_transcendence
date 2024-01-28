@@ -7,4 +7,4 @@ from rest_framework import status
 class UserRegistrationView(APIView):
     def post(self, request, format = None):
         print(request.POST)
-        return Response(status.HTTP_200_OK);
+        return Response(status.HTTP_200_OK)

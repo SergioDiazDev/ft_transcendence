@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
     'corsheaders', # This app is for handling cors
     'rest_framework', # This handles APIs
+    'drf_yasg', # Swagger
 
     # Local apps
     'tokens', # This is for getting tokens
