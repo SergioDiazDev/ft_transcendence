@@ -2,6 +2,7 @@ import os
 import json
 import asyncio
 import uuid
+import random
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from game.game_logic import PongGame
@@ -42,6 +43,14 @@ class GameConsumer(AsyncWebsocketConsumer):
 				#TODO: remove this comment when we have the user auth
 				#self.rooms[self.room_id]["player1"] = self.user
 				self.rooms[self.room_id]["player1"] = "Jugador 1"
+				if self.vs_ai:
+					self.rooms[self.room_id]["players"]["AI"] = {
+						"board_pos": 2,
+						"direction": 0,
+					}
+					self.rooms[self.room_id]["player2"] = "AI"
+					self.rooms[self.room_id]["game"] = PongGame()
+					asyncio.create_task(self.game_loop())
 			# second player joins the room
 			else:
 				self.rooms[self.room_id]["players"][self.user] = {
@@ -133,7 +142,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 					if player["board_pos"] == 1:
 						room["game"].pad1.move(player["direction"])
 					elif player["board_pos"] == 2:
-						room["game"].pad2.move(player["direction"])
+						if self.vs_ai:
+							room["game"].pad2.move(random.choice([0, 1, -1]))
+						else:
+							room["game"].pad2.move(player["direction"])
 
 				# delay after goals
 				goal = room["game"].calculate_frame()
