@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Game</title>
+	<link rel="stylesheet" href="{% static 'resets.css' %}">
+	<style>
+		div {
+			font-size: 0.8em;
+			white-space: pre-wrap;
+		}
+		body {
+			margin: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			height: 100vh;
+		}
+		.game-vars {
+			position: absolute;
+			width: 100%;
+			text-align: center;
+			z-index: 100;
+			color: #a787fa;
+			font-size: 4vw;
+			font-family: monospace;
+		}
+		#score {
+			top: 15%;
+		}
+		#countdown {
+			top: 40%;
+			font-size: 10vw;
+		}
+		#goal {
+			top: 45%;
+			width: auto;
+			font-size: 3vw;
+		}
+		#game-container {
+			min-width: 80vw;
+			min-height: 80vh;
+			aspect-ratio: 16 / 9;
+			font-size: 0.8em;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+		#game {
+			aspect-ratio: 16 / 9;
+		}
+	</style>
+	<script type="importmap">
+	{
+		"imports": {
+		"three": "https://unpkg.com/three@0.160.1/build/three.module.js",
+		"three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/"
+		}
+	}
+	</script>
+</head>
+<body>
+	<script type="module" src="{% static 'main.js' %}"></script>
+	<div id="game-container">
+		<p id="score" class="game-vars"></p>
+		<p id="countdown" class="game-vars"></p>
+		<p id="goal" class="game-vars"></p>
+	</div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./assets/css/stylesForms.css">
+    <link rel="stylesheet" href="./assets/css/stylesProfile.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&display=swap" rel="stylesheet">
+    <title>ft_transcendence</title>
+</head>
+
+<body>
+    <div class="row" id="main-profile">
+        <aside class="col-2 " id="section-profile-left d-none d-lg-block">
+            
+        </aside>
+        <main class="col-7 container" id="section-profile-mid">
+            <article class="row me-1" id="article-profile">
+                <section class="col-4 container-fluid p-4" id="section-games">
+                    <h2 id="h2-name-profile" class="fw-bold">nanoldiho</h2>
+                    <span class="col-12 " id="span-profile-img">
+                        <picture class="picture">
+                            <img src="assets/img/profile_pic.png" alt="" class="">
+                        </picture>
+                    </span>
+                    <span id="span-profile-game" class="col-12">
+                        <p>754 games</p>
+                        <p>400 wins</p>
+                        <p>53% win rate</p>
+                    </span>
+                    <span id="span-profile-tournament" class="col-12">
+                        <p>Tournament</p>
+                        <p>stats</p>
+                        <p>5 1st places</p>
+                        <p>3 2nd places</p>
+                        <p>8 3rd places</p>
+                    </span>
+                </section>
+                <section class="col-8" id="section-match-history">
+                    <h2 id="h2-name-profile" class="fw-bold">Match history</h2>
+                    <span class="container mt-3" id="span-history">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-split">
+                                <tbody>
+                                    <tr class="mb-3">
+                                        <td id="table-history-res"><img src="assets/img/match_lose.png" alt=""></td>
+                                        <td id="table-history-player1" title="Player2">Player2</td>
+                                        <td>VS</td>
+                                        <td id="table-history-player2" title="poner user">Player1</td>
+                                        <td id="table-history-date" title="fecha">26/12/2023</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </span>
+                </section>
+            </article>
+        </main>
+        <aside class="col-3" id="section-profile-right">
+            <h3>Online friends</h3>
+            <section class="row">
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-6">username_123</article>
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-2"><i class="fas  fa-inbox"></i></article>
+            </section>
+            <section class="row">
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-6">username_123</article>
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-2"><i class="fas  fa-inbox"></i></article>
+            </section>
+            <section class="row">
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-6">username_123</article>
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-2"><i class="fas  fa-inbox"></i></article>
+            </section>
+            <section class="row">
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-6">username_123</article>
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-2"><i class="fas  fa-inbox"></i></article>
+            </section>
+            <section class="row">
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-6">username_123</article>
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-2"><i class="fas  fa-inbox"></i></article>
+            </section>
+        </aside>
+    </div>
+    <script src="assets/js/CustomElement.js"></script>
+    <script src="assets/js/CreateElement.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/styles.js"></script>
+    <script src="assets/components/nav/navMenu.component.js"></script>
+    <script src="assets/components/form/form.component.js"></script>
+    <script src="assets/components/login/login.component.js"></script>
+    <script src="assets/components/logUp/logUp.component.js"></script>
+    <script>
+        // createLogUp('logup');
+        changeBgBody("profile");
+    </script>
+    <script src="assets/js/Request.js"></script>
+    <script src="assets/js/Cookie.js"></script>
+    <script src="assets/components/logUp/form_post.js"></script>
+</body>
+</html>
