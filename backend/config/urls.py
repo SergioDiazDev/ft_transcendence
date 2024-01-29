@@ -34,4 +34,5 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('token/', include('tokens.urls')),
     path('game/', include("game.urls")),
+    path('game_ai/', include("game.urls")),
 ]

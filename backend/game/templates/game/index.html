@@ -53,6 +53,14 @@
 			aspect-ratio: 16 / 9;
 		}
 	</style>
+	<script>
+		const gameId = "{{ game_id }}";
+		{% if vs_ai %}
+		const vsAI = true;
+		{% else %}
+		const vsAI = false;
+		{% endif %}
+	</script>
 	<script type="importmap">
 	{
 		"imports": {

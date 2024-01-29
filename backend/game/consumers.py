@@ -2,6 +2,8 @@ import os
 import json
 import asyncio
 import uuid
+import random
+import time
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from game.game_logic import PongGame
@@ -9,6 +11,14 @@ from game.game_logic import PongGame
 class GameConsumer(AsyncWebsocketConsumer):
 	rooms = {}
 	update_lock = asyncio.Lock()
+
+	def __init__(self, *args, **kwargs):
+		self.vs_ai = kwargs.pop("vs_ai", False)  # Get vs_ai parameter, default to False
+		if self.vs_ai:
+			print("Game vs AI", os.getcwd(), flush=True)
+		else:
+			print("Game vs another player", os.getcwd(), flush=True)
+		super().__init__(*args, **kwargs)
 
 	async def connect(self):
 		# each consumer has a scope that contains info about its connection, like game_id in the URL
@@ -34,6 +44,14 @@ class GameConsumer(AsyncWebsocketConsumer):
 				#TODO: remove this comment when we have the user auth
 				#self.rooms[self.room_id]["player1"] = self.user
 				self.rooms[self.room_id]["player1"] = "Jugador 1"
+				if self.vs_ai:
+					self.rooms[self.room_id]["players"]["AI"] = {
+						"board_pos": 2,
+						"direction": 0,
+					}
+					self.rooms[self.room_id]["player2"] = "AI"
+					self.rooms[self.room_id]["game"] = PongGame()
+					asyncio.create_task(self.game_loop())
 			# second player joins the room
 			else:
 				self.rooms[self.room_id]["players"][self.user] = {
@@ -49,8 +67,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.accept()
 		await self.channel_layer.group_add(self.room_id, self.channel_name)
 		await self.send(
-            text_data=json.dumps({"type": "player_join", "player_id": self.user, "room_id": self.room_id })
-        )
+			text_data=json.dumps({"type": "player_join", "player_id": self.user, "room_id": self.room_id })
+		)
 
 	async def disconnect(self, close_code):
 		# group_discard -> disconnect channel from the group
@@ -63,7 +81,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 				if self.user in self.rooms[self.room_id]["players"]:
 					# remove the player from the room when he disconnects
 					del self.rooms[self.room_id]["players"][self.user]
-
 
 	async def receive(self, text_data):
 		text_data_json = json.loads(text_data)
@@ -118,19 +135,47 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.room_id, {"type": "ready_msg"},
 		)
 		await asyncio.sleep(4)
+
 		room = self.rooms.get(self.room_id, None)
 		if room:
+			if self.vs_ai:
+				ai_status = room["game"].get_gamestate() # this is the board that we send to the AI once per second
+				last_ai_update = time.time()
+
+			# game loop
 			while not room["game"].finish:
+				# send the board status to the AI if 1 sec or more went since last time
+				if self.vs_ai and time.time() - last_ai_update >= 1:
+					ai_status = room["game"].get_gamestate()
+
+					# if the pad is under the ball, it goes up, else it goes down
+					if ai_status["pad2"]["y"] < ai_status["ball"]["y"]:
+						room["players"]["AI"]["direction"] = 1
+					elif ai_status["pad2"]["y"] == ai_status["ball"]["y"]:
+						room["players"]["AI"]["direction"] = 0
+					else:
+						room["players"]["AI"]["direction"] = -1
+
+					last_ai_update = time.time()
+
+				# get what move is every player is making and do it in the game
 				for player_id in room["players"]:
 					player = room["players"][player_id]
 					if player["board_pos"] == 1:
 						room["game"].pad1.move(player["direction"])
 					elif player["board_pos"] == 2:
+						# AI is always player 2, it should be treated as a regular player, it
+						# should make its moves as the players do
 						room["game"].pad2.move(player["direction"])
 
 				# delay after goals
 				goal = room["game"].calculate_frame()
 				if goal:
+					# if there is a goal, we should also send the gamestate to the AI
+					if self.vs_ai:
+						ai_status = room["game"].get_gamestate()
+						last_ai_update = time.time()
+
 					await self.channel_layer.group_send(
 						self.room_id,
 						{
@@ -141,14 +186,17 @@ class GameConsumer(AsyncWebsocketConsumer):
 					)
 					await asyncio.sleep(1)
 
+				# stop the game when all players disconnect
 				if len(room["players"]) == 0:
 					break
 
+				# send the gamestate to the players every 1/64 seconds
 				await self.channel_layer.group_send(
 					self.room_id,
 					{"type": "gamestate_update", "room": self.room_id, "gamestate": room["game"].get_gamestate()},
 				)
 				await asyncio.sleep(0.015625) # 64 ticks per second
+
 			# game end notification
 			# should write the result in the database
 		# delete the room from the self.rooms object when the game is done
