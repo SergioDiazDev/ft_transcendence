@@ -10,7 +10,7 @@ document.getElementById("form-logup").addEventListener("submit", function (event
     'username': username,
     'pass': pass,
   }
-  const r = new Request(`http://localhost:8000/accounts/register/`, user);
+  const r = new Request(`${window.location.protocol}//${window.location.host.replace(":5500", ":8000")}/accounts/register/`, user);
   const res = r.post();
 
   res.then(res => res.text())

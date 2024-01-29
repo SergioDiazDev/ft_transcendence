@@ -2,7 +2,7 @@
 class Request {
 
     static csrf_token = `X-CSRFToken`;
-    static #URL_CSRF_TOKEN = `http://localhost:8000/token/csrf_token/`
+    static #URL_CSRF_TOKEN = `${window.location.protocol}//${window.location.host.replace(":5500", ":8000")}/token/csrf_token/`;
     /**
      * 
      * @param {String} _url - Url to hit in web request

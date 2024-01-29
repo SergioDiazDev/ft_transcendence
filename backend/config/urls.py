@@ -33,4 +33,5 @@ urlpatterns = [
     path('api/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('accounts/', include('accounts.urls')),
     path('token/', include('tokens.urls')),
+    path('game/', include("game.urls")),
 ]

@@ -9,14 +9,10 @@ import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 const GAME_WIDTH = 100;
 const GAME_HEIGHT = height_aspect_ratio(GAME_WIDTH);
 
-const BALL_SPEED = 1;
 const OBJECTS_Z = 0;
 
 const PAD_H = GAME_HEIGHT / 5;
 const PAD_W = GAME_WIDTH / 100;
-const PAD_OFFSET_X = PAD_W * 5;
-const PAD_INITIAL_Y = GAME_HEIGHT / 2;
-const PAD_SPEED = 1;
 const BALL_SIZE = GAME_WIDTH / 100;
 
 const WALL_HEIGHT = 1;
@@ -50,12 +46,6 @@ function height_aspect_ratio(width) {
 	return (width / 16) * 9;
 }
 
-function create_light(x, y, z, color, intensity) {
-	let light = new THREE.PointLight(color, intensity);
-	light.position.set(x, y, z);
-	return light;
-}
-
 function random_choice(object) {
 	var keys = Object.keys(object);
 	var index = Math.floor(Math.random() * keys.length);
@@ -63,37 +53,21 @@ function random_choice(object) {
 }
 
 class Paddle extends THREE.Mesh {
-	constructor(x, color, index) {
+	constructor(color) {
 		var capsule_length = PAD_H - PAD_W * 3;
 		super(
 			new THREE.CapsuleGeometry(PAD_W, capsule_length, 3, 10),
 			new THREE.MeshStandardMaterial({color: color}),
 		);
-		this.index = index;
-		this.position.set(x, PAD_INITIAL_Y, OBJECTS_Z);
-		this.initial_pos = new THREE.Vector3(x, PAD_INITIAL_Y, OBJECTS_Z);
 		this.rect_light = new THREE.RectAreaLight(color, 5, PAD_W, PAD_H);
 		this.rect_light.position.set(half(PAD_W), 0, OBJECTS_Z + 1);
 		this.rect_light.lookAt(0, 0, 0);
+			/*
 		if (index == 2)
 			this.rotateZ(Math.PI);
+			*/
 		this.add(this.rect_light);
-		this.color = color;
-		this.width = PAD_W;
-		this.height = PAD_H;
-	}
-	moveUp() {
-		if (this.position.y < GAME_HEIGHT - half(PAD_H)) {
-			this.position.y += PAD_SPEED;
-		}
-	}
-	moveDown() {
-		if (this.position.y > 0 + half(PAD_H)) {
-			this.position.y -= PAD_SPEED;
-		}
-	}
-	reset() {
-		this.position.y = this.initial_pos.y;
+		this.position.set(0, 0, -100);
 	}
 }
 
@@ -104,35 +78,10 @@ class Ball extends THREE.Mesh {
 			new THREE.SphereGeometry(radius, 32, 16),
 			new THREE.MeshPhongMaterial({ color: COLORS.pink, shininess: 100}),
 		);
-		this.radius = radius;
-		this.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), 1);
-		this.direction = new THREE.Vector3(BALL_SPEED, 0, 0);
-		this.light = create_light(0, 0, 0, COLORS.purple, 60);
-		this.light.position.z = OBJECTS_Z;
+		this.light = new THREE.PointLight(COLORS.purple, 60, 10);
+		this.light.position.set(0, 0, OBJECTS_Z + 0.5);
 		this.add(this.light);
-		if (Date.now() % 2 == 0) {
-			this.direction.x *= -1;
-		}
-	}
-	move() {
-		this.position.x += this.direction.x;
-		this.position.y += this.direction.y;
-	}
-	reset(direction) {
-		this.position.set(half(GAME_WIDTH), half(GAME_HEIGHT), 1);
-		this.direction = new THREE.Vector3(BALL_SPEED * direction, 0, 0);
-	}
-	get lower_y() {
-		return this.position.y - this.radius;
-	}
-	get upper_y() {
-		return this.position.y + this.radius;
-	}
-	get left_x() {
-		return this.position.x - this.radius;
-	}
-	get right_x() {
-		return this.position.x + this.radius;
+		this.position.set(0, 0, -100);
 	}
 }
 
@@ -182,12 +131,12 @@ class Board extends THREE.Group {
 class Game extends THREE.Scene {
 	constructor() {
 		super();
-		this.score = { p1: 0, p2: 0 };
+		this.score = {p1: NaN, p2: NaN};
 		this.width = GAME_WIDTH;
 		this.height = GAME_HEIGHT;
 		this.board = new Board();
-		this.pad1 = new Paddle(0 + PAD_OFFSET_X, random_choice(PLAYER_COLORS), 1);
-		this.pad2 = new Paddle(GAME_WIDTH - PAD_OFFSET_X, random_choice(PLAYER_COLORS), 2);
+		this.pad1 = new Paddle(PLAYER_COLORS.aqua);
+		this.pad2 = new Paddle(PLAYER_COLORS.pear);
 		this.ball = new Ball();
 		this.renderer = new THREE.WebGLRenderer({ antialias: true });
 		this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -205,10 +154,8 @@ class Game extends THREE.Scene {
 		this.add(this.pad1);
 		this.add(this.pad2);
 		this.add(this.board);
-		//this.add(new THREE.AmbientLight(0xcccccc, 0.3));
-		this.update_score();
 		this.renderer.domElement.setAttribute("id", "game");
-		document.body.appendChild(this.renderer.domElement);
+		document.getElementById("game-container").appendChild(this.renderer.domElement);
 		// Neon style effect
 		const renderScene = new RenderPass(this, this.camera);
 		const bloomPass = new UnrealBloomPass(
@@ -229,21 +176,9 @@ class Game extends THREE.Scene {
 		this.composer.addPass(outputPass);
 		this.renderer.toneMappingExposure = 16;
 	}
-	update() {
-		if (!this.check_game_end()) {
-			var goal = this.check_goal();
-			if (goal != 0)
-			{
-				this.reset_board(goal);
-				this.update_score();
-			}
-			var pad_hit = this.check_pad_collisions();
-			if (pad_hit != 0) this.calculate_ball_dir(pad_hit);
-			if (this.check_board_collision()) this.ball.direction.y *= -1;
-			this.ball.move();
-		}
-	}
-	update_score() {
+	update_score(p1, p2) {
+		this.score.p1 = p1;
+		this.score.p2 = p2;
 		if (this.score.p1 == MAX_SCORE - 1 && this.score.p2 == MAX_SCORE - 1)
 		{
 			document.getElementById("score").innerText = "MATCH POINT";
@@ -251,65 +186,6 @@ class Game extends THREE.Scene {
 		else {
 			document.getElementById("score").innerText = `${this.score.p1}\u00A0\u00A0${this.score.p2}`;
 		}
-	}
-	reset_board(direction) {
-		this.ball.reset(direction);
-		this.pad1.reset();
-		this.pad2.reset();
-	}
-	check_goal() {
-		if (this.ball.position.x > GAME_WIDTH) {
-			this.score.p1 += 1;
-			return 1;
-		} else if (this.ball.position.x < 0) {
-			this.score.p2 += 1;
-			return -1;
-		}
-		return 0;
-	}
-	check_pad_collisions() {
-		if (this.calculate_pad_hit(this.ball, this.pad1)) return -1;
-		if (this.calculate_pad_hit(this.ball, this.pad2)) return 1;
-		return 0;
-	}
-	calculate_pad_hit(ball, pad) {
-		var hit = {
-			x: ball.right_x - pad.position.x,
-			y: ball.position.y - pad.position.y,
-		};
-		if (pad.index == 1) hit.x = ball.left_x - pad.position.x;
-		if (
-			hit.y <= half(PAD_H) &&
-			hit.y >= half(-PAD_H) &&
-			hit.x <= half(PAD_W) &&
-			hit.x >= half(-PAD_W)
-		)
-			return true;
-		return false;
-	}
-	check_board_collision() {
-		if (this.ball.lower_y <= 0 || this.ball.upper_y >= GAME_HEIGHT)
-			return true;
-		return false;
-	}
-	calculate_ball_dir(pad_hit) {
-		if (pad_hit == -1) {
-			this.ball.direction.x *= -1;
-			this.ball.direction.y =
-				(this.ball.position.y - this.pad1.position.y) / PAD_H;
-		}
-		if (pad_hit == 1) {
-			this.ball.direction.x *= -1;
-			this.ball.direction.y =
-				(this.ball.position.y - this.pad2.position.y) / PAD_H;
-		}
-	}
-	check_game_end() {
-		if (this.score.p1 >= MAX_SCORE || this.score.p2 >= MAX_SCORE) {
-			console.log("Game ended");
-			return true;
-		}
-		return false;
 	}
 }
 

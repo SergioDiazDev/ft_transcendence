@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
 </head>
 <body>
-    <style>
-        form {
-            width: 50%;
-            margin: 0 auto;
-        }
+	<style>
+		form {
+			width: 50%;
+			margin: 0 auto;
+		}
 
-        form input {
-            margin-bottom: 10px;
-        }
-    </style>
-    <section id="root"></section>
+		form input {
+			margin-bottom: 10px;
+		}
+	</style>
+	<section id="root"></section>
+		<script>
+		const r = new Request(`${window.location.protocol}//${window.location.host.replace(":5500", ":8000")}/accounts/register/`, persona);
+		const res = r.post();
+
+		res.then(res => res.text())
+			.then(data => console.log(data));
+
+
+		</script>
 </body>
 <script src="delete.js" type="module"></script>
 </html>
