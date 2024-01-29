@@ -10,6 +10,14 @@ class GameConsumer(AsyncWebsocketConsumer):
 	rooms = {}
 	update_lock = asyncio.Lock()
 
+	def __init__(self, *args, **kwargs):
+		self.vs_ai = kwargs.pop("vs_ai", False)  # Get vs_ai parameter, default to False
+		if self.vs_ai:
+			print("Game vs AI", os.getcwd(), flush=True)
+		else:
+			print("Game vs another player", os.getcwd(), flush=True)
+		super().__init__(*args, **kwargs)
+
 	async def connect(self):
 		# each consumer has a scope that contains info about its connection, like game_id in the URL
 		# or the currently authenticated user
@@ -49,8 +57,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		await self.accept()
 		await self.channel_layer.group_add(self.room_id, self.channel_name)
 		await self.send(
-            text_data=json.dumps({"type": "player_join", "player_id": self.user, "room_id": self.room_id })
-        )
+			text_data=json.dumps({"type": "player_join", "player_id": self.user, "room_id": self.room_id })
+		)
 
 	async def disconnect(self, close_code):
 		# group_discard -> disconnect channel from the group
@@ -63,7 +71,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 				if self.user in self.rooms[self.room_id]["players"]:
 					# remove the player from the room when he disconnects
 					del self.rooms[self.room_id]["players"][self.user]
-
 
 	async def receive(self, text_data):
 		text_data_json = json.loads(text_data)

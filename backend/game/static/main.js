@@ -2,8 +2,9 @@ import WebGL from "three/addons/capabilities/WebGL.js";
 import Game from "./objects.js";
 import {announceGoal, getPositionVector, OBJECTS_Z, countdown} from "./aux_functions.js";
 
-const gameId = location.href.split("/")[4] ? location.href.split("/")[4] : "error"; // there could be a better way to do this
-const gameSocket = new WebSocket(`ws://${window.location.host}/wss/game/${gameId}/`);
+const slug = vsAI ? `wss/game_ai/${gameId}/` : `wss/game/${gameId}/`;
+
+const gameSocket = new WebSocket(`ws://${window.location.host}/${slug}`);
 var game = new Game();
 var gameContainer = document.getElementById("game-container");
 
