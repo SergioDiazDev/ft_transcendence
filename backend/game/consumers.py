@@ -150,7 +150,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 					ai_status = copy.deepcopy(room["game"].get_gamestate())
 					# if the pad is under the ball, it goes up, else it goes down
 					last_ai_update = time.time()
-				
+
 				if self.vs_ai:
 					room["players"]["AI"]["direction"] = AI(ai_status).predict_movement(room["game"].pad2.get_position())
 

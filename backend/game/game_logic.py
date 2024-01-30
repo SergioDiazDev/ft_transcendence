@@ -144,23 +144,28 @@ class PongGame:
 			"ball": self.ball.get_position(),
 			"ball_direction": self.ball.get_direction(),
 		}
-	
+
 class AI:
-	def __init__(self, gamestate):
+	def __init__(self, gamestate, wrongness = 5):
 		self.gamestate = gamestate
+		self.wrongness = wrongness
 
 	def predict_movement(self, pad_position) -> int:
 		ball_pos = self.gamestate["ball"]
 		ball_dir = self.gamestate["ball_direction"]
-		
+
 		if ball_dir["x"] <= 0.0:
 			return 0
 
 		slope = ball_dir["y"] / ball_dir["x"]
 		final_pos = (pad_position["x"] - ball_pos["x"]) * slope + ball_pos["y"]
 
-		if pad_position["y"] > final_pos:
+		# I am going to add an error that gets adjusted depending on the "wrongness" level,
+		# the more wrongness, the wider the error is
+		error = random.uniform(self.wrongness, -self.wrongness)
+
+		if pad_position["y"] > final_pos + error:
 			return -1
-		if pad_position["y"] < final_pos:
+		if pad_position["y"] < final_pos + error:
 			return 1
 		return 0
