@@ -4,6 +4,7 @@ import asyncio
 import uuid
 import random
 import time
+import copy
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from game.game_logic import PongGame, AI
@@ -139,16 +140,19 @@ class GameConsumer(AsyncWebsocketConsumer):
 		room = self.rooms.get(self.room_id, None)
 		if room:
 			if self.vs_ai:
-				ai_status = room["game"].get_gamestate() # this is the board that we send to the AI once per second
+				ai_status = copy.deepcopy(room["game"].get_gamestate()) # this is the board that we send to the AI once per second
 				last_ai_update = time.time()
 
 			# game loop
 			while not room["game"].finish:
 				# send the board status to the AI if 1 sec or more went since last time
 				if self.vs_ai and time.time() - last_ai_update >= 1:
-					ai_status = room["game"].get_gamestate()
+					ai_status = copy.deepcopy(room["game"].get_gamestate())
 					# if the pad is under the ball, it goes up, else it goes down
 					last_ai_update = time.time()
+				
+				if self.vs_ai:
+					room["players"]["AI"]["direction"] = AI(ai_status).predict_movement(room["game"].pad2.get_position())
 
 				# get what move is every player is making and do it in the game
 				for player_id in room["players"]:
@@ -156,8 +160,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 					if player["board_pos"] == 1:
 						room["game"].pad1.move(player["direction"])
 					elif player["board_pos"] == 2:
-						if self.vs_ai:
-							room["players"]["AI"]["direction"] = AI(ai_status).predict_movement(room["game"].pad2.get_position())
 						# AI is always player 2, it should be treated as a regular player, it
 						# should make its moves as the players do
 						room["game"].pad2.move(player["direction"])
