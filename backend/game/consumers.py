@@ -6,7 +6,7 @@ import random
 import time
 
 from channels.generic.websocket import AsyncWebsocketConsumer
-from game.game_logic import PongGame
+from game.game_logic import PongGame, AI
 
 class GameConsumer(AsyncWebsocketConsumer):
 	rooms = {}
@@ -147,15 +147,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 				# send the board status to the AI if 1 sec or more went since last time
 				if self.vs_ai and time.time() - last_ai_update >= 1:
 					ai_status = room["game"].get_gamestate()
-
 					# if the pad is under the ball, it goes up, else it goes down
-					if ai_status["pad2"]["y"] < ai_status["ball"]["y"]:
-						room["players"]["AI"]["direction"] = 1
-					elif ai_status["pad2"]["y"] == ai_status["ball"]["y"]:
-						room["players"]["AI"]["direction"] = 0
-					else:
-						room["players"]["AI"]["direction"] = -1
-
 					last_ai_update = time.time()
 
 				# get what move is every player is making and do it in the game
@@ -164,6 +156,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 					if player["board_pos"] == 1:
 						room["game"].pad1.move(player["direction"])
 					elif player["board_pos"] == 2:
+						if self.vs_ai:
+							room["players"]["AI"]["direction"] = AI(ai_status).predict_movement(room["game"].pad2.get_position())
 						# AI is always player 2, it should be treated as a regular player, it
 						# should make its moves as the players do
 						room["game"].pad2.move(player["direction"])

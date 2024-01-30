@@ -1,3 +1,4 @@
+import os
 import random
 import copy
 
@@ -82,6 +83,8 @@ class PongBall(PongObject):
 		self.position["x"] += self.direction["x"]
 		self.position["y"] += self.direction["y"]
 
+	def get_direction(self):
+		return self.direction
 
 class PongGame:
 	def __init__(self):
@@ -139,4 +142,25 @@ class PongGame:
 			"pad1": self.pad1.get_position(),
 			"pad2": self.pad2.get_position(),
 			"ball": self.ball.get_position(),
+			"ball_direction": self.ball.get_direction(),
 		}
+	
+class AI:
+	def __init__(self, gamestate):
+		self.gamestate = gamestate
+
+	def predict_movement(self, pad_position) -> int:
+		ball_pos = self.gamestate["ball"]
+		ball_dir = self.gamestate["ball_direction"]
+		
+		if ball_dir["x"] <= 0.0:
+			return 0
+
+		slope = ball_dir["y"] / ball_dir["x"]
+		final_pos = (pad_position["x"] - ball_pos["x"]) * slope + ball_pos["y"]
+
+		if pad_position["y"] > final_pos:
+			return -1
+		if pad_position["y"] < final_pos:
+			return 1
+		return 0
