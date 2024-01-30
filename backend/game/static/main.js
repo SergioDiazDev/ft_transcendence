@@ -1,4 +1,4 @@
-import WebGL from "three/addons/capabilities/WebGL.js";
+import WebGL from "./three/examples/jsm/capabilities/WebGL.js";
 import Game from "./objects.js";
 import {announceGoal, getPositionVector, OBJECTS_Z, countdown} from "./aux_functions.js";
 

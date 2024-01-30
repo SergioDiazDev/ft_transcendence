@@ -1,9 +1,9 @@
-import * as THREE from "three";
+import { Vector3 } from "./three/build/three.module.min.js";
 
 export const OBJECTS_Z = 0;
 
 export function getPositionVector(x, y) {
-	return new THREE.Vector3(x, y, OBJECTS_Z);
+	return new Vector3(x, y, OBJECTS_Z);
 }
 
 export function announceGoal(player, end) {

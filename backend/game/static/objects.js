@@ -1,10 +1,11 @@
 /* game logic */
 
-import * as THREE from "three";
-import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
-import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
-import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import * as THREE from "./three/build/three.module.min.js";
+import { EffectComposer } from "./three/examples/jsm/postprocessing/EffectComposer.js";
+import { UnrealBloomPass } from "./three/examples/jsm/postprocessing/UnrealBloomPass.js";
+import { RenderPass } from "./three/examples/jsm/postprocessing/RenderPass.js";
+import { OutputPass } from "./three/examples/jsm/postprocessing/OutputPass.js";
+
 
 const GAME_WIDTH = 100;
 const GAME_HEIGHT = height_aspect_ratio(GAME_WIDTH);
