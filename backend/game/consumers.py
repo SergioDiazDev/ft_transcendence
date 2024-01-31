@@ -2,7 +2,6 @@ import os
 import json
 import asyncio
 import uuid
-import random
 import time
 import copy
 
@@ -141,35 +140,38 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if room:
 			if self.vs_ai:
 				ai_status = copy.deepcopy(room["game"].get_gamestate()) # this is the board that we send to the AI once per second
+				ai_agent = AI(ai_status)
 				last_ai_update = time.time()
 
 			# game loop
 			while not room["game"].finish:
+				game = room["game"]
 				# send the board status to the AI if 1 sec or more went since last time
 				if self.vs_ai and time.time() - last_ai_update >= 1:
-					ai_status = copy.deepcopy(room["game"].get_gamestate())
+					ai_status = copy.deepcopy(game.get_gamestate())
 					# if the pad is under the ball, it goes up, else it goes down
 					last_ai_update = time.time()
-
-				if self.vs_ai:
-					room["players"]["AI"]["direction"] = AI(ai_status).predict_movement(room["game"].pad2.get_position())
+					ai_agent = AI(ai_status)
+					ai_agent.predict_ball_position(game.pad2.get_position())
 
 				# get what move is every player is making and do it in the game
 				for player_id in room["players"]:
 					player = room["players"][player_id]
 					if player["board_pos"] == 1:
-						room["game"].pad1.move(player["direction"])
+						game.pad1.move(player["direction"])
 					elif player["board_pos"] == 2:
+						if self.vs_ai:
+							player["direction"] = ai_agent.decide_movement(game.pad2.get_position())
 						# AI is always player 2, it should be treated as a regular player, it
 						# should make its moves as the players do
-						room["game"].pad2.move(player["direction"])
+						game.pad2.move(player["direction"])
 
 				# delay after goals
-				goal = room["game"].calculate_frame()
+				goal = game.calculate_frame()
 				if goal:
 					# if there is a goal, we should also send the gamestate to the AI
 					if self.vs_ai:
-						ai_status = room["game"].get_gamestate()
+						ai_status = game.get_gamestate()
 						last_ai_update = time.time()
 
 					await self.channel_layer.group_send(
@@ -177,7 +179,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 						{
 							"type": "goal_msg",
 							"player": room[f"player{goal}"],
-							"finish": room["game"].finish
+							"finish": game.finish
 						},
 					)
 					await asyncio.sleep(1)
@@ -189,7 +191,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 				# send the gamestate to the players every 1/64 seconds
 				await self.channel_layer.group_send(
 					self.room_id,
-					{"type": "gamestate_update", "room": self.room_id, "gamestate": room["game"].get_gamestate()},
+					{"type": "gamestate_update", "room": self.room_id, "gamestate": game.get_gamestate()},
 				)
 				await asyncio.sleep(0.015625) # 64 ticks per second
 
