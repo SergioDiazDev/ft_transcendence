@@ -1,8 +1,10 @@
-
-from django.forms import ModelForm
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from .models import Player
 
-class RegisterForm(ModelForm):
-    class Meta():
+class SignupForm(UserCreationForm):
+    email = forms.EmailField(max_length=200, help_text="Required")
+
+    class Meta:
         model = Player
-        fields = ["nick", "email", "password"]
+        fields = ["username", "email"]

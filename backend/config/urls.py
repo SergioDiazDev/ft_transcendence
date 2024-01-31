@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from accounts.views import signup
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -31,7 +32,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('accounts/', include('accounts.urls')),
+    path('signup/', signup, name="Sign Up"),
     path('token/', include('tokens.urls')),
     path('game/', include("game.urls")),
     path('game_ai/', include("game.urls")),
