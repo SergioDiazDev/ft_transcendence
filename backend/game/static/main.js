@@ -1,4 +1,4 @@
-import WebGL from "three/addons/capabilities/WebGL.js";
+import WebGL from "./three/examples/jsm/capabilities/WebGL.js";
 import Game from "./objects.js";
 import {announceGoal, getPositionVector, OBJECTS_Z, countdown} from "./aux_functions.js";
 
@@ -79,21 +79,25 @@ else {
 // Event listeners
 
 const keydownHandler = (event) => {
+	if (event.repeat)
+		return ;
     var name = event.key;
-    if (name == "ArrowUp" || name == "w") {
+    if (name == "ArrowUp" || name.toLowerCase() == "w") {
         gameSocket.send(JSON.stringify({ movement: "up", player: player_id }));
     }
-    if (name == "ArrowDown" || name == "s") {
+    if (name == "ArrowDown" || name.toLowerCase() == "s") {
         gameSocket.send(JSON.stringify({ movement: "down", player: player_id }));
     }
 };
 
 const keyupHandler = (event) => {
+	if (event.repeat)
+		return ;
     var name = event.key;
-    if (name == "ArrowUp" || name == "w") {
+    if (name == "ArrowUp" || name.toLowerCase() == "w") {
         gameSocket.send(JSON.stringify({ movement: "", player: player_id }));
     }
-    if (name == "ArrowDown" || name == "s") {
+    if (name == "ArrowDown" || name.toLowerCase() == "s") {
         gameSocket.send(JSON.stringify({ movement: "", player: player_id }));
     }
 };
