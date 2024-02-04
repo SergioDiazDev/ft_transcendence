@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2^)i(v&+(y(0-@gzz-t4-6jcbtisia&x$wjby6sosobz!%jju#'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+debug_flag = os.getenv("DJANGO_DEBUG", "False")
 
-ALLOWED_HOSTS = []
+if debug_flag == "False":
+    DEBUG = False
+else:
+    DEBUG = True
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -36,18 +42,32 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    #'django.contrib.staticfiles', # this is commented because I have to add it below
+
+    # Third party apps
+
+    'daphne', #This handles ASGI server, necessary for WebSockets
+    'django.contrib.staticfiles', # this is not third party but needs to init after daphne
     'corsheaders', # This app is for handling cors
     'rest_framework', # This handles APIs
+    'drf_yasg', # Swagger
+    'channels', # This handles WebSockets
+
+    # Local apps
     'tokens', # This is for getting tokens
     'accounts', # This is for auth purposes
+    'player_friends', # This contains friends of a user
+    'player_block', # This has blocked players
+    'chat', # This has chat messages???
+    'tournament', # ????
+    'game' # ????
 ]
 
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', # This middleware handle cors
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # This middleware handle cors
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -58,11 +78,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
-
+print((str(BASE_DIR) + "/templates"))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [str(BASE_DIR) + ("/templates/")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,6 +96,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+        # it's either inmemory channel or redis, but we will stick with this now
+    }
+}
 
 
 # Database
@@ -84,11 +111,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'prueba',
-        'PASSWORD': 'prueba',
-        'HOST': 'localhost',
-        'PORT': '9000'
+        'NAME': os.getenv("POSTGRES_DB_NAME"),
+        'USER': os.getenv("POSTGRES_USER"),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+        'HOST': 'postgresql',
+        'PORT': '5432'
     }
 }
 
@@ -128,13 +155,15 @@ USE_TZ = True
 
 # Setting up Cors params
 CORS_ALLOWED_ORIGINS = [
+        "http://127.0.0.1:5500",
         "http://localhost:5500",
-        "http://127.0.0.1:5500"
+
 ]
 CORS_ALLOW_CREDENTIALS = True
-# Setting up CSRF Token
+
+    # Setting up CSRF Token
 CSRF_COOKIE_AGE = 86400
-CSRF_TRUSTED_ORIGINS = [ 'http://localhost:5500', 'http://127.0.0.1:5500', ]
+CSRF_TRUSTED_ORIGINS = [ 'http://localhost:5500', 'http://127.0.0.1:5500' ]
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = False
 # Static files (CSS, JavaScript, Images)
