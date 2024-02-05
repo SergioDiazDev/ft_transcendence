@@ -1,10 +1,14 @@
-from .models import Player
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-# Create your views here.
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from .forms import SignupForm
 
-class UserRegistrationView(APIView):
-    def post(self, request, format = None):
-        print(request.POST)
-        return Response(status.HTTP_200_OK)
+def signup(request):
+	if request.method == "POST":
+		form = SignupForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			login(request, user)
+			return redirect("home")
+	else:
+		form = SignupForm()
+	return render(request, 'signup.html', {'form': form})
