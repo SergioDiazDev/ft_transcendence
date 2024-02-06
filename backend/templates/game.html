@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} Game {% endblock %}
+
+{% block additional_head %}
+	<link rel="stylesheet" href="{% static 'resets.css' %}">
+	<link rel="stylesheet" href="{% static 'game.css' %}">
+
+	<script>
+		const gameId = "{{ game_id }}";
+		{% if vs_ai %}
+		const vsAI = true;
+		{% else %}
+		const vsAI = false;
+		{% endif %}
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div id="game-body" class="small-no-whitespace">
+		<script type="module" src="{% static 'main.js' %}"></script>
+		<div id="game-container" class="small-no-whitespace">
+			<p id="score" class="game-vars"></p>
+			<p id="countdown" class="game-vars"></p>
+			<p id="goal" class="game-vars"></p>
+		</div>
+	</div>
+{% endblock %}
