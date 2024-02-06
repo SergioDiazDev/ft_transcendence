@@ -1,6 +1,9 @@
 from django.shortcuts import render
 
 # Create your views here.
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def index(request, game_id, vs_ai=False):
 	if vs_ai == 1:
 		vs_ai = True
