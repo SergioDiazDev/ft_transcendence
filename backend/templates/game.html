@@ -5,8 +5,8 @@
 {% block title %} Game {% endblock %}
 
 {% block additional_head %}
-	<link rel="stylesheet" href="{% static 'resets.css' %}">
-	<link rel="stylesheet" href="{% static 'game.css' %}">
+	<link rel="stylesheet" href="{% static 'game_files/resets.css' %}">
+	<link rel="stylesheet" href="{% static 'game_files/game.css' %}">
 
 	<script>
 		const gameId = "{{ game_id }}";
@@ -19,12 +19,12 @@
 {% endblock %}
 
 {% block content %}
-	<div id="game-body" class="small-no-whitespace">
-		<script type="module" src="{% static 'main.js' %}"></script>
+	<main id="game-body" class="small-no-whitespace">
+		<script type="module" src="{% static 'game_files/main.js' %}"></script>
 		<div id="game-container" class="small-no-whitespace">
 			<p id="score" class="game-vars"></p>
 			<p id="countdown" class="game-vars"></p>
 			<p id="goal" class="game-vars"></p>
 		</div>
-	</div>
+	</main>
 {% endblock %}

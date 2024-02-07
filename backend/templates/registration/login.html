@@ -3,10 +3,50 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<form method="post">
-	{% csrf_token %}
-	{{ form.as_p }}
-	<button type="submit">Login</button>
-    <a href="{% url 'signup' %}">Don't have an account? Register here</a>
-</form>
+<main class="conatiner container" id="main-container">
+	<section class="row" id="section-undefined">
+		<section class="col-sm-3" id="section-left">
+			<h6>Empty</h6>
+		</section>
+		<section class="mt-5 text-light col-sm-6" id="section-center">
+			<form method="POST" id="form-undefined">
+				{% csrf_token %}
+				<fieldset id="fieldset-undefined">
+					<article class="row ps-3 pe-3 mt-3"
+						id="article-username-undefined">
+						<section class="col" id="section-username-undefined">
+							<label for="username" class="form-label"
+								id="label-username-undefined">Username or
+								email</label><input type="text"
+								class="form-control" id="username"
+								name="username" />
+						</section>
+					</article>
+					<article class="row ps-3 pe-3 mt-2"
+						id="article-password-undefined">
+						<section class="col" id="section-password-undefined">
+							<label for="password" class="form-label"
+								id="label-password-undefined">Password</label><a
+								href="#" class="float-end text-decoration-none"
+								id="a-forgot-password">Forgot your
+								passpword?</a><input type="password"
+								class="form-control" id="password"
+								name="password" />
+						</section>
+					</article>
+					<article class="row m-3" id="article-btn-undefined">
+						<button class="btn-purple fw-bold p-1 rounded-5"
+							id="btn--undefined" name="btn--undefined"
+							type="submit">
+							Login
+						</button>
+					</article>
+				</fieldset>
+			</form>
+		</section>
+		<section class="col-sm-3" id="section-right">
+			<h6>Empty</h6>
+		</section>
+	</section>
+</main>
 {% endblock %}

@@ -3,13 +3,16 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<h1>Transcendence home page</h1>
 
-{% if user.is_authenticated %}
+<main class="container" id="main-container">
+	<h1>Transcendence home page</h1>
+
+	{% if user.is_authenticated %}
 	<p>You are logged in as: {{ user.username }}</p>
 	<p>Your email address is: {{ user.email }}</p>
-{% else %}
+	{% else %}
 	<p>You are not logged in.</p>
-{% endif %}
+	{% endif %}
+</main>
 
 {% endblock %}
