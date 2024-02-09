@@ -170,3 +170,9 @@ article section input{
     border-radius: 7px;
     color: white;
 }
+
+.form-error {
+    font-size: 14px;
+    text-align: center;
+    color: #F03D3E;
+}
