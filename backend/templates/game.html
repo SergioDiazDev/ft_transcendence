@@ -5,7 +5,8 @@
 {% block title %} Game {% endblock %}
 
 {% block additional_head %}
-	<link rel="stylesheet" href="{% static 'game_files/resets.css' %}">
+	{# Game Resets are causing problems with the rest of the UI #}
+	{# <link rel="stylesheet" href="{% static 'game_files/resets.css' %}"> #}
 	<link rel="stylesheet" href="{% static 'game_files/game.css' %}">
 
 	<script>
@@ -19,6 +20,9 @@
 {% endblock %}
 
 {% block content %}
+
+	{% include 'nav.html' %}
+
 	<main id="game-body" class="small-no-whitespace">
 		<script type="module" src="{% static 'game_files/main.js' %}"></script>
 		<div id="game-container" class="small-no-whitespace">
