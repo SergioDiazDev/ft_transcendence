@@ -9,6 +9,7 @@
 			<h6>Empty</h6>
 		</section>
 		<section class="mt-5 text-light col-sm-6" id="section-center">
+			<h1>Are you transcending?</h1>
 			<form method="POST" id="form-undefined">
 				{% csrf_token %}
 				<fieldset id="fieldset-undefined">
@@ -22,7 +23,7 @@
 					<article class="row ps-3 pe-3 mt-2" id="article-password-undefined">
 						<section class="col" id="section-password-undefined">
 							<label for="password" class="form-label" id="label-password-undefined">Password</label>
-							<a href="#" class="float-end text-decoration-none" id="a-forgot-password">Forgot your password?</a>
+							{# <a href="#" class="float-end text-decoration-none" id="a-forgot-password">Forgot your password?</a> #}
 							<input type="password" class="form-control" id="password" name="password">
 						</section>
 					</article>
@@ -38,6 +39,10 @@
 					{% endif %}
 				</fieldset>
 			</form>
+			<section id="section-bottom">
+				<p class="text-light p-undefined no-margin">New to this game?</p>
+				<a href="{% url 'signup' %}" class="mb-5 text-decoration-none a-undefined" id="a-undefined">Create an account</a>
+			</section>
 		</section>
 		<section class="col-sm-3" id="section-right">
 			<h6>Empty</h6>
