@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from .forms import SignupForm
 
+from datetime import datetime
+
 from .models import Player
 
 from django.contrib.auth.decorators import login_required
@@ -27,7 +29,9 @@ def profile(request):
 
 # Lo uso para trae cosas de la base, borrar para despliegue
 def lista(request):
-	usuarios = Player.objects.all()
-	return render(request, 'lista.html', {'usuarios': usuarios})
-   
-    
+	# Update last_login
+	if request.user.is_authenticated:
+		request.user.last_login = datetime.now()
+		request.user.save()
+	users = Player.objects.all()
+	return render(request, 'lista.html', {'users': users})
