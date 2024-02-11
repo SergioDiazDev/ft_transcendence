@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from .forms import SignupForm
 
+from .models import Player
+
 from django.contrib.auth.decorators import login_required
 
 def signup(request):
@@ -21,4 +23,11 @@ def home(request):
 
 @login_required
 def profile(request):
+	usuarios = Player.objects.all()
+	return render(request, 'profile.html', {'usuarios': usuarios})
 	return render(request, 'profile.html')
+
+# # No se si esto iria aqui.
+# def lista_usuarios(request):
+   
+    
