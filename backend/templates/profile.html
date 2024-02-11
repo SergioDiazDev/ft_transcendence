@@ -12,7 +12,7 @@
     <h2>User Profile</h2>
     <p>Username: {{ user.username }}</p>
     <p>Email: {{ user.email }}</p>
-    <p>Avatar: {{ user.avatar }}</p>
+    <p>Avatar: <img src="{{ user.avatar }}"></p>
     <p>Fecha de registro: {{ user.registerDate }}<p>
     <p>Ultimo login: {{user.last_login}}
     <p>Activo: {{user.is_active}}<p>
@@ -22,10 +22,10 @@
         {% csrf_token %}
         <button type="submit">Log Out</button>
     </form>
-    <ul>
-        {% for usuario in usuarios %}
-            <li>{{ usuario.is_active }}</li>
-        {% endfor %}
-    </ul>
+    <!--Upload Avatar-->
+    <br><br><br>
+    
+    <br><br><br>
+    <!--Mostar user DEV-->
     <p>hola<p>
 {% endblock %}

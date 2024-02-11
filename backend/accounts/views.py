@@ -23,11 +23,11 @@ def home(request):
 
 @login_required
 def profile(request):
-	usuarios = Player.objects.all()
-	return render(request, 'profile.html', {'usuarios': usuarios})
 	return render(request, 'profile.html')
 
-# # No se si esto iria aqui.
-# def lista_usuarios(request):
+# Lo uso para trae cosas de la base, borrar para despliegue
+def lista(request):
+	usuarios = Player.objects.all()
+	return render(request, 'lista.html', {'usuarios': usuarios})
    
     
