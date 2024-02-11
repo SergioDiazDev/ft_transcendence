@@ -35,6 +35,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls'), name='accounts'),
     path('admin/', admin.site.urls),
     path('api/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('friends/', include('player_friends.urls'), name='friends'),
     path('token/', include('tokens.urls')),
     path('game/', include("game.urls")),
     path('game_ai/', include("game.urls")),
