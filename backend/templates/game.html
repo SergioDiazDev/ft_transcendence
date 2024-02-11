@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} Game {% endblock %}
+
+{% block additional_head %}
+	{# Game Resets are causing problems with the rest of the UI #}
+	{# <link rel="stylesheet" href="{% static 'game_files/resets.css' %}"> #}
+	<link rel="stylesheet" href="{% static 'game_files/game.css' %}">
+
+	<script>
+		const gameId = "{{ game_id }}";
+		{% if vs_ai %}
+		const vsAI = true;
+		{% else %}
+		const vsAI = false;
+		{% endif %}
+	</script>
+{% endblock %}
+
+{% block content %}
+
+	{% include 'nav.html' %}
+
+	<main id="game-body" class="small-no-whitespace">
+		<script type="module" src="{% static 'game_files/main.js' %}"></script>
+		<div id="game-container" class="small-no-whitespace">
+			<p id="score" class="game-vars"></p>
+			<p id="countdown" class="game-vars"></p>
+			<p id="goal" class="game-vars"></p>
+		</div>
+	</main>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }} profile{% endblock %}
+
+{% block content %}
+
+{% include 'nav.html' %}
+
+<main class="container" id="main-container">
+	<section class="row text-light col-sm-6">
+	<!-- Campos de prueba, es para poder probar ya las partidas entre jugadores logueados -->
+        <h2>User Profile</h2>
+        <p>Username: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Avatar: {{ user.avatar }}</p>
+    </section>
+</main>
+
+{% endblock %}

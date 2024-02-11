@@ -1,0 +1,52 @@
+.small-no-whitespace {
+	font-size: 0.8em;
+	white-space: pre-wrap;
+}
+
+#game-body {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100vh;
+}
+
+.game-vars {
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+	color: #a787fa;
+	font-size: 4vw;
+	font-family: monospace;
+}
+
+#score {
+	top: 15%;
+}
+
+#countdown {
+	top: 40%;
+	font-size: 10vw;
+}
+
+#goal {
+	top: 45%;
+	width: auto;
+	font-size: 3vw;
+}
+
+#game-container {
+	min-width: 80vw;
+	min-height: 80vh;
+	aspect-ratio: 16 / 9;
+	font-size: 0.8em;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+#game {
+	aspect-ratio: 16 / 9;
+}
