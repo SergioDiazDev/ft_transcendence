@@ -49,8 +49,10 @@ def findUser(request):
 @login_required
 def isactive(request):
 	users = Player.objects.all()
+	one_hour_ago_utc = now_utc - timedelta(hours=1)
+
 	for user in users:
-		if (user.last_login > timezone.now() - timedelta(minutes=5)):
+		if user.last_login and user.last_login.replace(tzinfo=timezone.utc) > one_hour_ago_utc:
 			user.isactive = True
 		else:
 			user.isactive = False
