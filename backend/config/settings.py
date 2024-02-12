@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'accounts', # This is for auth purposes
     'player_friends', # This contains friends of a user
     'player_block', # This has blocked players
-    'chat', # This has chat messages???
+    'chat', # This has chat messages??? Now yes
     'tournament', # ????
     'game' # ????
 ]

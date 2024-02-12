@@ -27,3 +27,16 @@ application = ProtocolTypeRouter({
 		AuthMiddlewareStack(URLRouter(websocket_urlpatterns))
 	),
 })
+
+#parte para el chat
+
+import chat.routing
+
+application = ProtocolTypeRouter(
+    {
+        "http": django_asgi,
+        "websocket": AllowedHostsOriginValidator(
+            AuthMiddlewareStack(URLRouter(chat.routing.websocket_urlpatterns))
+        ),
+    }
+)

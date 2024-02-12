@@ -22,8 +22,3 @@ def home(request):
 @login_required
 def profile(request):
 	return render(request, 'profile.html')
-
-@login_required
-def chat(request, room_name):
-    return render(request, 'chat.html', {'room_name': room_name})
-
