@@ -32,6 +32,12 @@
 			</script>
 			{{find_user.myFriend.username}}
 		</ul>
+		<h1>Friends Actives</h1>
+		<ul>
+			{% for user in users %}
+				<li>{{user.username}} : {{user.isactive}}</li>
+			{% endfor %}
+		</ul>
 	</section>
 </main>
 
