@@ -16,6 +16,10 @@ def signup(request):
 	return render(request, 'registration/signup.html', {'form': form})
 
 @login_required
+def main(request):
+	return render(request, 'main.html')
+
+@login_required
 def home(request):
 	return render(request, 'home.html')
 

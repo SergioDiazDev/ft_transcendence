@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ft_transcendence</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/stylesProfile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stylesForms.css' %}">
+</head>
+
+<body style="background-image: url({% static 'img/profile.png' %})">
+	{% include 'nav.html' %}
+
+	<div id="transcendence-app"></div>
+
+	<script>
+	function handleNavigation(event) {
+    	const targetLink = event.target.closest('a[link]');
+		if (targetLink)
+		{
+			event.preventDefault();
+			const href = targetLink.getAttribute('href');
+			if (href !== window.location.pathname)
+			{
+				history.pushState({ path: href }, '', href);
+				if (href === "/")
+        			loadPage("/home");
+				else
+					loadPage(href);
+			}
+		}
+	};
+
+	function loadPage(href) {
+		fetch(href)
+		.then(response => response.text())
+		.then(html => {
+				document.querySelector('#transcendence-app').innerHTML = html;
+			})
+			.catch(error => console.error('Error when going to ', href, error));
+	};
+
+    document.addEventListener('click', handleNavigation);
+
+	function handleInitialLoad() {
+        const currentPath = window.location.pathname;
+        loadPage("/home");
+    };
+
+ 	document.addEventListener('DOMContentLoaded', handleInitialLoad);
+
+	window.addEventListener('popstate', () => {
+		handleInitialLoad();
+	});
+
+	</script>
+
+
+</body>
+</html>

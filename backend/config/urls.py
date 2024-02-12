@@ -19,7 +19,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from accounts.views import home
+from accounts.views import main, home
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -31,7 +31,8 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('', home, name='home'),
+    path('', main, name='main'),
+    path('home/', home, name='home'),
     path('accounts/', include('accounts.urls'), name='accounts'),
     path('admin/', admin.site.urls),
     path('api/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
