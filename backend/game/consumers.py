@@ -116,6 +116,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 			text_data = json.dumps(
 				{
 					"type": "ready",
+					"player1": event["player1"],
+					"player2": event["player2"],
+					"avatar1": event["avatar1"],
+					"avatar2": event["avatar2"],
 				}
 			)
 		)
@@ -125,9 +129,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if room:
 			match_id = await sync_to_async(Match.create_match)(player1_name=room["player1"], player2_name=room["player2"])
 			room["db_match_id"] = match_id
+			avatars = await sync_to_async(Match.get_match_pictures)(match_id)
 		# game countdown
 		await self.channel_layer.group_send(
-			self.room_id, {"type": "ready_msg"},
+			self.room_id, {"type": "ready_msg", "player1": room["player1"], "player2": room["player2"], "avatar1": avatars[0], "avatar2": avatars[1]},
 		)
 		await asyncio.sleep(4)
 		if room:

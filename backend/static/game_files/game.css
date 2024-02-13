@@ -24,11 +24,21 @@
 	font-family: monospace;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-evenly;
+	justify-content: center;
+}
+
+.game-vars > p {
+	margin: 0;
+}
+
+.game-vars > p:empty::after {
+    content: ".";
+    visibility: hidden;
 }
 
 #score {
 	font-size: 4vw;
+	padding: 2rem 0;
 }
 
 #countdown {
@@ -39,9 +49,31 @@
 	font-size: 3vw;
 }
 
-#goal:empty::after {
-    content: ".";
-    visibility: hidden;
+#players {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+	padding: 20px 0;
+}
+
+#players > p {
+	font-size: 1.5rem;
+	margin: 0;
+}
+
+#avatars {
+	display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#avatars > img {
+	height: 25vh;
+	width: 25vh;
 }
 
 #game-container {

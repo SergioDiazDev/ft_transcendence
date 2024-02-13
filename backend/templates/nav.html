@@ -22,7 +22,7 @@
 			<span class="span-profile pe-3 position-absolute me-2 end-0" id="span-profile">
 				<a link class="img-profile p-0 text-decoration-none" id="user-account" href="{% url 'profile' %}">
 					<picture class="picture" id="picture">
-						<img class="img-user" id="img-user" src="{{ user.avatar|default:'/static/img/icon1.png' }}" alt="undefined">
+						<img class="img-user" id="img-user" src="/static/img/avatars/{{ user.avatar }}" alt="undefined">
 					</picture>
 					<span class="span-img d-inline-block" id="span-img">{{ user.username }}</span>
 				</a>

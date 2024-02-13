@@ -1,9 +1,10 @@
 import WebGL from "./three/examples/jsm/capabilities/WebGL.js";
 import Game from "./objects.js";
-import {announceGoal, getPositionVector, OBJECTS_Z, countdown} from "./aux_functions.js";
+import {announceGoal, getPositionVector, OBJECTS_Z, countdown, announcePlayers} from "./aux_functions.js";
 
 window.game_main = function game_main(gameId, vsAI) {
-	document.querySelector("#game-button").remove()
+	document.querySelector("#game-button").remove();
+
 	const slug = vsAI === "True" ? `wss/game_ai/${gameId}/` : `wss/game/${gameId}/`;
 
 	const gameSocket = new WebSocket(`ws://${window.location.host}/${slug}`);
@@ -35,6 +36,7 @@ window.game_main = function game_main(gameId, vsAI) {
 	function messageHandler(event) {
 		const messageData = JSON.parse(event.data);
 		if (messageData.type === "gamestate_update") {
+			document.getElementById("avatars").hidden = true;
 			announceGoal("", finish); // this removes the goal message only if the game has not finished
 			gamestate = messageData.gamestate;
 			// close the socket here so the last goal gets received
@@ -46,6 +48,7 @@ window.game_main = function game_main(gameId, vsAI) {
 			finish = messageData.finish;
 			announceGoal(messageData.player, messageData.finish);
 		} else if (messageData.type === "ready") {
+			announcePlayers(messageData.player1, messageData.player2, messageData.avatar1, messageData.avatar2);
 			countdown("countdown", 3);
 		}
 	}
