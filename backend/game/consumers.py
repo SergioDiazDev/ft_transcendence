@@ -44,6 +44,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 					asyncio.create_task(self.game_loop())
 			# second player joins the room
 			else:
+				if self.user == self.rooms[self.room_id]["player1"]:
+					# don't allow games vs themselves, this is undefined behavior
+					return
 				self.rooms[self.room_id]["players"][self.user] = {
 					"board_pos": 2,
 					"direction": 0,
