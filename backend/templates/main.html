@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/stylesProfile.css' %}">
     <link rel="stylesheet" href="{% static 'css/stylesForms.css' %}">
+	<link rel="stylesheet" href="{% static 'game_files/game.css' %}">
 	<script>
 		blockNavigation = false;
 	</script>
@@ -19,7 +20,7 @@
 	<script type="module" src="{% static 'game_files/main.js' %}"></script>
 	{% include 'nav.html' %}
 
-	<div id="transcendence-app"></div>
+	<div style="height: calc(100vh - 5em);" id="transcendence-app"></div>
 
 	<script>
 	function handleClickNavigation(event) {

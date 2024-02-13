@@ -2,13 +2,13 @@
 
 {# <link rel="stylesheet" href="{% static 'game_files/resets.css' %}"> #}
 
-<link rel="stylesheet" href="{% static 'game_files/game.css' %}">
-
 <main id="game-body" class="small-no-whitespace">
 	<div id="game-container" class="small-no-whitespace">
 		<button class="nav-button" onclick="game_main('{{ game_id }}', '{{ vs_ai }}')" id="game-button">Join the game</button>
-		<p id="score" class="game-vars"></p>
-		<p id="countdown" class="game-vars"></p>
-		<p id="goal" class="game-vars"></p>
+		<div class="game-vars">
+			<p id="score"></p>
+			<p id="countdown"></p>
+			<p id="goal"></p>
+		</div>
 	</div>
 </main>
