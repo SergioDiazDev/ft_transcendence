@@ -6,5 +6,6 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('signup/', views.signup, name="signup"),
     path('profile/', views.profile, name="profile"),
+    path('lista/', views.lista, name="lista"),
     path('', include('django.contrib.auth.urls'), name="Accounts"),
 ]

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+
+{% include 'nav.html' %}
+
+<main class="container" id="main-container">
+	<section class="row text-light col-sm-6">
+		<h1>All Users</h1>
+		<ul>
+			{% for user in users %}
+			<li>{{user.username}}</li>
+			{% endfor %}
+		</ul>
+		<h1>Friends</h1>
+		<ul>
+			{% for friend in friends %}
+				<li>{{friend.myFriend.username}}</li>
+			{% endfor %}
+		</ul>
+		<h2>Buscar Usuario</h2>
+		<form action="/friends/friends/" method="GET">
+			<label for="username">Nombre de Usuario:</label>
+			<input type="text" id="username" name="user" required>
+			<button type="submit">Buscar</button>
+		</form>
+		<ul>
+			<script>
+				console.log("Amigo:", "{{ find_user }}");
+			</script>
+			{{find_user.myFriend.username}}
+		</ul>
+		<h1>Friends Actives</h1>
+		<ul>
+			{% for user in users %}
+				<li>{{user.username}} : {{user.isactive}}</li>
+			{% endfor %}
+		</ul>
+		<a href="/accounts/lista/" target="_blank">
+			<button>Ir a lista, para refrescar tu login</button>
+		</a>
+	</section>
+</main>
+
+{% endblock %}
