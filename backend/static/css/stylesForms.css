@@ -100,7 +100,7 @@ main {
         background-color: #C3A5EC;
     }
 
-    #profile {
+    .nav-button {
         background-color: #7857DC;
         color: white;
     }
