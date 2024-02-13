@@ -50,3 +50,12 @@
 #game {
 	aspect-ratio: 16 / 9;
 }
+
+#game-button {
+	background-color: #7857DC;
+	color: white;
+	border-radius: 2rem;
+	font-size: 2rem;
+	padding: 2rem;
+	font-weight: 900;
+}

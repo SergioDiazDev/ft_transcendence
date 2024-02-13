@@ -10,19 +10,25 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/stylesProfile.css' %}">
     <link rel="stylesheet" href="{% static 'css/stylesForms.css' %}">
+	<script>
+		blockNavigation = false;
+	</script>
 </head>
 
 <body style="background-image: url({% static 'img/profile.png' %})">
+	<script type="module" src="{% static 'game_files/main.js' %}"></script>
 	{% include 'nav.html' %}
 
 	<div id="transcendence-app"></div>
 
 	<script>
-	function handleNavigation(event) {
+	function handleClickNavigation(event) {
     	const targetLink = event.target.closest('a[link]');
 		if (targetLink)
 		{
 			event.preventDefault();
+			if (blockNavigation)
+				return ;
 			const href = targetLink.getAttribute('href');
 			if (href !== window.location.pathname)
 			{
@@ -33,7 +39,18 @@
 					loadPage(href);
 			}
 		}
-	};
+	}
+
+	function handleArrowsNavigation(href) {
+		if (blockNavigation)
+			return ;
+		console.log("Going into arrows");
+		console.log(href);
+		if (href === "/")
+			loadPage("/home");
+		else
+			loadPage(href);
+ 	}
 
 	function loadPage(href) {
 		fetch(href)
@@ -44,7 +61,7 @@
 			.catch(error => console.error('Error when going to ', href, error));
 	};
 
-    document.addEventListener('click', handleNavigation);
+    document.addEventListener('click', handleClickNavigation);
 
 	function handleInitialLoad() {
         const currentPath = window.location.pathname;
@@ -53,12 +70,16 @@
 
  	document.addEventListener('DOMContentLoaded', handleInitialLoad);
 
-	window.addEventListener('popstate', () => {
-		handleInitialLoad();
+	window.addEventListener('popstate', (event) => {
+		console.log(event);
+		if (event.state.path)
+			handleArrowsNavigation(event.state.path);
 	});
 
+	window.onbeforeunload = function (e) {
+		e.preventDefault();
+		return false;
+	};
 	</script>
-
-
 </body>
 </html>
