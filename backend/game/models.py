@@ -17,8 +17,8 @@ class Match(models.Model):
     def create_match(cls, player1_name, player2_name):
         # create the AI player if it doesn't exist
         if player2_name == "AI" and not Player.objects.filter(username='AI').exists():
-            ai_player = Player.objects.create_user(username='AI', password=uuid.uuid4(),
-                                                   avatar="https://i.pinimg.com/736x/e8/76/f7/e876f767f52cc37b4cefdc9ab5e6b8d0.jpg")
+            ai_player = Player.objects.create_user(username='AI', password=str(uuid.uuid4()),
+                                                   avatar="ai.jpg")
             ai_player.save()
 
         player1 = Player.objects.get(username__exact=player1_name)
@@ -47,3 +47,8 @@ class Match(models.Model):
             match.winner = match.player2
 
         match.save()
+
+    @classmethod
+    def get_match_pictures(cls, match_id):
+        match = cls.objects.get(id=match_id)
+        return (match.player1.avatar, match.player2.avatar)
