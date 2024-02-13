@@ -10,8 +10,8 @@
 	<section class="row text-light col-sm-6">
 		<h1>All Users</h1>
 		<ul>
-			{% for user in users %}
-			<li>{{user.username}}</li>
+			{% for player in users %}
+			<li>{{player.username}}</li>
 			{% endfor %}
 		</ul>
 		<h1>Friends</h1>
@@ -34,8 +34,14 @@
 		</ul>
 		<h1>Friends Actives</h1>
 		<ul>
-			{% for user in users %}
-				<li>{{user.username}} : {{user.isactive}}</li>
+			{% for player in users %}
+				<li>{{ player.username }} : {{ player.isactive }} 
+					<a href="/chat/{{ user.username }}+{{ player.username }}/" target="_blank">
+						<button class="start-chat-btn" data-username="{{ player.username }}">
+							<i class="fas fa-paper-plane"></i>
+						</button>
+					</a>
+				</li>
 			{% endfor %}
 		</ul>
 		<a href="/accounts/lista/" target="_blank">
