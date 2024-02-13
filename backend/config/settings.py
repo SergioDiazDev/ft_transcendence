@@ -54,10 +54,7 @@ INSTALLED_APPS = [
     'channels', # This handles WebSockets
 
     # Local apps
-    'tokens', # This is for getting tokens
     'accounts', # This is for auth purposes
-    'player_friends', # This contains friends of a user
-    'player_block', # This has blocked players
     'chat', # This has chat messages???
     'tournament', # ????
     'game' # ????
