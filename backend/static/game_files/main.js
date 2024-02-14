@@ -15,6 +15,8 @@ window.game_main = function game_main(gameId, vsAI) {
 	var gamestate;
 	var finish = false;
 	const lerpSmoothness = 0.6;
+	var animation_frame;
+	var frames_to_finish_render = 200;
 
 	// Socket handling
 
@@ -73,8 +75,15 @@ window.game_main = function game_main(gameId, vsAI) {
 				game.ball.position.lerp(getPositionVector(gamestate.ball.x, gamestate.ball.y), lerpSmoothness);
 			}
 		}
-		requestAnimationFrame(animate);
+		animation_frame = requestAnimationFrame(animate);
 		game.composer.render(game, game.camera);
+		if (finish)
+		{
+			frames_to_finish_render--;
+			if (frames_to_finish_render == 0)
+				cancelAnimationFrame(animation_frame);
+		}
+
 	}
 
 	if (WebGL.isWebGLAvailable()) animate();
@@ -110,12 +119,8 @@ window.game_main = function game_main(gameId, vsAI) {
 	};
 
 	function onWindowResize() {
-		console.log("resizing");
 		game.renderer.setSize(window.innerWidth, (window.innerWidth / 16) * 9);
 	}
 
 	window.addEventListener("resize", onWindowResize, false);
-	window.addEventListener('locationchange', function () {
-    	console.log('location changed!');
-	});
 }
