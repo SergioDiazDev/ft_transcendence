@@ -1,7 +1,10 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
+from django.shortcuts import render, redirect, HttpResponse
+from django.contrib.auth import login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
+
 from django.db.models import Q
-from .forms import SignupForm
+from .forms import SignupForm, UpdatePlayerForm
 
 from .models import Player, PlayerFriend
 from game.models import Match
@@ -38,6 +41,31 @@ def profile(request):
 	win_rate = round(matches_won / matches.count() * 100) if matches.count() > 0 else 0
 
 	return render(request, 'profile.html', context={"matches": matches, "matches_won": matches_won, "win_rate": win_rate})
+
+@login_required
+def edit_profile(request):
+	if request.method == "POST":
+		user_form = UpdatePlayerForm(request.POST, request.FILES, instance=request.user)
+		password_form = PasswordChangeForm(user=request.user, data=request.POST)
+
+		if user_form.is_valid() and user_form.has_changed():
+			user_form.save()
+			messages.success(request, "Profile details updated.")
+		else:
+			messages.error(request, user_form.errors)
+		if request.POST.get("new_password1") != "" or request.POST.get("new_password2") != "":
+			if password_form.is_valid():
+				password_form.save()
+				update_session_auth_hash(request, password_form.user)
+				messages.success(request, "Password updated.")
+			else:
+				messages.error(request, password_form.errors)
+
+		return redirect("main")
+	else:
+		user_form = UpdatePlayerForm(instance=request.user)
+		password_form = PasswordChangeForm(request.user)
+		return render(request, "edit_profile.html", context={'user_form': user_form, 'password_form': password_form})
 
 @login_required
 def my_logout(request):
