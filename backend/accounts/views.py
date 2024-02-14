@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
+from django.db.models import Q
 from .forms import SignupForm
 
 from .models import Player, PlayerFriend
+from game.models import Match
 
 from datetime import datetime, timedelta, timezone
 
@@ -29,7 +31,13 @@ def home(request):
 
 @login_required
 def profile(request):
-	return render(request, 'profile.html')
+	user = request.user
+	matches = Match.objects.filter(Q(player1=user.id) | Q(player2=user.id))
+	matches_won = Match.objects.filter(Q(winner=user.id)).count()
+	#TODO: Add pagination to the matches in the backend
+	win_rate = round(matches_won / matches.count() * 100) if matches.count() > 0 else 0
+
+	return render(request, 'profile.html', context={"matches": matches, "matches_won": matches_won, "win_rate": win_rate})
 
 @login_required
 def my_logout(request):
@@ -56,7 +64,6 @@ def showFriends(request):
 		request.user.last_login = datetime.now()
 		request.user.save()
 
-	
 	now_utc = datetime.now(timezone.utc)
 
 	# Definir el límite de una hora atrás en UTC
@@ -87,6 +94,7 @@ def findUser(request):
 @login_required
 def isactive(request):
 	users = Player.objects.all()
+	now_utc = datetime.now(timezone.utc)
 	one_hour_ago_utc = now_utc - timedelta(hours=1)
 
 	for user in users:

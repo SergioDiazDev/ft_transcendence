@@ -11,6 +11,7 @@ class Match(models.Model):
     player2_score = models.PositiveSmallIntegerField(default=0)
     winner = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="game_winner",
                                blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
 	# TODO: add the tournament ID when we have tournaments implemented
 
     @classmethod
