@@ -1,4 +1,6 @@
 import json
+from chat.models import Chat
+from chat.models import Message
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 
@@ -7,6 +9,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = "chat_%s" % self.room_name
+        # deberia de separar los usuarios por el + para enviarlos a sear_or_create()
+        # la funcion search_or_create me devuelve el id del chat 
 
         # Join room group
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
@@ -30,6 +34,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from room group
     async def chat_message(self, event):
         message = event["message"]
+
+        # cuando vaya a enviar un mensaje deberia de guardarlo en la bd 
+        # con Message.create(1, 'Esto es un mensaje') 
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({"message": message}))
