@@ -75,7 +75,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
-print((str(BASE_DIR) + "/templates"))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -178,3 +177,4 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AVATARS_PATH = "static/img/avatars/"

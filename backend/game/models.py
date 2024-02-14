@@ -52,4 +52,4 @@ class Match(models.Model):
     @classmethod
     def get_match_pictures(cls, match_id):
         match = cls.objects.get(id=match_id)
-        return (match.player1.avatar, match.player2.avatar)
+        return (match.player1.avatar.name, match.player2.avatar.name)
