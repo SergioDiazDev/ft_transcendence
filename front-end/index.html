@@ -13,6 +13,7 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./assets/css/stylesForms.css">
     <link rel="stylesheet" href="./assets/css/stylesProfile.css">
+    <link rel="stylesheet" href="./assets/css/home.css">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&display=swap" rel="stylesheet">
     <title>ft_transcendence</title>
 </head>
@@ -20,49 +21,33 @@
 <body>
     <div class="row" id="main-profile">
         <aside class="col-2 " id="section-profile-left d-none d-lg-block">
-            
+
         </aside>
+        <main class="col-7 container-fluid" id="section-profile-mid">
+            <div class="container-fluid chat">
+                <section class="row chat2 " id="chat">
+                    <span class="div-chat-text">
+                        <p class="me">Hola quieres jugarksjbgjkfsjkvbksjbfvjksbkjvbskjfbjkvbskjbvkjsbvkjbsdkjvbjksdbvjksdbvkjbsdjkbvjksdbvjkb</p>
+                        <p class="you">Vete al carajo</p>
+                        <p class="me">Hasta los cojones</p>
+                        <p class="me">Hasta los cojones</p>
+                        <p class="me">Hasta los cojones</p>
+                    </span>
+                    <form action="">
+                        <label for="input-chat"></label>
+                        <input type="text" id="input-chat">
+                    </form>
+                </section>
+            </div>
+        </main>
         <main class="col-7 container" id="section-profile-mid">
-            <article class="row me-1" id="article-profile">
-                <section class="col-4 container-fluid p-4" id="section-games">
-                    <h2 id="h2-name-profile" class="fw-bold">nanoldiho</h2>
-                    <span class="col-12 " id="span-profile-img">
-                        <picture class="picture">
-                            <img src="assets/img/profile_pic.png" alt="" class="">
-                        </picture>
-                    </span>
-                    <span id="span-profile-game" class="col-12">
-                        <p>754 games</p>
-                        <p>400 wins</p>
-                        <p>53% win rate</p>
-                    </span>
-                    <span id="span-profile-tournament" class="col-12">
-                        <p>Tournament</p>
-                        <p>stats</p>
-                        <p>5 1st places</p>
-                        <p>3 2nd places</p>
-                        <p>8 3rd places</p>
-                    </span>
+            <div class="container-fluid div-user-chat">
+                <section class="row row-cols-4 section-chat " id="user-chat">
+                    <article class="col-2"><i class="fas fa-user"></i></article>
+                    <article class="col-6">username_123</article>
+                    <article class="col-2  icon-chat"><i class="fas fa-times"></i></article>
                 </section>
-                <section class="col-8" id="section-match-history">
-                    <h2 id="h2-name-profile" class="fw-bold">Match history</h2>
-                    <span class="container mt-3" id="span-history">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-split">
-                                <tbody>
-                                    <tr class="mb-3">
-                                        <td id="table-history-res"><img src="assets/img/match_lose.png" alt=""></td>
-                                        <td id="table-history-player1" title="Player2">Player2</td>
-                                        <td>VS</td>
-                                        <td id="table-history-player2" title="poner user">Player1</td>
-                                        <td id="table-history-date" title="fecha">26/12/2023</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </span>
-                </section>
-            </article>
+            </div>
         </main>
         <aside class="col-3" id="section-profile-right">
             <h3>Online friends</h3>
@@ -113,5 +98,18 @@
     <script src="assets/js/Request.js"></script>
     <script src="assets/js/Cookie.js"></script>
     <script src="assets/components/logUp/form_post.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var sections = document.querySelectorAll('.section-chat');
+            const chat = document.getElementById('chat')
+            sections.forEach(function (section) {
+                section.addEventListener('click', function () {
+                        chat.classList.toggle('visible');
+                });
+            });
+        });
+
+    </script>
 </body>
+
 </html>

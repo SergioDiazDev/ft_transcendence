@@ -1,0 +1,131 @@
+/* USER-CHAT */
+
+.div-user-chat {
+    height: 2em;
+    display: block;
+    width: 70%;
+    position: fixed;
+    bottom: 2px;
+    left: 2em;
+    right: 15em;
+    padding: 0;
+    overflow: hidden;
+}
+
+.chat {
+    height: 15em;
+    display: block;
+    max-width: 70%;
+    position: fixed;
+    bottom: 40px;
+    left: 2em;
+    right: 15em;
+    padding: 0;
+}
+
+/* CHAT */
+.chat2 {
+    display: flex;
+    background-color: #202646;
+    height: 100%;
+    max-width: 30%;
+    min-width: 30%;
+    float: right;
+    margin-right: 1.2em;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border-radius: 5px;
+    border: 1px solid #C3A5EC;
+    /* visibility: hidden; */
+    transform: translateY(100%);
+    transition: all 0.5s ease-out;
+}
+
+/* ANIMATION CHAT*/
+
+.visible {
+    visibility: visible;
+    transform: translateY(0);
+    transition: all 0.5s ease-out;
+}
+
+
+
+.chat2::-webkit-scrollbar {
+    width: 5px;
+}
+
+.div-chat-text {
+    min-width: 100%;
+    border: 0;
+    padding: 8px 8px 8px 8px;
+    
+}
+
+
+
+.section-chat  {
+    background-color: #110E1F;
+    max-width: 30%;
+    min-width: 30%;
+    float: right;
+    height: 2em;
+    margin-right: 20px;
+    border: 1px solid #C3A5EC;
+}
+
+
+/* SALA DE CHAT*/
+.div-chat-text > p {
+    padding: 8px 8px 8px 8px;
+    border-radius: 5px;
+    font-size: 10px;
+    max-width: 80%;
+}
+
+.div-chat-text > .me {
+    color: #FFFFFF;
+    margin: 1em 0 0 0;
+    background: #7857DC;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+.div-chat-text > .you {
+    color: #FFFFFF;
+    margin: 1em 0 0 8em;
+    background: #C3A5EC;
+}
+
+.section-chat article:nth-child(2) {
+    background-color: #110E1F;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: white;
+}
+
+.section-chat article:nth-child(1) {
+    background-color: #C3A5EC;
+    color: white;
+}
+
+.icon-chat {
+    color: white;
+    position: relative;
+    left: 2.1em;
+    top: 2px;
+}
+
+.section-chat article:hover {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* INPUT CHAT */
+
+#input-chat {
+    position: fixed;
+    width: 95%;
+}
+
