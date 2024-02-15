@@ -23,6 +23,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		# the second player creates the game, if the game is created, nobody can join the room
 		if self.room_id in self.rooms and "game" in self.rooms[self.room_id]:
+			await self.accept()
+			await self.close(4001)
 			return
 
 		async with self.update_lock:

@@ -29,10 +29,18 @@ window.game_main = function game_main(gameId, vsAI) {
 	}
 
 	gameSocket.onclose = function (e) {
+		if (e.code === 4001)
+		{
+			var warning = document.createElement("p");
+			warning.innerText = "Looks like this game has already started, sorry!"
+			warning.className = "game-error";
+			document.getElementById("game-container").appendChild(warning);
+		}
 		window.blockNavigation = false;
 		document.removeEventListener("keydown", keydownHandler);
 		document.removeEventListener("keyup", keyupHandler);
 		game.remove(game.pad1, game.pad2, game.ball);
+		finish = true;
 	};
 
 	function messageHandler(event) {
@@ -83,7 +91,6 @@ window.game_main = function game_main(gameId, vsAI) {
 			if (frames_to_finish_render == 0)
 				cancelAnimationFrame(animation_frame);
 		}
-
 	}
 
 	if (WebGL.isWebGLAvailable()) animate();

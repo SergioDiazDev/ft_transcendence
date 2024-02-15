@@ -101,3 +101,11 @@
 	font-weight: 900;
 	z-index: 101;
 }
+
+.game-error {
+	position: absolute;
+    font-size: 2rem;
+    color: yellow;
+    text-align: center;
+    margin: 10vw;
+}
