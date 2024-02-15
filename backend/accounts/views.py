@@ -33,14 +33,22 @@ def home(request):
 	return render(request, 'home.html')
 
 @login_required
-def profile(request):
-	user = request.user
+def profile(request, username=None):
+	if username:
+		try:
+			user = Player.objects.get(username=username)
+		except Player.DoesNotExist:
+			messages.error(request, f"The user {username} was not found.")
+			return redirect("home")
+	else:
+		user = request.user
+
 	matches = Match.objects.filter(Q(player1=user.id) | Q(player2=user.id))
 	matches_won = Match.objects.filter(Q(winner=user.id)).count()
 	#TODO: Add pagination to the matches in the backend
 	win_rate = round(matches_won / matches.count() * 100) if matches.count() > 0 else 0
 
-	return render(request, 'profile.html', context={"matches": matches, "matches_won": matches_won, "win_rate": win_rate})
+	return render(request, 'profile.html', context={"user": user, "matches": matches, "matches_won": matches_won, "win_rate": win_rate})
 
 @login_required
 def edit_profile(request):
