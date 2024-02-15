@@ -36,13 +36,14 @@
 		<ul>
 			{% for player in users %}
 				<li>{{ player.username }} : {{ player.isactive }} 
-					<a href="/chat/{{ user.username }}+{{ player.username }}/" target="_blank">
+					<a href="{% url 'chat' user1=player.username user2=user.username %}" target="_blank">
 						<button class="start-chat-btn" data-username="{{ player.username }}">
 							<i class="fas fa-paper-plane"></i>
 						</button>
-					</a>
+					</a>            
 				</li>
 			{% endfor %}
+		
 		</ul>
 		<a href="/accounts/lista/" target="_blank">
 			<button>Ir a lista, para refrescar tu login</button>
