@@ -24,12 +24,12 @@
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             if (data.message_history) {
-                data.message_history.forEach(message => {
-                    document.querySelector('#chat-log').value += (message + '\n');
+                data.message_history.forEach(elem => {
+                    document.querySelector('#chat-log').value += (`${elem.sender}: ${elem.message}` + '\n');
                 });
             }
             if (data.message) {
-                document.querySelector('#chat-log').value += (data.message + '\n');
+                document.querySelector('#chat-log').value += (`${data.sender}: ${data.message}` + '\n');
             }
         };
 

@@ -32,7 +32,8 @@ class Message(models.Model):
 	chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
 	content = models.TextField()
 	created_at = models.DateTimeField(auto_now_add=True)
+	sender = models.ForeignKey(Player, on_delete=models.CASCADE)
 
 	@classmethod
-	def create(cls, chat_id, content):
-		return Message.objects.create(chat_id=chat_id, content=content)
+	def create(cls, chat_id, content, sender):
+		return Message.objects.create(chat_id=chat_id, content=content, sender=sender)
