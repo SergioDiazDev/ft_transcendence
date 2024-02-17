@@ -32,11 +32,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
         room_name = text_data_json.get("room_name")
-        username = self.scope["user"].username
         sender = self.scope["user"]
-        # message = username + ": " + message
         if self.chat_id:
             await sync_to_async(Message.create)(self.chat_id, message, sender)
+
+        # Marcar todos los mensajes como leídos para el usuario actual
+        await sync_to_async(Message.objects.filter(chat_id=self.chat_id, sender=sender).update)(read=True)
 
         await self.channel_layer.group_send(
             self.room_group_name, {"type": "chat_message", "message": message}

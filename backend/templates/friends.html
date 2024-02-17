@@ -17,7 +17,12 @@
 		<h1>Friends</h1>
 		<ul>
 			{% for friend in friends %}
-				<li>{{friend.myFriend.username}}</li>
+				<li>
+					{{friend.myFriend.username}}
+					{% if friend.unread_messages_exist %}
+						<span class="badge badge-danger">Mensajes sin leer</span>
+					{% endif %}
+				</li>
 			{% endfor %}
 		</ul>
 		<h2>Buscar Usuario</h2>
@@ -40,10 +45,12 @@
 						<button class="start-chat-btn" data-username="{{ player.username }}">
 							<i class="fas fa-paper-plane"></i>
 						</button>
-					</a>            
+					</a>
+					{% if player.unread_messages_exist %}
+						<span class="badge badge-danger">Mensajes sin leer</span>
+					{% endif %}            
 				</li>
 			{% endfor %}
-		
 		</ul>
 		<a href="/accounts/lista/" target="_blank">
 			<button>Ir a lista, para refrescar tu login</button>
