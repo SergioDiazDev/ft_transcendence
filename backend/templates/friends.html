@@ -35,7 +35,10 @@
 		<h1>Friends Actives</h1>
 		<ul>
 			{% for player in users %}
-				<li>{{ player.username }} : {{ player.isactive }} 
+				<li>{{ player.username }} : {{ player.isactive }}
+					<!-- {% if player.has_unread_messages %}
+						<span class="unread-indicator"></span> <!-- Agrega un indicador visual mensajes no leidos -->
+					{% endif %} -->
 					<a href="{% url 'chat' user1=player.username user2=user.username %}" target="_blank">
 						<button class="start-chat-btn" data-username="{{ player.username }}">
 							<i class="fas fa-paper-plane"></i>
