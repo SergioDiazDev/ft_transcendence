@@ -129,3 +129,48 @@
     width: 95%;
 }
 
+/* CONTAINER OPTION */
+
+.container-option {
+    position: relative;
+    top: 8em;
+    min-width: 20em;
+    min-height: 35em;
+}
+
+.home-option {
+    position: relative;
+    float: left;
+    margin-bottom: 2em;
+    min-width: 30em;
+    min-height: 35em;
+    margin-left: 2em;
+    background-repeat: no-repeat;
+    background-size: 100% 95%;
+    background-position: center center;
+}
+
+#matchmaking {
+    background-image: url("../img/home-option1.png");
+}
+
+#tournament-mode {
+    background-image: url("../img/home-option2.png");
+}
+
+.title-option {
+    position: relative;
+    top: 30.3em;
+    background-color: #202646;
+    min-width: 30em;
+    min-height: 4em;
+    border: 3px solid #C3A5EC;
+    border-radius: 0 0 10px 10px;
+}
+
+
+.title-option > p{
+    text-align: center;
+    color: #FFFFFF;
+    font-size: 40px;
+}
