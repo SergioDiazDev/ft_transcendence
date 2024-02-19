@@ -33,6 +33,7 @@ class Message(models.Model):
 	content = models.TextField()
 	created_at = models.DateTimeField(auto_now_add=True)
 	sender = models.ForeignKey(Player, on_delete=models.CASCADE)
+	read = models.BooleanField(default=False)
 
 	@classmethod
 	def create(cls, chat_id, content, sender):
