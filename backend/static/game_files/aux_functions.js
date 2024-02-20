@@ -34,3 +34,19 @@ export function countdown(containerId, count) {
 	updateCountdown();
 	const interval = setInterval(updateCountdown, 1000);
 }
+
+function create_avatar(src) {
+	let img = document.createElement("img");
+	img.src = "/static/img/avatars/" + src;
+	return img
+}
+
+export function announcePlayers(player1, player2, avatar1, avatar2) {
+	let vs = document.createElement("span");
+	vs.innerText = "vs";
+	document.getElementById("player1").innerText = player1;
+	document.getElementById("player2").innerText = player2;
+	document.getElementById("avatars").appendChild(create_avatar(avatar1));
+	document.getElementById("avatars").appendChild(vs);
+	document.getElementById("avatars").appendChild(create_avatar(avatar2));
+}

@@ -7,5 +7,10 @@ urlpatterns = [
     path('signup/', views.signup, name="signup"),
     path('profile/', views.profile, name="profile"),
     path('lista/', views.lista, name="lista"),
+    path('edit_profile/', views.edit_profile, name="edit_profile"),
+    path('logout/', views.my_logout, name="logout"),
+    path('friends/', views.showFriends, name="friends"),
+    path('users/', views.showAll, name="users"),
+    path('user/', views.findUser, name="user"),
     path('', include('django.contrib.auth.urls'), name="Accounts"),
 ]

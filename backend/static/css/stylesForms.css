@@ -15,10 +15,6 @@ h6 {
     display: none;
 }
 
-main {
-    margin-top: 8em;
-}
-
 .span-profile {
     display: none;
 }
@@ -100,7 +96,7 @@ main {
         background-color: #C3A5EC;
     }
 
-    #profile {
+    .nav-button {
         background-color: #7857DC;
         color: white;
     }

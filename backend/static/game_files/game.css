@@ -8,37 +8,78 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	height: 100vh;
+	justify-content: center;
 }
 
 .game-vars {
-	position: absolute;
 	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
 	text-align: center;
 	z-index: 100;
 	color: #a787fa;
 	font-size: 4vw;
 	font-family: monospace;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.game-vars > p {
+	margin: 0;
+}
+
+.game-vars > p:empty::after {
+    content: ".";
+    visibility: hidden;
 }
 
 #score {
-	top: 15%;
+	font-size: 4vw;
+	padding: 2rem 0;
 }
 
 #countdown {
-	top: 40%;
 	font-size: 10vw;
 }
 
 #goal {
-	top: 45%;
-	width: auto;
 	font-size: 3vw;
 }
 
+#players {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+	padding: 20px 0;
+}
+
+#players > p {
+	font-size: 1.5rem;
+	margin: 0;
+}
+
+#avatars {
+	display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#avatars > img {
+	height: 25vh;
+	width: 25vh;
+}
+
 #game-container {
-	min-width: 80vw;
-	min-height: 80vh;
+	position: relative;
+	max-height: 700px;
+	margin: 0 auto;
 	aspect-ratio: 16 / 9;
 	font-size: 0.8em;
 	display: flex;
@@ -49,4 +90,14 @@
 
 #game {
 	aspect-ratio: 16 / 9;
+}
+
+#game-button {
+	background-color: #7857DC;
+	color: white;
+	border-radius: 2rem;
+	font-size: 2rem;
+	padding: 2rem;
+	font-weight: 900;
+	z-index: 101;
 }

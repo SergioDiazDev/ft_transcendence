@@ -8,3 +8,11 @@ class SignupForm(UserCreationForm):
     class Meta:
         model = Player
         fields = ["username", "email"]
+
+class UpdatePlayerForm(forms.ModelForm):
+    email = forms.EmailField(max_length=200)
+    avatar = forms.ImageField(widget=forms.FileInput())
+
+    class Meta:
+        model = Player
+        fields = ["username", "email", "avatar"]

@@ -54,11 +54,8 @@ INSTALLED_APPS = [
     'channels', # This handles WebSockets
 
     # Local apps
-    'tokens', # This is for getting tokens
     'accounts', # This is for auth purposes
-    'player_friends', # This contains friends of a user
-    'player_block', # This has blocked players
-    'chat', # This has chat messages??? Now yes
+    'chat', # This has chat messages???
     'tournament', # ????
     'game' # ????
 ]
@@ -78,7 +75,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
-print((str(BASE_DIR) + "/templates"))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -181,3 +177,4 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AVATARS_PATH = "static/img/avatars/"

@@ -4,6 +4,9 @@ backend/virtual_env
 postgres_data
 .vscode/
 
+# Avatars
+avatar_*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

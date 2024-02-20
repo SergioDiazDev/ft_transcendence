@@ -187,6 +187,10 @@ td {
     align-items: center;
 }
 
+.center-container {
+    display: flex;
+    justify-content: center;
+}
 
 
 

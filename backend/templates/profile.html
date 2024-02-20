@@ -1,31 +1,102 @@
-{% extends 'base.html' %}
-
-{% block title %}{{ user.username }} profile{% endblock %}
-
-{% block content %}
-
-{% include 'nav.html' %}
+{% load static %}
 
 <main class="container" id="main-container">
-	<section class="row text-light col-sm-6">
-	<!-- Campos de prueba, es para poder probar ya las partidas entre jugadores logueados -->
-    <h2>User Profile</h2>
-    <p>Username: {{ user.username }}</p>
-    <p>Email: {{ user.email }}</p>
-    <p>Avatar: <img src="{{ user.avatar }}"></p>
-    <p>Fecha de registro: {{ user.registerDate }}<p>
-    <p>Ultimo login: {{user.last_login}}
-    <p>Activo: {{user.is_active}}<p>
-    <br><br><br>
-    <!--Logout -->
-    <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Log Out</button>
-    </form>
-    <!--Upload Avatar-->
-    <br><br><br>
-    
-    <br><br><br>
-    <!--Mostar user DEV-->
-    <p>hola<p>
-{% endblock %}
+<div class="row" id="main-profile">
+        <!--
+            <aside class="col-2 " id="section-profile-left d-none d-lg-block">
+        </aside>
+        -->
+        <main class="col-7 container" id="section-profile-mid">
+            <article class="row me-1" id="article-profile">
+                <section class="col-4 container-fluid p-4" id="section-games">
+                    <h2 id="h2-name-profile" class="fw-bold">{{ user.username }}</h2>
+                    <a link href="/accounts/edit_profile/">Edit</a>
+                    <span class="col-12 " id="span-profile-img">
+                        <picture class="picture">
+                            <img src="/static/img/avatars/{{ user.avatar }}" alt="" class="">
+                        </picture>
+                    </span>
+                    <span id="span-profile-game" class="col-12">
+                        <p>{{ matches.count }} games</p>
+                        <p>{{ matches_won }} wins</p>
+                        <p
+                        {% if win_rate < 50 %} style="color: red;"
+                        {% endif %}
+                        >{{ win_rate }}% win rate</p>
+                    </span>
+                    <span id="span-profile-tournament" class="col-12">
+                        <p>Tournament</p>
+                        <p>stats</p>
+                        <!--
+                        <p>5 1st places</p>
+                        <p>3 2nd places</p>
+                        <p>8 3rd places</p>
+                        -->
+                    </span>
+                </section>
+                <section class="col-8" id="section-match-history">
+                    <h2 id="h2-name-profile" class="fw-bold">Match history</h2>
+                    <span class="container mt-3" id="span-history">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-split">
+                                <tbody>
+                                    {% for match in matches %}
+                                    <tr class="mb-3">
+                                        <td id="table-history-res">
+                                            {% if match.winner == user %}
+                                            <img src="{% static 'img/match_win.png' %}" alt="">
+                                            {% else %}
+                                            <img src="{% static 'img/match_lose.png' %}" alt="">
+                                            {% endif %}
+                                        </td>
+                                        <td id="table-history-score">{{ match.player1_score }} - {{ match.player2_score }}</td>
+                                        <td id="table-history-player1">{{ match.player1 }}</td>
+                                        <td>VS</td>
+                                        <td id="table-history-player2">{{ match.player2 }}</td>
+                                        <td id="table-history-date" title="fecha">{{ match.created_at }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </span>
+                </section>
+            </article>
+        </main>
+        <!--
+        <aside class="col-3" id="section-profile-right">
+            <h3>Online friends</h3>
+            <section class="row">
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-6">username_123</article>
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-2"><i class="fas  fa-inbox"></i></article>
+            </section>
+            <section class="row">
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-6">username_123</article>
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-2"><i class="fas  fa-inbox"></i></article>
+            </section>
+            <section class="row">
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-6">username_123</article>
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-2"><i class="fas  fa-inbox"></i></article>
+            </section>
+            <section class="row">
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-6">username_123</article>
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-2"><i class="fas  fa-inbox"></i></article>
+            </section>
+            <section class="row">
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-6">username_123</article>
+                <article class="col-2"><i class="fas fa-user"></i></article>
+                <article class="col-2"><i class="fas  fa-inbox"></i></article>
+            </section>
+        </aside>
+        -->
+    </div>
+</main>
