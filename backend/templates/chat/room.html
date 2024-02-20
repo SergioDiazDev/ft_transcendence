@@ -10,8 +10,10 @@
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
+    <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        const csrfToken = document.getElementById('csrf-token').value;
 
         const chatSocket = new WebSocket(
             'ws://'
@@ -26,12 +28,35 @@
             if (data.message_history) {
                 data.message_history.forEach(elem => {
                     document.querySelector('#chat-log').value += (`${elem.sender}: ${elem.message}` + '\n');
+                    markMessageAsRead(elem.id);
                 });
             }
             if (data.message) {
                 document.querySelector('#chat-log').value += (`${data.sender}: ${data.message}` + '\n');
+                markMessageAsRead(data.message_id);
             }
         };
+
+        function markMessageAsRead(messageId) {
+            const url = '/chat/mark-message-as-read/' + messageId + '/';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Mensaje marcado como leído en la base de datos');
+                } else {
+                    console.error('Error al marcar el mensaje como leído');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
 
         chatSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');

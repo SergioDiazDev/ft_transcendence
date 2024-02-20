@@ -6,6 +6,19 @@ from accounts.models import Player
 from datetime import datetime, timedelta, timezone
 
 from django.contrib.auth.decorators import login_required
+from chat.models import Chat, Message
+from django.db.models import Q
+
+# def has_unread_messages(user, other_user):
+#     # Buscar si hay una conversación abierta con el otro usuario
+#     chat_id = Chat.objects.filter(Q(player_a=user, player_b=other_user) | Q(player_a=other_user, player_b=user)).first()
+    
+#     if chat_id:
+#         # Si se encuentra una conversación, obtener los mensajes no leídos
+#         unread_messages = Message.objects.filter(chat_id=chat_id, read='f', sender=other_user)
+#         return True
+    
+#     return False
 
 @login_required
 def showFriends(request):
@@ -29,7 +42,9 @@ def showFriends(request):
 			user.isactive = True
 		else:
 			user.isactive = False
-
+	# 	has_messages = has_unread_messages( request.user.id ,user.id)
+	# print("USER:")
+	# print(dir(request))
 	return render(request, 'friends.html', {'friends': friends, "users": users, "find_user": find_user})
 
 @login_required
