@@ -11,6 +11,10 @@ from game.models import Match
 
 from datetime import datetime, timedelta, timezone
 
+from datetime import datetime
+
+from .models import Player
+
 from django.contrib.auth.decorators import login_required
 
 def signup(request):
@@ -33,22 +37,23 @@ def home(request):
 	return render(request, 'home.html')
 
 @login_required
-def profile(request, username=None):
-	if username:
-		try:
-			user = Player.objects.get(username=username)
-		except Player.DoesNotExist:
-			messages.error(request, f"The user {username} was not found.")
-			return redirect("home")
-	else:
-		user = request.user
-
+def profile(request):
+	user = request.user
 	matches = Match.objects.filter(Q(player1=user.id) | Q(player2=user.id))
 	matches_won = Match.objects.filter(Q(winner=user.id)).count()
 	#TODO: Add pagination to the matches in the backend
 	win_rate = round(matches_won / matches.count() * 100) if matches.count() > 0 else 0
 
-	return render(request, 'profile.html', context={"user": user, "matches": matches, "matches_won": matches_won, "win_rate": win_rate})
+	return render(request, 'profile.html', context={"matches": matches, "matches_won": matches_won, "win_rate": win_rate})
+
+# Lo uso para trae cosas de la base, borrar para despliegue
+def lista(request):
+	# Update last_login
+	if request.user.is_authenticated:
+		request.user.last_login = datetime.now()
+		request.user.save()
+	users = Player.objects.all()
+	return render(request, 'lista.html', {'users': users})
 
 @login_required
 def edit_profile(request):
@@ -90,24 +95,29 @@ def my_logout(request):
 
 #PlayerFriends
 
+# def has_unread_messages(user, other_user):
+#     # Buscar si hay una conversación abierta con el otro usuario
+#     chat_id = Chat.objects.filter(Q(player_a=user, player_b=other_user) | Q(player_a=other_user, player_b=user)).first()
+    
+#     if chat_id:
+#         # Si se encuentra una conversación, obtener los mensajes no leídos
+#         unread_messages = Message.objects.filter(chat_id=chat_id, read='f', sender=other_user)
+#         return True
+    
+#     return False
+
 @login_required
 def showFriends(request):
-
-	find_user = None
-	find = request.GET.get('user_tag')
-	print("find =", request.GET.get('user_tag'))
-	find_user = PlayerFriend.objects.filter(myFriend__username = find).first()
-	print("find =", find_user)
-
 	friends = PlayerFriend.objects.filter(myUser=request.user)
 
 	users = Player.objects.all()
 
-	# Actualizo mi usuario
-	if request.user.is_authenticated:
-		request.user.last_login = datetime.now()
-		request.user.save()
-
+	find_user = None
+	find = request.GET.get('user')
+	print("find =", request.GET.get('user'))
+	if find:
+		find_user = PlayerFriend.objects.filter(myFriend__username=find).first()
+	
 	now_utc = datetime.now(timezone.utc)
 
 	# Definir el límite de una hora atrás en UTC
@@ -118,7 +128,9 @@ def showFriends(request):
 			user.isactive = True
 		else:
 			user.isactive = False
-
+	# 	has_messages = has_unread_messages( request.user.id ,user.id)
+	# print("USER:")
+	# print(dir(request))
 	return render(request, 'friends.html', {'friends': friends, "users": users, "find_user": find_user})
 
 @login_required

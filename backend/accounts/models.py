@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from datetime import datetime
 from config.settings import AVATARS_PATH
+import uuid
 
 from PIL import Image, ImageOps
-import uuid
 
 # Create your models here.
 

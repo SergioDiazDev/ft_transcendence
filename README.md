@@ -1,4 +1,4 @@
-- Hoe to go to DB:
+- How to go to DB:
 
 make shell service=postgresql
 psql -U transcendence
