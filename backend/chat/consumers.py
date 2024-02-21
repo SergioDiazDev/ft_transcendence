@@ -35,9 +35,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             message_object = await sync_to_async(Message.create)(self.chat_id, message_content, sender)
             message_id = message_object.id
 
-        # Marcar todos los mensajes como leídos para el usuario actual
-        await sync_to_async(Message.objects.filter(chat_id=self.chat_id, sender=sender).update)(read=True)
-
         await self.channel_layer.group_send(
             self.room_group_name, {
                 "type": "chat_message",
