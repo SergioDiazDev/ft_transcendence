@@ -21,12 +21,14 @@
             if (data.message_history) {
                 data.message_history.forEach(elem => {
                     document.querySelector('#chat-log').value += (`${elem.sender}: ${elem.message}` + '\n');
-                    markMessageAsRead(elem.id);
+                    if (elem.sender != data.user)
+                        markMessageAsRead(elem.id);
                 });
             }
             if (data.message) {
                 document.querySelector('#chat-log').value += (`${data.sender}: ${data.message}` + '\n');
-                markMessageAsRead(data.message_id);
+                if (data.sender != data.user)
+                    markMessageAsRead(data.message_id);
             }
         };
 
