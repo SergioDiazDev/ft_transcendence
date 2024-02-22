@@ -7,7 +7,9 @@ def index(request):
     return render(request, "chat/index.html")
 
 def room(request, room_name):
-    chat = get_object_or_404(Chat, id=room_name)
+    chat = Chat.objects.filter(id=room_name).first()
+    if not chat:
+        return HttpResponseForbidden("No tienes permiso para acceder a esta sala de chat.")
     if request.user.username != chat.player_a.username and request.user.username != chat.player_b.username:
         return HttpResponseForbidden("No tienes permiso para acceder a esta sala de chat.")
     return render(request, "chat/room.html", {"room_name": room_name})
