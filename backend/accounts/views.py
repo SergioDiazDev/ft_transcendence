@@ -30,7 +30,9 @@ def signup(request):
 
 @login_required
 def main(request):
-	return render(request, 'main.html')
+	# TODO: friends right now are all players, change when friends are ok
+	friends = Player.objects.all()
+	return render(request, 'main.html', context={"user": request.user, "friends": friends})
 
 @login_required
 def home(request):

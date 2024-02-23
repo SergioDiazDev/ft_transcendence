@@ -1,0 +1,11 @@
+<aside class="col-3" id="section-profile-right">
+	<h3>Online friends</h3>
+	{% for friend in friends %}
+	<section class="row">
+		<article class="col-2"><img width="24px" height="24px" src="/static/img/avatars/{{ friend.avatar }}"></article>
+		<article class="col-6">{{ friend.username }}</article>
+		<article class="col-2"><a link href="{% url 'profile' friend.username %}" class="fas fa-user"></a></article>
+		<article class="col-2"><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank"></a></article>
+	</section>
+	{% endfor %}
+</aside>
