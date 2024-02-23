@@ -34,6 +34,8 @@ class Message(models.Model):
 	created_at = models.DateTimeField(auto_now_add=True)
 	sender = models.ForeignKey(Player, on_delete=models.CASCADE)
 	read = models.BooleanField(default=False)
+	class Meta:
+		ordering = ['id'] 
 
 	@classmethod
 	def create(cls, chat_id, content, sender):
