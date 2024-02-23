@@ -35,6 +35,12 @@ def main(request):
 	return render(request, 'main.html', context={"user": request.user, "friends": friends})
 
 @login_required
+def friends_panel(request):
+	# TODO: friends right now are all players, change when friends are ok
+	friends = Player.objects.all()
+	return render(request, 'friends_panel.html', context={"user": request.user, "friends": friends})
+
+@login_required
 def home(request):
 	return render(request, 'home.html')
 

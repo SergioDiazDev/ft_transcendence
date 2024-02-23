@@ -12,5 +12,6 @@ urlpatterns = [
     path('friends/', views.showFriends, name="friends"),
     path('users/', views.showAll, name="users"),
     path('user/', views.findUser, name="user"),
+    path('friends_panel/', views.friends_panel, name="friends_panel"),
     path('', include('django.contrib.auth.urls'), name="Accounts"),
 ]

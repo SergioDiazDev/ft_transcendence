@@ -25,6 +25,9 @@
 	{% include 'nav.html' %}
 
 	<div style="height: calc(100vh - 5em);" id="transcendence-app"></div>
+	<div id="transcendence-sidebar">
+		{% include 'friends_panel.html' %}
+	</div>
 	{% include 'messages_modal.html' %}
 	<script>
 	function handleClickNavigation(event) {
@@ -68,6 +71,15 @@
 			.catch(error => console.error('Error when going to ', href, error));
 	};
 
+	function loadPanel(href) {
+		fetch(href)
+		.then(response => response.text())
+		.then(html => {
+				document.querySelector('#transcendence-sidebar').innerHTML = html;
+			})
+			.catch(error => console.error('Error when going to ', href, error));
+	}
+
     document.addEventListener('click', handleClickNavigation);
 
 	function handleInitialLoad() {
@@ -87,7 +99,9 @@
 		e.preventDefault();
 		return false;
 	};
+
+	// Long polling to check if the friends got updated
+	setInterval(loadPanel, 5000, "/accounts/friends_panel");
 	</script>
-	{% include 'friends_panel.html' %}
 </body>
 </html>
