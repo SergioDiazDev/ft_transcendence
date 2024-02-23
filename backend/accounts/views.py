@@ -155,13 +155,15 @@ def showAll(request):
 	return render(request, 'users.html', {'users': users})
 
 @login_required
-def findUser(request):
-	find = request.GET.get('user')
+def findUser(request, find):
+	#find = request.GET.get('user')
+
+	print("Holaaa :", find, flush=True, file=sys.stderr, end='\n')
 	if find:
 		user = PlayerFriend.objects.filter(username = find)
 	else:
 		user = None
-	return render(request, 'finduser.html', {'user': user})
+	return render(request, 'finduser.html', {'user_find_value': user.username})
 
 @login_required
 def isactive(request):
