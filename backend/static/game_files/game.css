@@ -1,0 +1,111 @@
+.small-no-whitespace {
+	font-size: 0.8em;
+	white-space: pre-wrap;
+}
+
+#game-body {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.game-vars {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	text-align: center;
+	z-index: 100;
+	color: #a787fa;
+	font-size: 4vw;
+	font-family: monospace;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.game-vars > p {
+	margin: 0;
+}
+
+.game-vars > p:empty::after {
+    content: ".";
+    visibility: hidden;
+}
+
+#score {
+	font-size: 4vw;
+	padding: 2rem 0;
+}
+
+#countdown {
+	font-size: 10vw;
+}
+
+#goal {
+	font-size: 3vw;
+}
+
+#players {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+	padding: 20px 0;
+}
+
+#players > p {
+	font-size: 1.5rem;
+	margin: 0;
+}
+
+#avatars {
+	display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#avatars > img {
+	height: 25vh;
+	width: 25vh;
+}
+
+#game-container {
+	position: relative;
+	max-height: 700px;
+	margin: 0 auto;
+	aspect-ratio: 16 / 9;
+	font-size: 0.8em;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+#game {
+	aspect-ratio: 16 / 9;
+}
+
+#game-button {
+	background-color: #7857DC;
+	color: white;
+	border-radius: 2rem;
+	font-size: 2rem;
+	padding: 2rem;
+	font-weight: 900;
+	z-index: 101;
+}
+
+.game-error {
+	position: absolute;
+    font-size: 2rem;
+    color: yellow;
+    text-align: center;
+    margin: 10vw;
+}

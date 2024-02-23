@@ -1,5 +1,6 @@
 * {
     font-family: 'IBM Plex Mono';
+    font-weight: 600;
 }
 body {
     background-size: cover;
@@ -12,10 +13,6 @@ body {
 
 h6 {
     display: none;
-}
-
-main {
-    margin-top: 8em;
 }
 
 .span-profile {
@@ -50,7 +47,7 @@ main {
  
     
     section > a{
-        font-size: 18px;
+        font-size: 16px;
         max-height: 2em;
         width: 8em;
         justify-content: center;
@@ -99,7 +96,7 @@ main {
         background-color: #C3A5EC;
     }
 
-    #profile {
+    .nav-button {
         background-color: #7857DC;
         color: white;
     }
@@ -148,6 +145,12 @@ fieldset, .login, #section-bottom {
 
 .form-control {
     background-color: #495057;
+    color: white;
+}
+
+.form-control:focus {
+    background-color: #495057;
+    color: white;
 }
 
 section>h1 {
@@ -169,4 +172,14 @@ article section input{
     background-color: #7858DC;
     border-radius: 7px;
     color: white;
+}
+
+.form-error {
+    font-size: 14px;
+    text-align: center;
+    color: #F03D3E;
+}
+
+.no-margin {
+    margin: 0;
 }

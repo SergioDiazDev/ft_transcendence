@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<main class="conatiner container" id="main-container">
+	<section class="row" id="section-undefined">
+		<section class="col-sm-3" id="section-left">
+			<h6>Empty</h6>
+		</section>
+		<section class="mt-5 text-light col-sm-6" id="section-center">
+			<h1>Are you transcending?</h1>
+			<form method="POST" id="form-undefined">
+				{% csrf_token %}
+				<fieldset id="fieldset-undefined">
+					<article class="row ps-3 pe-3 mt-3"
+						id="article-email-undefined">
+						<section class="col" id="section-email-undefined">
+							<label for="id_email" class="form-label" id="label-email-undefined">Email address</label>
+							<input type="email" class="form-control" id="id_email" name="email">
+							{% for error in form.email.errors %}
+							<span class="form-error">{{ error|escape }}</span>
+							{% endfor %}
+						</section>
+					</article>
+					<article class="row ps-3 pe-3 mt-3"	id="article-username-undefined">
+						<section class="col" id="section-username-undefined">
+							<label for="id_username" class="form-label" id="label-username-undefined">Username</label>
+							<input type="text" class="form-control" id="id_username" name="username"></section>
+							{% for error in form.username.errors %}
+							<span class="form-error">{{ error|escape }}</span>
+							{% endfor %}
+					</article>
+					<article class="row ps-3 pe-3 mt-3"	id="article-password-undefined">
+						<section class="col" id="section-password-undefined">
+							<label for="id_password1" class="form-label" id="label-password-undefined">Password</label>
+							<input type="password" class="form-control" id="id_password1" name="password1"></section>
+							{% for error in form.password1.errors %}
+							<span class="form-error">{{ error|escape }}</span>
+							{% endfor %}
+					</article>
+					<article class="row ps-3 pe-3 mt-3"	id="article-confirm-password-undefined">
+						<section class="col" id="section-confirm-password-undefined">
+							<label for="id_password2" class="form-label" id="label-confirm-password-undefined">Confirm password</label>
+							<input type="password" class="form-control" id="confirm-password-undefined" name="password2"></section>
+							{% for error in form.password2.errors %}
+							<span class="form-error">{{ error|escape }}</span>
+							{% endfor %}
+					</article>
+					<article class="row m-3" id="article-btn-undefined">
+						<button class="btn-purple fw-bold p-1 rounded-5" id="btn--undefined" name="btn--undefined" type="submit">Create an account</button>
+					</article>
+				</fieldset>
+			</form>
+			<section id="section-bottom">
+				<p class="text-light p-undefined no-margin">Already have an account?</p>
+				<a href="{% url 'login' %}" class="mb-5 text-decoration-none a-undefined" id="a-undefined">Login</a>
+			</section>
+		</section>
+		<section class="col-sm-3" id="section-right">
+			<h6>Empty</h6>
+		</section>
+	</section>
+</main>
+
+{% endblock %}

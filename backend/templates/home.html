@@ -1,0 +1,13 @@
+{% include 'messages_modal.html' %}
+
+<main class="container" id="main-container">
+	<section class="row text-light col-sm-6">
+		<h1>Transcendence home page</h1>
+		{% if user.is_authenticated %}
+		<p>You are logged in as: {{ user.username }}</p>
+		<p>Your email address is: {{ user.email }}</p>
+		{% else %}
+		<p>You are not logged in.</p>
+		{% endif %}
+	</section>
+</main>

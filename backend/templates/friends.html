@@ -1,0 +1,54 @@
+<div class="container" id="main-container">
+	<section class="row text-light col-sm-6">
+		<h1>All Users</h1>
+		<ul>
+			{% for player in users %}
+			<li>{{player.username}}</li>
+			{% endfor %}
+		</ul>
+		<h1>Friends</h1>
+		<ul>
+			{% for friend in friends %}
+				<li>
+					{{friend.myFriend.username}}
+					{% if friend.unread_messages_exist %}
+						<span class="badge badge-danger">Mensajes sin leer</span>
+					{% endif %}
+				</li>
+			{% endfor %}
+		</ul>
+		<h2>Buscar Usuario</h2>
+		<form action="/friends/friends/" method="GET">
+			<label for="username">Nombre de Usuario:</label>
+			<input type="text" id="username" name="user" required>
+			<button type="submit">Buscar</button>
+		</form>
+		<ul>
+			<script>
+				console.log("Amigo:", "{{ find_user }}");
+			</script>
+			{{find_user.myFriend.username}}
+		</ul>
+		<h1>Friends Actives</h1>
+		<ul>
+			{% for player in users %}
+				<li>{{ player.username }} : {{ player.isactive }}
+					<!-- {% if player.has_unread_messages %}
+						<span class="unread-indicator"></span> <!-- Agrega un indicador visual mensajes no leidos -->
+					{% endif %} -->
+					<a href="{% url 'chat' user1=player.username user2=user.username %}" target="_blank">
+						<button class="start-chat-btn" data-username="{{ player.username }}">
+							<i class="fas fa-paper-plane"></i>
+						</button>
+					</a>
+					{% if player.unread_messages_exist %}
+						<span class="badge badge-danger">Mensajes sin leer</span>
+					{% endif %}            
+				</li>
+			{% endfor %}
+		</ul>
+		<a href="/accounts/lista/" target="_blank">
+			<button>Ir a lista, para refrescar tu login</button>
+		</a>
+	</section>
+</div>
