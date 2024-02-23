@@ -18,12 +18,17 @@ from channels.security.websocket import AllowedHostsOriginValidator
 django_asgi = get_asgi_application()
 
 from game.routing import websocket_urlpatterns
+import tournament.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 application = ProtocolTypeRouter({
 	'http': django_asgi,
 	'websocket': AllowedHostsOriginValidator(
-		AuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
+		AuthMiddlewareStack(
+			URLRouter(
+				websocket_urlpatterns + 
+				tournament.routing.websocket_urlpatterns
+			)),
 	),
 })
