@@ -24,9 +24,11 @@
 	<script type="module" src="{% static 'chat_files/main.js' %}"></script>
 	{% include 'nav.html' %}
 
-	<div style="height: calc(100vh - 5em);" id="transcendence-app"></div>
-	<div id="transcendence-sidebar">
-		{% include 'friends_panel.html' %}
+	<div id="transcendence-container">
+		<div style="height: calc(100vh - 5em);" id="transcendence-app"></div>
+		<div id="transcendence-sidebar">
+			{% include 'friends_panel.html' %}
+		</div>
 	</div>
 	{% include 'messages_modal.html' %}
 	<script>
@@ -86,6 +88,14 @@
         const currentPath = window.location.pathname;
         loadPage("/home");
     };
+
+	function hide_sidebar() {
+		var status = document.querySelector("#transcendence-sidebar").className;
+		if (status === "hidden")
+			document.querySelector("#transcendence-sidebar").className = "";
+		else
+			document.querySelector("#transcendence-sidebar").className = "hidden";
+	}
 
  	document.addEventListener('DOMContentLoaded', handleInitialLoad);
 

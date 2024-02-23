@@ -37,6 +37,7 @@ main {
 }
 
 #section-profile-right {
+    width: fit-content;
     background-color: #110E1F;
     border: 3px solid #C3A5EC;
     border-radius: 10px;

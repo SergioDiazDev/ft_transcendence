@@ -19,9 +19,9 @@
 			<a class="nav-link btn me-3 nav-button" href="/accounts/logout/">
 				<p>Logout</p>
 			</a>
-			<a link class="nav-link btn " id="icon-users" href="#">
+			<button class="nav-link btn " id="icon-users" onclick="hide_sidebar()">
 				<img src="{% static 'img/Users.png' %}" alt="Icon users">
-			</a>
+			</button>
 			<span class="span-profile pe-3 position-absolute me-2 end-0" id="span-profile">
 				<a link class="img-profile p-0 text-decoration-none" id="user-account" href="{% url 'profile' user.username %}">
 					<picture class="picture" id="picture">
