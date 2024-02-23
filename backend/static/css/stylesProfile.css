@@ -23,6 +23,11 @@ main {
     height: 100%;
 }
 
+.scroll {
+    overflow-y: auto;
+    max-height: 82vh;
+}
+
 #section-profile-mid {
     padding: 0;
     margin-top: 4em;
@@ -37,7 +42,7 @@ main {
 }
 
 #section-profile-right {
-    width: fit-content;
+    width: 100%;
     background-color: #110E1F;
     border: 3px solid #C3A5EC;
     border-radius: 10px;
@@ -61,7 +66,7 @@ section > span {
 }
 
 #span-profile-game {
-    min-height: 8em;
+    min-height: 7em;
     border-right: 3px solid #C3A5EC;
     border-left: 3px solid #C3A5EC;
     border-bottom: 4px solid #C3A5EC;
@@ -78,6 +83,7 @@ section > span {
 
 #transcendence-sidebar {
     height: calc(100vh - 5em);
+    width: 20vw;
 }
 
 /* Image */
@@ -186,14 +192,14 @@ td {
 
 /* aside right */
 
-#section-profile-right > h3 {
+#section-profile-right h3 {
     padding: 1em;
     color: #3AAEE0;
     font-size: 20px;
     text-align: center;
 }
 
-#section-profile-right > section {
+#section-profile-right section {
     height: 2em;
     border: 1px solid #C3A5EC;
 }
@@ -202,7 +208,7 @@ a.fas {
     color: #C3A5EC;
 }
 
-#section-profile-right > section > article {
+#section-profile-right section > article {
     display: flex;
     background-color: #302D3D;
     justify-content: center;
@@ -211,7 +217,7 @@ a.fas {
     font-size: 15px;
 }
 
-#section-profile-right > section > article:first-child {
+#section-profile-right section > article:first-child {
     display: flex;
     background-color: #7857DC;
     justify-content: center;
@@ -223,7 +229,7 @@ a.fas {
     justify-content: center;
 }
 
-#section-profile-right > .row {
+#section-profile-right .row {
     margin-top: 0;
     margin-left: 0;
     margin-right: 0;
