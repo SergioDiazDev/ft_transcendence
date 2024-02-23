@@ -10,7 +10,9 @@
             <article class="row me-1" id="article-profile">
                 <section class="col-4 container-fluid p-4" id="section-games">
                     <h2 id="h2-name-profile" class="fw-bold">{{ user.username }}</h2>
-                    <a link href="/accounts/edit_profile/">Edit</a>
+                    {% if user.username == request.user.username %}
+                    <a link href="/accounts/edit_profile/">Edit my information</a>
+                    {% endif %}
                     <span class="col-12 " id="span-profile-img">
                         <picture class="picture">
                             <img src="/static/img/avatars/{{ user.avatar }}" alt="" class="">

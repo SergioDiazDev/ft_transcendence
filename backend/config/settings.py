@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 debug_flag = os.getenv("DJANGO_DEBUG", "False")
 
 if debug_flag == "False":
-    DEBUG = True
+    DEBUG = False
 else:
     DEBUG = True
 
