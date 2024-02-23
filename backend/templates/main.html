@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="{% static 'css/home.css' %}">
 	<script>
 		blockNavigation = false;
+		isChatting = false;
 	</script>
 </head>
 
@@ -33,6 +34,8 @@
 			event.preventDefault();
 			if (blockNavigation)
 				return ;
+			if (isChatting)
+				close_chat();
 			const href = targetLink.getAttribute('href');
 			if (href !== window.location.pathname)
 			{

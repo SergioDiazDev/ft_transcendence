@@ -49,8 +49,6 @@
     transition: all 0.5s ease-out;
 }
 
-
-
 .chat2::-webkit-scrollbar {
     width: 5px;
 }
@@ -77,22 +75,21 @@
 
 /* SALA DE CHAT*/
 .div-chat-text > p {
-    padding: 8px 8px 8px 8px;
+    padding: 8px 16px;
     border-radius: 5px;
-    font-size: 10px;
+    font-size: 14px;
     max-width: 80%;
+    width: fit-content;
 }
 
-.div-chat-text > .me {
+.div-chat-text > .you {
     color: #FFFFFF;
     margin: 1em 0 0 0;
     background: #7857DC;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
 }
-.div-chat-text > .you {
+.div-chat-text > .me {
     color: #FFFFFF;
     margin: 1em 0 0 8em;
     background: #C3A5EC;
