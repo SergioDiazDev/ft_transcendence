@@ -11,9 +11,9 @@
 			{% for friend in friends %}
 				<li>
 					{{friend.myFriend.username}}
-					{% if friend.unread_messages_exist %}
+					<!-- {% if friend.unread_messages_exist %}
 						<span class="badge badge-danger">Mensajes sin leer</span>
-					{% endif %}
+					{% endif %} -->
 				</li>
 			{% endfor %}
 		</ul>
