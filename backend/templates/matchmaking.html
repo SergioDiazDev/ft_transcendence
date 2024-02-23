@@ -1,0 +1,24 @@
+{% load static %}
+
+<main class="container" id="main-container">
+    <section class="matchmaking-display">
+        <section class="match-display">
+            <div>
+                <p class="text">{{user.username}}</p>
+                <img src="/static/img/avatars/{{user.avatar}}">
+            </div>
+
+            <p class="text vs-text">vs</p>
+        
+            <div class="no-display">
+                <p class="text">{{user.username}}</p>
+                <img src="/static/img/avatars/{{user.avatar}}">
+            </div>
+
+            <div class="loader">
+            </div>
+        </section>
+
+        <button class="home-search-button">Start Matchmaking</button>
+    </section>
+</main>

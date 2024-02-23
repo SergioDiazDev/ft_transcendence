@@ -39,4 +39,5 @@ urlpatterns = [
     path('game/', include("game.urls")),
     path('game_ai/', include("game.urls")),
 	path("chat/", include("chat.urls")),
+    path('', include("tournament.urls"))
 ]

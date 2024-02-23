@@ -6,6 +6,9 @@
 		{% if user.is_authenticated %}
 		<p>You are logged in as: {{ user.username }}</p>
 		<p>Your email address is: {{ user.email }}</p>
+
+		<a link class="home-search-button" href="/matchmaking/"><p>Matchmaking</p></button>
+		<a link class="home-search-button" href="#"><p>Tournament</p></button>
 		{% else %}
 		<p>You are not logged in.</p>
 		{% endif %}
