@@ -8,4 +8,14 @@
 		<article class="col-2"><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank"></a></article>
 	</section>
 	{% endfor %}
+	<h3>Add a new friend</h3>
+	<section class="row">
+		<div class="nav-button">
+			<label for="username">Nombre de Usuario:</label>
+			<input type="text" id="username_find" name="user_find" required>
+			<button class="nav-button" link href="{% url 'user'%}">Find</button>
+		</div>
+	<section class="row>">
+		{{user}}
+	</section>
 </aside>
