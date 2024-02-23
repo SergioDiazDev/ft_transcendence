@@ -14,9 +14,9 @@
                     <a link href="/accounts/edit_profile/">Edit my information</a>
                     {% endif %}
                     <span class="col-12 " id="span-profile-img">
-                        <picture class="picture">
-                            <img src="/static/img/avatars/{{ user.avatar }}" alt="" class="">
-                        </picture>
+                        <div class="profile-avatar">
+                            <img src="/static/img/avatars/{{ user.avatar }}" alt="" class="" width="316" height="316">
+                        </div>
                     </span>
                     <span id="span-profile-game" class="col-12">
                         <p>{{ matches.count }} games</p>
@@ -29,11 +29,9 @@
                     <span id="span-profile-tournament" class="col-12">
                         <p>Tournament</p>
                         <p>stats</p>
-                        <!--
                         <p>5 1st places</p>
                         <p>3 2nd places</p>
                         <p>8 3rd places</p>
-                        -->
                     </span>
                 </section>
                 <section class="col-8" id="section-match-history">
@@ -41,7 +39,7 @@
                     <span class="container mt-3" id="span-history">
                         <div class="table-responsive">
                             <table class="table table-bordered table-split">
-                                <tbody>
+                                <tbody class="table-matches">
                                     {% for match in matches %}
                                     <tr>
                                         <td id="table-history-res">
