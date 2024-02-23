@@ -6,7 +6,7 @@
             <aside class="col-2 " id="section-profile-left d-none d-lg-block">
         </aside>
         -->
-        <main class="col-7 container" id="section-profile-mid">
+        <main class="col-10 container" id="section-profile-mid">
             <article class="row me-1" id="article-profile">
                 <section class="col-4 container-fluid p-4" id="section-games">
                     <h2 id="h2-name-profile" class="fw-bold">{{ user.username }}</h2>
@@ -43,7 +43,7 @@
                             <table class="table table-bordered table-split">
                                 <tbody>
                                     {% for match in matches %}
-                                    <tr class="mb-3">
+                                    <tr>
                                         <td id="table-history-res">
                                             {% if match.winner == user %}
                                             <img src="{% static 'img/match_win.png' %}" alt="">

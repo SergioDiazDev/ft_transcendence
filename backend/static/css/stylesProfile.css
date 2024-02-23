@@ -131,11 +131,11 @@ span > p:last-child, span > p:nth-child(2) {
 /* Table match history */
 
 .table-split {
-    margin-bottom: 0.4em;
+    /* margin-bottom: 0.4em; */
 }
 
 td {
-    max-width: 1em; 
+    /* max-width: 1em; */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -159,8 +159,7 @@ td {
 /* aside right */
 
 #section-profile-right > h3 {
-    margin-top: 1em;
-    margin-bottom: 1em;
+    padding: 1em;
     color: #3AAEE0;
     font-size: 20px;
     text-align: center;
@@ -171,6 +170,9 @@ td {
     border: 1px solid #C3A5EC;
 }
 
+a.fas {
+    color: #C3A5EC;
+}
 
 #section-profile-right > section > article {
     display: flex;
@@ -193,6 +195,10 @@ td {
     justify-content: center;
 }
 
-
+#section-profile-right > .row {
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
 
 /* Medida a la que se rompe 950*/
