@@ -11,13 +11,20 @@
 		<article class="col-2"><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank"></a></article>
 	</section>
 	{% endfor %}
-	<h3>Add a new friend</h3>
 	<section class="row">
 		<div class="nav-button">
-			<label for="username">Nombre de Usuario:</label>
-			<input type="text" id="username_find" name="user_find" required>
-			<button class="nav-button" onclick="window.find_user(document.getElementById('username_find').value)">Find</button>
+			{% for invite, player in pending_invites %}
+			<p>ID: {{ invite }} USER: {{ player.username }} </p>
+			{% endfor %}
 		</div>
-		<div id="find_container">
 	</section>
 </aside>
+<h3>Add a new friend</h3>
+<section class="row">
+	<div class="nav-button">
+		<label for="username">Nombre de Usuario:</label>
+		<input type="text" id="username_find" name="user_find" required>
+		<button class="nav-button" onclick="window.find_user(document.getElementById('username_find').value)">Find</button>
+	</div>
+	<div id="find_container">
+</section>

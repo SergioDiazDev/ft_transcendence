@@ -9,6 +9,7 @@ from .forms import SignupForm, UpdatePlayerForm
 
 from .models import Player, PlayerFriend
 from chat.models import Chat, Message
+from itertools import chain
 
 from game.models import Match
 
@@ -34,13 +35,23 @@ def signup(request):
 @login_required
 def main(request):
 	# TODO: friends right now are all players, change when friends are ok
-	friends = Player.objects.all()
-	return render(request, 'main.html', context={"user": request.user, "friends": friends})
+	friends_join = chain(PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(status=True)).values_list("myUser", flat=True),
+					PlayerFriend.objects.filter((Q(myUser=request.user.id) & Q(status=True))).values_list("myFriend", flat=True))
+	pending_invites = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(status=False)).values_list("id", flat=True)
+	player_invited = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(status=False)).values_list("myUser", flat=True)
+
+	friends = Player.objects.filter(id__in=friends_join)
+	invites = Player.objects.filter(id__in=player_invited)
+	
+	print("pending:", pending_invites, flush=True)
+	print("invites:", invites, flush=True)
+	return render(request, 'main.html', context={"user": request.user, "friends": friends,
+		"pending_invites": zip(pending_invites, invites)})
 
 @login_required
 def friends_panel(request):
 	# TODO: friends right now are all players, change when friends are ok
-	friends = Player.objects.all()
+	friends = PlayerFriend
 	return render(request, 'friends_panel.html', context={"user": request.user, "friends": friends})
 
 @login_required
@@ -167,11 +178,12 @@ def findUser(request, find):
 	if user == None:
 		return JsonResponse({"username": None, "id": None})
 	return JsonResponse({'username': user.username, 'id': user.id })
+
 @login_required
 def makeFriend(request, myFriend):
 	myUser = request.user
 
-	if Player.objects.filter(id = myUser.id).first() == None:
+	if Player.objects.filter(username = myFriend).first() == None or myUser.username == myFriend :
 		return JsonResponse({"username": None, "id": None})
 	PlayerFriend.search_or_create(myUser.username, myFriend)
 
