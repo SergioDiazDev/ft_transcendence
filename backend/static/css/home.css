@@ -54,9 +54,14 @@
 }
 
 .div-chat-text {
-    min-width: 100%;
+    overflow-wrap: anywhere;
+    height: 60vh;
     border: 0;
-    padding: 8px 8px 8px 8px;
+    padding: 8px;
+    overflow-y: auto;
+    overflow-anchor: auto;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .section-chat  {
@@ -80,16 +85,19 @@
 }
 
 .div-chat-text > .you {
+    margin-right: auto;
     color: #FFFFFF;
-    margin: 1em 0 0 0;
     background: #7857DC;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
+    display: flex;
+    align-items: flex-start;
 }
+
 .div-chat-text > .me {
-    color: #FFFFFF;
-    margin: 1em 0 0 8em;
+    margin-left: auto;
+    color: black;
     background: #C3A5EC;
+    display: flex;
+    align-items: flex-end;
 }
 
 .section-chat article:nth-child(2) {
@@ -190,4 +198,20 @@
 
 .friends-record > article:nth-child(2) {
     flex-grow: 1;
+}
+
+#chat-container {
+    padding: 12px;
+    min-height: 100%;
+    border: 3px solid #C3A5EC;
+    background-color: #302D3D;
+    border-radius: 10px;
+}
+
+.chat-controls {
+    display: flex;
+}
+
+#chat-message-submit {
+    min-width: 8rem;
 }
