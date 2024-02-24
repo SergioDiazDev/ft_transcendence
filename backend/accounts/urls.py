@@ -13,4 +13,5 @@ urlpatterns = [
     path('users/', views.showAll, name="users"),
     path('user/', views.findUser, name="user"),
     path('', include('django.contrib.auth.urls'), name="Accounts"),
+    path('profile/avatar/<str:username>/', views.getAvatar)
 ]

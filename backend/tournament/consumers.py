@@ -7,7 +7,7 @@ import json
 
 class MatchmakingConsumer(AsyncWebsocketConsumer):
     users_searching = []
-
+    
     async def connect(self, *args, **kwargs):
         if self.scope["user"].is_authenticated:
             await self.accept()
@@ -15,13 +15,17 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
             await self.close()
 
     async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
         print("Disconnect", flush = True)
 
     async def receive(self, text_data):
         data_json = json.loads(text_data)
         if data_json["search"]:
             if len(MatchmakingConsumer.users_searching) <= 0:
-                myuuid = uuid4()
+                myuuid = "1234"
                 MatchmakingConsumer.users_searching.append({str(myuuid): str(self.scope["user"])})
                 self.room_group_name = f"matchmaking-{myuuid}"
                 await self.channel_layer.group_add(self.room_group_name, self.channel_name)

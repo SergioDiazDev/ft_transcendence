@@ -121,6 +121,16 @@
 	justify-content: center;
 }
 
+.home-search-button:hover
+{
+	color: white;
+}
+
+.home-search-button::selection{
+	background-color: #7857DC;
+	color: white;
+}
+
 .home-search-button > p {
 	height: 50%;
 }

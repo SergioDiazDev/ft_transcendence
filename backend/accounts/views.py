@@ -3,6 +3,8 @@ from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 
+from django.http import JsonResponse
+
 from django.db.models import Q
 from .forms import SignupForm, UpdatePlayerForm
 
@@ -167,3 +169,12 @@ def isactive(request):
 		else:
 			user.isactive = False
 	return render(request, 'friends.html', {'users': users})
+
+
+#This method is used in tournament
+@login_required
+def getAvatar(request, username):
+	 user = Player.objects.get(username = username)
+	 user_avatar = str(user.avatar)
+	 print(user_avatar, flush = True)
+	 return JsonResponse({"enemy_avatar": user_avatar})
