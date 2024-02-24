@@ -222,6 +222,7 @@ a.fas {
     background-color: #7857DC;
     justify-content: center;
     align-items: center;
+    padding: 0;
 }
 
 .center-container {

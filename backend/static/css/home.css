@@ -57,10 +57,7 @@
     min-width: 100%;
     border: 0;
     padding: 8px 8px 8px 8px;
-    
 }
-
-
 
 .section-chat  {
     background-color: #110E1F;
@@ -181,4 +178,16 @@
 
 .hidden {
     display: none;
+}
+
+.friends-record > article {
+    flex-basis: content;
+}
+
+.friends-record {
+    flex-wrap: nowrap;
+}
+
+.friends-record > article:nth-child(2) {
+    flex-grow: 1;
 }
