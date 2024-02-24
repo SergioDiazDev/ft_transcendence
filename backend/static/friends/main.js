@@ -20,14 +20,9 @@ function make_friend(username) {
 	})
 		.then(response => {
 			if (response.ok) {
-				console.log('Mensaje marcado como leído en la base de datos');
-			} else {
-				console.error('Error al marcar el mensaje como leído');
+				alert("Invitation Sent.")
 			}
 		})
-		.catch(error => {
-			console.error('Error:', error);
-		});
 }
 
 window.find_user = function find_user(find) {
@@ -35,7 +30,6 @@ window.find_user = function find_user(find) {
 	fetch(url)
 		.then(response => response.json())
 		.then(json => {
-			console.log(json);
 			document.querySelector("#find_container").innerHTML = friend_html(json.username, json.id);
 		});
 }

@@ -43,8 +43,6 @@ def main(request):
 	friends = Player.objects.filter(id__in=friends_join)
 	invites = Player.objects.filter(id__in=player_invited)
 	
-	print("pending:", pending_invites, flush=True)
-	print("invites:", invites, flush=True)
 	return render(request, 'main.html', context={"user": request.user, "friends": friends,
 		"pending_invites": zip(pending_invites, invites)})
 
@@ -187,9 +185,6 @@ def makeFriend(request, myFriend):
 		return JsonResponse({"username": None, "id": None})
 	PlayerFriend.search_or_create(myUser.username, myFriend)
 
-	chat_id = Chat.search_or_create(myUser.username, myFriend)
-	message_content = "ivita"
-	Message.create(chat_id, message_content, myUser)
 	return JsonResponse({})
 
 
