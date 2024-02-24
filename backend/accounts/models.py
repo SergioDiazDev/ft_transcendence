@@ -28,6 +28,7 @@ class PlayerFriend(models.Model):
     myUser = models.ForeignKey("Player", on_delete=models.DO_NOTHING, related_name = "my_user")
     myFriend = models.ForeignKey("Player", on_delete=models.DO_NOTHING, related_name = "my_friend")
     status = models.BooleanField(default = False)
+    block = models.BooleanField(default = False)
     registerDate = models.DateField(auto_now_add = True)
 
     @classmethod

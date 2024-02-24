@@ -38,11 +38,10 @@ def main(request):
 
 @login_required
 def friends_panel(request):
-	# TODO: friends right now are all players, change when friends are ok
-	friends_join = chain(PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(status=True)).values_list("myUser", flat=True),
-					PlayerFriend.objects.filter((Q(myUser=request.user.id) & Q(status=True))).values_list("myFriend", flat=True))
-	pending_invites = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(status=False)).values_list("id", flat=True)
-	player_invited = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(status=False)).values_list("myUser", flat=True)
+	friends_join = chain(PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=True)).values_list("myUser", flat=True),
+					PlayerFriend.objects.filter((Q(myUser=request.user.id) & Q(block=False) & Q(status=True))).values_list("myFriend", flat=True))
+	pending_invites = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=False)).values_list("id", flat=True)
+	player_invited = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=False)).values_list("myUser", flat=True)
 
 	friends = Player.objects.filter(id__in=friends_join)
 	invites = Player.objects.filter(id__in=player_invited)
@@ -177,7 +176,7 @@ def findUser(request, find):
 
 @login_required
 def makeFriend(request, myFriend):
-	myUser = request.user
+	myUser = request.user 
 
 	if Player.objects.filter(username = myFriend).first() == None or myUser.username == myFriend :
 		return JsonResponse({"username": None, "id": None})
@@ -192,7 +191,11 @@ def acceptFriend(request, invitation_id):
 	PlayerFriend.objects.filter(id = invitation_id).update(status=True)
 	return JsonResponse({"status": "ok"})
 
+@login_required
+def blockFriend(request, invitation_id):
 
+	PlayerFriend.objects.filter(id = invitation_id).update(block=True)
+	return JsonResponse({"status": "ok"})
 
 
 

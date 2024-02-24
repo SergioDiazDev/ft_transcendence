@@ -41,6 +41,23 @@ function accept_friend(invitation_id) {
 		});
 }
 
+function block_friend(invitation_id) {
+	const csrfToken = document.getElementById('csrf-token').value;
+	const url = '/accounts/block-friend/' + invitation_id;
+	fetch(url, {
+		method: 'POST',
+		headers: {
+			'X-CSRFToken': csrfToken
+		},
+		credentials: 'same-origin'
+	})
+		.then(response => response.json())
+		.then(json => {
+			if (json.status === "ok")
+				loadPanel("/accounts/friends_panel");
+		});
+}
+
 window.find_user = function find_user(find) {
 	var url = "/accounts/user/" + find;
 	fetch(url)
