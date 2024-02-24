@@ -1,5 +1,3 @@
-{% load static %}
-<script src="{% static 'friends/main.js' %}"></script>
 
 <aside class="col-3" id="section-profile-right">
 	<h3>Online friends</h3>
@@ -18,7 +16,6 @@
 			<input type="text" id="username_find" name="user_find" required>
 			<button class="nav-button" onclick="window.find_user(document.getElementById('username_find').value)">Find</button>
 		</div>
-	<section class="row">
-		{{user_find_value}}
+		<div id="find_container">
 	</section>
 </aside>

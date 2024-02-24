@@ -29,3 +29,17 @@ class PlayerFriend(models.Model):
     myFriend = models.ForeignKey("Player", on_delete=models.DO_NOTHING, related_name = "my_friend")
     status = models.BooleanField(default = False)
     registerDate = models.DateField(auto_now_add = True)
+
+    @classmethod
+    def search_or_create(cls, player_a, player_b):
+        if player1 is None or player2 is None:
+            return None
+
+        makeFriend =    PlayerFriends.objects.filter(myUser=player1, myFriend=player2) | \
+                        PlayerFriends.objects.filter(myUser=player2, myFriend=player1)
+        
+        if len(makeFriend) == 0:
+            makeFriend = PlayerFriends.objects.create(myUser=player1, myFriend=player2)
+        else:
+            makeFriend = PlayerFriends.first()
+        return makeFriend

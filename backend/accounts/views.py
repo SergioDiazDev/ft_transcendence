@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
@@ -7,6 +8,8 @@ from django.db.models import Q
 from .forms import SignupForm, UpdatePlayerForm
 
 from .models import Player, PlayerFriend
+from chat.models import Chat, Message
+
 from game.models import Match
 
 from datetime import datetime, timedelta, timezone
@@ -156,14 +159,28 @@ def showAll(request):
 
 @login_required
 def findUser(request, find):
-	#find = request.GET.get('user')
 
-	print("Holaaa :", find, flush=True, file=sys.stderr, end='\n')
 	if find:
-		user = PlayerFriend.objects.filter(username = find)
+		user = Player.objects.filter(username = find).first()
 	else:
 		user = None
-	return render(request, 'finduser.html', {'user_find_value': user.username})
+	if user == None:
+		return JsonResponse({"username": None, "id": None})
+	return JsonResponse({'username': user.username, 'id': user.id })
+
+def makeFriend(request, myFriend):
+	myUser = request.user
+
+	if Player.objects.filter(id = myId).first() == None:
+		return JsonResponse({"username": None, "id": None})
+	PlayerFriends.search_or_create(myUser, myFriend)
+
+	chat_id = Chat.search_or_create(myUser.username, myFriend.username)
+	Message.create(chat_id, message_content, myUser)
+	return JsonResponse({})
+
+
+
 
 @login_required
 def isactive(request):
