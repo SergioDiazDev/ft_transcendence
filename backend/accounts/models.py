@@ -32,14 +32,18 @@ class PlayerFriend(models.Model):
 
     @classmethod
     def search_or_create(cls, player_a, player_b):
+
+        player1 = Player.objects.filter(username__exact=player_a).first()
+        player2 = Player.objects.filter(username__exact=player_b).first()
+
         if player1 is None or player2 is None:
             return None
 
-        makeFriend =    PlayerFriends.objects.filter(myUser=player1, myFriend=player2) | \
-                        PlayerFriends.objects.filter(myUser=player2, myFriend=player1)
+        makeFriend =    PlayerFriend.objects.filter(myUser__exact=player1, myFriend__exact=player2) | \
+                        PlayerFriend.objects.filter(myUser__exact=player2, myFriend__exact=player1)
         
         if len(makeFriend) == 0:
-            makeFriend = PlayerFriends.objects.create(myUser=player1, myFriend=player2)
+            makeFriend = PlayerFriend.objects.create(myUser=player1, myFriend=player2)
         else:
-            makeFriend = PlayerFriends.first()
+            makeFriend = makeFriend.first()
         return makeFriend

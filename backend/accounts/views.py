@@ -167,15 +167,16 @@ def findUser(request, find):
 	if user == None:
 		return JsonResponse({"username": None, "id": None})
 	return JsonResponse({'username': user.username, 'id': user.id })
-
+@login_required
 def makeFriend(request, myFriend):
 	myUser = request.user
 
-	if Player.objects.filter(id = myId).first() == None:
+	if Player.objects.filter(id = myUser.id).first() == None:
 		return JsonResponse({"username": None, "id": None})
-	PlayerFriends.search_or_create(myUser, myFriend)
+	PlayerFriend.search_or_create(myUser.username, myFriend)
 
-	chat_id = Chat.search_or_create(myUser.username, myFriend.username)
+	chat_id = Chat.search_or_create(myUser.username, myFriend)
+	message_content = "ivita"
 	Message.create(chat_id, message_content, myUser)
 	return JsonResponse({})
 

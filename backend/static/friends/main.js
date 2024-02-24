@@ -2,17 +2,20 @@ function friend_html(username, id) {
 	console.log(username, id);
 	return (`<section class="row">
 	<div>
-		<button onclick="make_friend('${id}')"> ${username} </button>
+		<button onclick="make_friend('${username}')"> ${username} </button>
 	</div>
 	</section>`);
 }
 
-function make_friend(id) {
-	//const csrfToken = document.getElementById('csrf-token').value;
-	const url = '/accounts/make-friend/' + id + '/';
+function make_friend(username) {
+	const csrfToken = document.getElementById('csrf-token').value;
+	const url = '/accounts/make-friend/' + username;
 	console.error('URLLL:', url);
 	fetch(url, {
 		method: 'POST',
+		headers: {
+			'X-CSRFToken': csrfToken
+		},
 		credentials: 'same-origin'
 	})
 		.then(response => {
