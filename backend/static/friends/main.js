@@ -18,11 +18,11 @@ function make_friend(username) {
 		},
 		credentials: 'same-origin'
 	})
-		.then(response => {
-			if (response.ok) {
-				alert("Invitation Sent.")
-			}
-		})
+		.then(response => response.json())
+		.then( json => {
+			alert("Invitation Sent.");
+			console.log(json);
+		});
 }
 
 window.find_user = function find_user(find) {

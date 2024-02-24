@@ -39,11 +39,14 @@ class PlayerFriend(models.Model):
         if player1 is None or player2 is None:
             return None
 
-        makeFriend =    PlayerFriend.objects.filter(myUser__exact=player1, myFriend__exact=player2) | \
-                        PlayerFriend.objects.filter(myUser__exact=player2, myFriend__exact=player1)
-        
+        makeFriend = PlayerFriend.objects.filter(myUser__exact=player1, myFriend__exact=player2) | \
+                     PlayerFriend.objects.filter(myUser__exact=player2, myFriend__exact=player1)
+        print(makeFriend, flush=True)
         if len(makeFriend) == 0:
             makeFriend = PlayerFriend.objects.create(myUser=player1, myFriend=player2)
+            print("Se crea", flush=True)
         else:
             makeFriend = makeFriend.first()
+            print("Se encuentra", flush=True)
+        
         return makeFriend
