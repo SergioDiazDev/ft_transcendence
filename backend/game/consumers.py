@@ -129,7 +129,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def game_loop(self):
 		room = self.rooms.get(self.room_id, None)
 		if room:
-			match_id = await sync_to_async(Match.create_match)(player1_name=room["player1"], player2_name=room["player2"])
+			match_id = await sync_to_async(Match.create_match)(player1_name=room["player1"], player2_name=room["player2"], game_id=self.room_name)
 			room["db_match_id"] = match_id
 			avatars = await sync_to_async(Match.get_match_pictures)(match_id)
 		# game countdown

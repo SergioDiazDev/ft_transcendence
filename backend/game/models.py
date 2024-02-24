@@ -11,11 +11,12 @@ class Match(models.Model):
     player2_score = models.PositiveSmallIntegerField(default=0)
     winner = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="game_winner",
                                blank=True, null=True)
+    game_url = models.CharField(max_length = 100)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 	# TODO: add the tournament ID when we have tournaments implemented
 
     @classmethod
-    def create_match(cls, player1_name, player2_name):
+    def create_match(cls, player1_name, player2_name, game_id):
         # create the AI player if it doesn't exist
         if player2_name == "AI" and not Player.objects.filter(username='AI').exists():
             ai_player = Player.objects.create_user(username='AI', password=str(uuid.uuid4()),
@@ -25,7 +26,7 @@ class Match(models.Model):
         player1 = Player.objects.get(username__exact=player1_name)
         player2 = Player.objects.get(username__exact=player2_name)
 
-        match = cls.objects.create(player1=player1, player2=player2)
+        match = cls.objects.create(player1=player1, player2=player2, game_url=game_id)
         return match.id
 
     @classmethod
