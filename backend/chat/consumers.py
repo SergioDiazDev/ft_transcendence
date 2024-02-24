@@ -15,12 +15,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = "chat_%s" % self.chat_id
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
-        
+        user = self.scope["user"]
+
         # Recuperar mensajes anteriores de la base de datos de forma asíncrona
         messages = await sync_to_async(Message.objects.filter)(chat_id=self.chat_id)
         message_history = await sync_to_async(get_messages)(messages)
 
-        await self.send(text_data=json.dumps({"message_history": message_history}))
+        await self.send(text_data=json.dumps({"message_history": message_history,
+                                              "user": user.username,
+                                              }))
 
     async def disconnect(self, close_code):
         # Leave room group
@@ -31,30 +34,30 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message_content = text_data_json["message"]
         room_name = text_data_json.get("room_name")
         sender = self.scope["user"]
-        if self.chat_id:
+        if self.chat_id and message_content != "":
             message_object = await sync_to_async(Message.create)(self.chat_id, message_content, sender)
             message_id = message_object.id
 
-        # Marcar todos los mensajes como leídos para el usuario actual
-        await sync_to_async(Message.objects.filter(chat_id=self.chat_id, sender=sender).update)(read=True)
-
-        await self.channel_layer.group_send(
-            self.room_group_name, {
-                "type": "chat_message",
-                  "message": message_content,
-                  "message_id": message_id
-                }
-        )
+            await self.channel_layer.group_send(
+                self.room_group_name, {
+                    "type": "chat_message",
+                    "message": message_content,
+                    "message_id": message_id,
+                    "sender": sender.username,
+                    }
+            )
 
     # Receive message from room group
     async def chat_message(self, event):
         message = event["message"]
-        sender = self.scope["user"]
+        sender = event["sender"]
         message_id = event["message_id"]
+        user = self.scope["user"]
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             "message": message,
-            "sender": sender.username,
-            "message_id": message_id
+            "sender": sender,
+            "message_id": message_id,
+            "user": user.username,
         }))

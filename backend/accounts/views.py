@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
@@ -9,6 +10,9 @@ from django.db.models import Q
 from .forms import SignupForm, UpdatePlayerForm
 
 from .models import Player, PlayerFriend
+from chat.models import Chat, Message
+from itertools import chain
+
 from game.models import Match
 
 from datetime import datetime, timedelta, timezone
@@ -32,7 +36,20 @@ def signup(request):
 
 @login_required
 def main(request):
-	return render(request, 'main.html')
+	return render(request, 'main.html', context={"user": request.user})
+
+@login_required
+def friends_panel(request):
+	friends_join = chain(PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=True)).values_list("myUser", flat=True),
+					PlayerFriend.objects.filter((Q(myUser=request.user.id) & Q(block=False) & Q(status=True))).values_list("myFriend", flat=True))
+	pending_invites = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=False)).values_list("id", flat=True)
+	player_invited = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=False)).values_list("myUser", flat=True)
+
+	friends = Player.objects.filter(id__in=friends_join)
+	invites = Player.objects.filter(id__in=player_invited)
+	
+	return render(request, 'friends_panel.html', context={"user": request.user, "friends": friends,
+		"pending_invites": zip(pending_invites, invites)})
 
 @login_required
 def home(request):
@@ -149,13 +166,40 @@ def showAll(request):
 	return render(request, 'users.html', {'users': users})
 
 @login_required
-def findUser(request):
-	find = request.GET.get('user')
+def findUser(request, find):
+
 	if find:
-		user = PlayerFriend.objects.filter(username = find)
+		user = Player.objects.filter(username = find).first()
 	else:
 		user = None
-	return render(request, 'finduser.html', {'user': user})
+	if user == None:
+		return JsonResponse({"username": None, "id": None})
+	return JsonResponse({'username': user.username, 'id': user.id })
+
+@login_required
+def makeFriend(request, myFriend):
+	myUser = request.user 
+
+	if Player.objects.filter(username = myFriend).first() == None or myUser.username == myFriend :
+		return JsonResponse({"username": None, "id": None})
+	PlayerFriend.search_or_create(myUser.username, myFriend)
+
+	return JsonResponse({"status": "ok"})
+
+@login_required
+def acceptFriend(request, invitation_id):
+	myUser = request.user
+	#TODO Block User
+	PlayerFriend.objects.filter(id = invitation_id).update(status=True)
+	return JsonResponse({"status": "ok"})
+
+@login_required
+def blockFriend(request, invitation_id):
+
+	PlayerFriend.objects.filter(id = invitation_id).update(block=True)
+	return JsonResponse({"status": "ok"})
+
+
 
 @login_required
 def isactive(request):

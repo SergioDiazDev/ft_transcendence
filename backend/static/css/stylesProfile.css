@@ -20,7 +20,12 @@ main {
 }
 
 #section-profile-right, #section-profile-mid, #section-profile-left {
-    min-height: 60em;
+    height: 100%;
+}
+
+.scroll {
+    overflow-y: auto;
+    max-height: 82vh;
 }
 
 #section-profile-mid {
@@ -37,6 +42,7 @@ main {
 }
 
 #section-profile-right {
+    width: 100%;
     background-color: #110E1F;
     border: 3px solid #C3A5EC;
     border-radius: 10px;
@@ -60,7 +66,7 @@ section > span {
 }
 
 #span-profile-game {
-    min-height: 8em;
+    min-height: 7em;
     border-right: 3px solid #C3A5EC;
     border-left: 3px solid #C3A5EC;
     border-bottom: 4px solid #C3A5EC;
@@ -73,6 +79,11 @@ section > span {
     border-right: 3px solid #C3A5EC;
     border-left: 3px solid #C3A5EC;
     min-height: 10%;
+}
+
+#transcendence-sidebar {
+    height: calc(100vh - 5em);
+    width: 20vw;
 }
 
 /* Image */
@@ -130,11 +141,11 @@ span > p:last-child, span > p:nth-child(2) {
 /* Table match history */
 
 .table-split {
-    margin-bottom: 0.4em;
+    /* margin-bottom: 0.4em; */
 }
 
 td {
-    max-width: 1em; 
+    /* max-width: 1em; */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -146,8 +157,27 @@ td {
     border-right: none;
 }
 
+.profile-avatar {
+    border: 3px solid #C3A5EC;
+    background-color: #302D3D;
+    border-radius: 10px 10px 0 0;
+}
+
+.friends-avatar {
+    width: 30px;
+}
+
+.profile-avatar > img {
+    width: 100%;
+    border-radius: inherit;
+}
+
 .table-split > tbody > tr > td:first-child {
     text-align: left;
+}
+
+.img-profile {
+    display: flex;
 }
 
 #table-history-res > img {
@@ -155,23 +185,30 @@ td {
     margin-left: 1em;
 }
 
+.table-responsive {
+    overflow-y: auto;
+    max-height: 610px;
+}
+
 /* aside right */
 
-#section-profile-right > h3 {
-    margin-top: 1em;
-    margin-bottom: 1em;
+#section-profile-right h3 {
+    padding: 1em;
     color: #3AAEE0;
     font-size: 20px;
     text-align: center;
 }
 
-#section-profile-right > section {
+#section-profile-right section {
     height: 2em;
     border: 1px solid #C3A5EC;
 }
 
+a.fas {
+    color: #C3A5EC;
+}
 
-#section-profile-right > section > article {
+#section-profile-right section > article {
     display: flex;
     background-color: #302D3D;
     justify-content: center;
@@ -180,11 +217,12 @@ td {
     font-size: 15px;
 }
 
-#section-profile-right > section > article:first-child {
+#section-profile-right section > article:first-child {
     display: flex;
     background-color: #7857DC;
     justify-content: center;
     align-items: center;
+    padding: 0;
 }
 
 .center-container {
@@ -192,6 +230,10 @@ td {
     justify-content: center;
 }
 
-
+#section-profile-right .row {
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
 
 /* Medida a la que se rompe 950*/
