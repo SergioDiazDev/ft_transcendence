@@ -34,6 +34,10 @@ def signup(request):
 
 @login_required
 def main(request):
+	return render(request, 'main.html', context={"user": request.user})
+
+@login_required
+def friends_panel(request):
 	# TODO: friends right now are all players, change when friends are ok
 	friends_join = chain(PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(status=True)).values_list("myUser", flat=True),
 					PlayerFriend.objects.filter((Q(myUser=request.user.id) & Q(status=True))).values_list("myFriend", flat=True))
@@ -43,14 +47,8 @@ def main(request):
 	friends = Player.objects.filter(id__in=friends_join)
 	invites = Player.objects.filter(id__in=player_invited)
 	
-	return render(request, 'main.html', context={"user": request.user, "friends": friends,
+	return render(request, 'friends_panel.html', context={"user": request.user, "friends": friends,
 		"pending_invites": zip(pending_invites, invites)})
-
-@login_required
-def friends_panel(request):
-	# TODO: friends right now are all players, change when friends are ok
-	friends = PlayerFriend
-	return render(request, 'friends_panel.html', context={"user": request.user, "friends": friends})
 
 @login_required
 def home(request):
@@ -185,7 +183,15 @@ def makeFriend(request, myFriend):
 		return JsonResponse({"username": None, "id": None})
 	PlayerFriend.search_or_create(myUser.username, myFriend)
 
-	return JsonResponse({})
+	return JsonResponse({"status": "ok"})
+
+@login_required
+def acceptFriend(request, invitation_id):
+	myUser = request.user
+	#TODO Block User
+	PlayerFriend.objects.filter(id = invitation_id).update(status=True)
+	return JsonResponse({"status": "ok"})
+
 
 
 

@@ -10,7 +10,6 @@ function friend_html(username, id) {
 function make_friend(username) {
 	const csrfToken = document.getElementById('csrf-token').value;
 	const url = '/accounts/make-friend/' + username;
-	console.error('URLLL:', url);
 	fetch(url, {
 		method: 'POST',
 		headers: {
@@ -25,11 +24,29 @@ function make_friend(username) {
 		});
 }
 
+function accept_friend(invitation_id) {
+	const csrfToken = document.getElementById('csrf-token').value;
+	const url = '/accounts/accept-friend/' + invitation_id;
+	fetch(url, {
+		method: 'POST',
+		headers: {
+			'X-CSRFToken': csrfToken
+		},
+		credentials: 'same-origin'
+	})
+		.then(response => response.json())
+		.then(json => {
+			if (json.status === "ok")
+				loadPanel("/accounts/friends_panel");
+		});
+}
+
 window.find_user = function find_user(find) {
 	var url = "/accounts/user/" + find;
 	fetch(url)
 		.then(response => response.json())
 		.then(json => {
-			document.querySelector("#find_container").innerHTML = friend_html(json.username, json.id);
+			if (json.username && json.id)
+				make_friend(json.username);
 		});
 }
