@@ -10,7 +10,7 @@ from PIL import Image, ImageOps
 
 class Player(AbstractUser):
     id = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
-    username = models.CharField(max_length = 100, unique = True)
+    username = models.CharField(max_length = 10, unique = True)
     email = models.EmailField(unique = True)
     avatar = models.ImageField(upload_to="avatars/", default = "default.png")
     registerDate = models.DateField(auto_now_add = True)

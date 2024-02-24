@@ -33,7 +33,7 @@ window.join_chat = function join_chat() {
 		var chat_message = document.createElement("p");
 		chat_message.innerText = data.message;
 		chat_message.className = data.sender == user ?  "me" : "you";
-		document.querySelector("#chat-content").append(chat_message);
+		document.querySelector("#chat-content").prepend(chat_message);
 	}
 
 	function markMessageAsRead(messageId) {
@@ -72,8 +72,8 @@ window.join_chat = function join_chat() {
 		}));
 		messageInputDom.value = '';
 	};
-	document.querySelector("#chat-button").classList = ["hidden"];
-	document.querySelector("#chat-container").classList = [];
+	document.querySelector("#chat-button").classList.add("hidden");
+	document.querySelector("#chat-container").classList.remove("hidden");
 }
 
 window.close_chat = function close_chat() {

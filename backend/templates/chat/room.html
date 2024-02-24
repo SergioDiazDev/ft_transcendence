@@ -14,11 +14,19 @@
     }
 </style>
 {{ room_name|json_script:"room-name" }}
-<button class="nav-button" id="chat-button" onclick="join_chat()">Join chat</button>
-<div id="chat-container" class="hidden container-fluid chat">
+<main id="game-body">
+    <div id="game-container">
+        <button class="nav-button" id="chat-button" onclick="join_chat()">Join chat</button>
+    </div>
+
+<div id="chat-container" class="hidden container-fluid col-10 container">
     <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
         <div class="div-chat-text" id="chat-content"></div>
-        <input id="chat-message-input" type="text" size="100">
-        <input id="chat-message-submit" type="button" value="Send">
+        <div class="chat-controls">
+            <input id="chat-message-input" class="form-control" type="text">
+            <input id="chat-message-submit" class="btn-purple fw-bold p-1 rounded-5" type="button" value="Send">
+        </div>
     </section>
 </div>
+
+</main>
