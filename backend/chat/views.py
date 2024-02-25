@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from chat.models import Chat, Message
 from django.urls import reverse
 from django.http import HttpResponseForbidden, JsonResponse
-
+from accounts.models import Player
 def index(request):
     return render(request, "chat/index.html")
 
@@ -32,3 +32,16 @@ def mark_message_as_read(request, message_id):
     except Message.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Message does not exist'})
 
+def mark_history_as_read(request, chat_id, user_name):
+    try:
+        user = get_object_or_404(Player, username=user_name)
+        unread_messages = Message.objects.filter(chat_id=chat_id).exclude(sender_id=user).filter(read=False)
+        
+        # Iterar sobre los mensajes y marcarlos como leídos
+        for message in unread_messages:
+            message.read = True
+            message.save()
+
+        return JsonResponse({'success': True})
+    except Message.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Message does not exist'})

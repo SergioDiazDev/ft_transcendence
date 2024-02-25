@@ -23,6 +23,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.send(text_data=json.dumps({"message_history": message_history,
                                               "user": user.username,
+                                              "chat_id": self.chat_id,
                                               }))
 
     async def disconnect(self, close_code):
