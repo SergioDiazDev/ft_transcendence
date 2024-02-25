@@ -4,13 +4,21 @@
 	<input type="hidden" id="csrf-token" value="{{ csrf_token }}">
 	<div class="scroll">
 	{% for friend in friends %}
+		
 		<section class="row friends-record">
+
+			{% if friend.online %}
+				<article><i class="fas fa-circle" style="color: green;"></i></article>
+			{% else %}
+				<article><i class="fas fa-circle" style="color: red;"></i></article>
+			{% endif %}
 			<article><img class="friends-avatar" src="/static/img/avatars/{{ friend.avatar }}"></article>
 			<article>{{ friend.username }}</article>
 			<article><button class="fas fa-user" onclick="window.block_friend_name('{{friend.username}}')">B</button></article>
 			<article><a link href="{% url 'profile' friend.username %}" class="fas fa-user"></a></article>
 			<article><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank"></a></article>
 		</section>
+		
 	{% endfor %}
 	{% for invite, player in pending_invites %}
 	<section class="row">

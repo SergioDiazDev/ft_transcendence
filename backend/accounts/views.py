@@ -36,10 +36,12 @@ def signup(request):
 
 @login_required
 def main(request):
+	Player.objects.filter(id = request.user.id).update(online=1)
 	return render(request, 'main.html', context={"user": request.user})
 
 @login_required
 def friends_panel(request):
+	#print("\n Online my user: ", request.user.online, flush=True)
 	friends_join = chain(PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=True)).values_list("myUser", flat=True),
 					PlayerFriend.objects.filter((Q(myUser=request.user.id) & Q(block=False) & Q(status=True))).values_list("myFriend", flat=True))
 	pending_invites = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=False)).values_list("id", flat=True)
@@ -117,6 +119,7 @@ def edit_profile(request):
 
 @login_required
 def my_logout(request):
+	Player.objects.filter(id = request.user.id).update(online=0)
 	logout(request)
 	return redirect("login")
 
@@ -141,7 +144,7 @@ def showFriends(request):
 
 	find_user = None
 	find = request.GET.get('user')
-	print("find =", request.GET.get('user'))
+	#print("find =", request.GET.get('user'))
 	if find:
 		find_user = PlayerFriend.objects.filter(myFriend__username=find).first()
 	
