@@ -58,6 +58,23 @@ function block_friend(invitation_id) {
 		});
 }
 
+function block_friend_name(username) {
+	const csrfToken = document.getElementById('csrf-token').value;
+	const url = '/accounts/block-friend-name/' + username;
+	fetch(url, {
+		method: 'POST',
+		headers: {
+			'X-CSRFToken': csrfToken
+		},
+		credentials: 'same-origin'
+	})
+		.then(response => response.json())
+		.then(json => {
+			if (json.status === "ok")
+				loadPanel("/accounts/friends_panel");
+		});
+}
+
 window.find_user = function find_user(find) {
 	var url = "/accounts/user/" + find;
 	fetch(url)
@@ -65,5 +82,8 @@ window.find_user = function find_user(find) {
 		.then(json => {
 			if (json.username && json.id)
 				make_friend(json.username);
-		});
+		})
+		.catch(error => {
+			alert("User not found.");
+		});;
 }

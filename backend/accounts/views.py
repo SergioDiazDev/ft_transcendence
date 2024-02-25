@@ -173,6 +173,9 @@ def findUser(request, find):
 	else:
 		user = None
 	if user == None:
+		#TODO: Add a message to the user
+		#messages.info(request, 'User not found.')
+		#reload the page
 		return JsonResponse({"username": None, "id": None})
 	return JsonResponse({'username': user.username, 'id': user.id })
 
@@ -196,6 +199,17 @@ def acceptFriend(request, invitation_id):
 @login_required
 def blockFriend(request, invitation_id):
 
+	PlayerFriend.objects.filter(id = invitation_id).update(block=True)
+	return JsonResponse({"status": "ok"})
+
+@login_required
+def blockFriendName(request, username):
+
+	myUser = request.user
+	myFriend = Player.objects.filter(username = username).first()
+	invitation_id = PlayerFriend.objects.filter(Q(myUser=myUser.id ) & Q(myFriend=myFriend.id) |
+												Q(myUser=myFriend.id ) & Q(myFriend=myUser.id)).first().id
+	
 	PlayerFriend.objects.filter(id = invitation_id).update(block=True)
 	return JsonResponse({"status": "ok"})
 

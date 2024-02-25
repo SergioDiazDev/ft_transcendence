@@ -7,6 +7,7 @@
 		<section class="row friends-record">
 			<article><img class="friends-avatar" src="/static/img/avatars/{{ friend.avatar }}"></article>
 			<article>{{ friend.username }}</article>
+			<article><button class="fas fa-user" onclick="window.block_friend_name('{{friend.username}}')">B</button></article>
 			<article><a link href="{% url 'profile' friend.username %}" class="fas fa-user"></a></article>
 			<article><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank"></a></article>
 		</section>
