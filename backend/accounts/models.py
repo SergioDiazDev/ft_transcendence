@@ -13,8 +13,8 @@ class Player(AbstractUser):
     username = models.CharField(max_length = 10, unique = True)
     email = models.EmailField(unique = True)
     avatar = models.ImageField(upload_to="avatars/", default = "default.png")
-    registerDate = models.DateField(auto_now_add = True)
     online = models.IntegerField(default = 0)
+    registerDate = models.DateField(auto_now_add = True)
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

@@ -36,14 +36,13 @@ def signup(request):
 
 @login_required
 def main(request):
-	# Player.objects.filter(id = request.user.id).update(online=1)
+	# Quizas deberia ir en otro sitio
 	Player.objects.filter(id = request.user.id).update(last_login=datetime.now())
 	isactive(request)
 	return render(request, 'main.html', context={"user": request.user})
 
 @login_required
 def friends_panel(request):
-	#print("\n Online my user: ", request.user.online, flush=True)
 	friends_join = chain(PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=True)).values_list("myUser", flat=True),
 					PlayerFriend.objects.filter((Q(myUser=request.user.id) & Q(block=False) & Q(status=True))).values_list("myFriend", flat=True))
 	pending_invites = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=False)).values_list("id", flat=True)
@@ -76,15 +75,6 @@ def profile(request, username=None):
 	win_rate = round(matches_won / matches.count() * 100) if matches.count() > 0 else 0
 
 	return render(request, 'profile.html', context={"user": user, "matches": matches, "matches_won": matches_won, "win_rate": win_rate})
-
-# Lo uso para trae cosas de la base, borrar para despliegue
-def lista(request):
-	# Update last_login
-	if request.user.is_authenticated:
-		request.user.last_login = datetime.now()
-		request.user.save()
-	users = Player.objects.all()
-	return render(request, 'lista.html', {'users': users})
 
 @login_required
 def edit_profile(request):
@@ -146,32 +136,19 @@ def showFriends(request):
 
 	find_user = None
 	find = request.GET.get('user')
-	#print("find =", request.GET.get('user'))
+	#print("find =", request.GET.get('user'))#BORRAR
 	if find:
 		find_user = PlayerFriend.objects.filter(myFriend__username=find).first()
 	
-	# now_utc = datetime.now(timezone.utc)
-
-	# Definir el límite de una hora atrás en UTC
-	# one_hour_ago_utc = now_utc - timedelta(hours=1)
-
-	# for user in users:
-	# 	if user.last_login and user.last_login.replace(tzinfo=timezone.utc) > one_hour_ago_utc:
-	# 		user.isactive = True
-	# 	else:
-	# 		user.isactive = False
-	# # 	has_messages = has_unread_messages( request.user.id ,user.id)
-	# print("USER:")
-	# print(dir(request))
 	return render(request, 'friends.html', {'friends': friends, "users": users, "find_user": find_user})
 
 @login_required
-def showAll(request):
+def showAll(request):#BORRAR
 	users = Player.objects.all()
 	return render(request, 'users.html', {'users': users})
 
 @login_required
-def findUser(request, find):
+def findUser(request, find):#BORRAR
 
 	if find:
 		user = Player.objects.filter(username = find).first()
@@ -216,7 +193,7 @@ def blockFriendName(request, username):
 	myFriend = Player.objects.filter(username = username).first()
 	invitation_id = PlayerFriend.objects.filter(Q(myUser=myUser.id ) & Q(myFriend=myFriend.id) |
 												Q(myUser=myFriend.id ) & Q(myFriend=myUser.id)).first().id
-	#print(Chat.search_or_create(request.user.username, myFriend.username), flush = True)
+	#print(Chat.search_or_create(request.user.username, myFriend.username), flush = True)#BORRAR
 	chat = Chat.search_or_create(request.user.username, myFriend.username)
 	Chat.objects.filter(id=chat).delete()
 	PlayerFriend.objects.filter(id = invitation_id).update(block=True)
@@ -226,19 +203,12 @@ def blockFriendName(request, username):
 
 @login_required
 def isactive(request):
-	# users = Player.objects.all()
 	now_utc = datetime.now(timezone.utc)
 	one_hour_ago_utc = now_utc - timedelta(hours=1)
 
 	# Actualizar el campo 'online' en función de 'last_login'
 	Player.objects.filter(last_login__gt=one_hour_ago_utc).update(online=1)
 	Player.objects.exclude(last_login__gt=one_hour_ago_utc).update(online=0)
-	# for user in users:
-	# 	if user.last_login and user.last_login.replace(tzinfo=timezone.utc) > one_hour_ago_utc:
-	# 		user.isactive = True
-	# 	else:
-	# 		user.isactive = False
-	# return render(request, 'friends.html', {'users': users})
 
 
 #This method is used in tournament
