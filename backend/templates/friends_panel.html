@@ -17,8 +17,8 @@
 		<article class="col-2"><img width="24px" height="24px" src="/static/img/avatars/{{ player.avatar }}"></article>
 		<article class="col-6">{{ player.username }}</article>
 		<article class="col-2"><a link href="{% url 'profile' player.username %}" class="fas fa-user"></a></article>
-		<button class="" onclick="window.accept_friend('{{invite}}')">Accept</button>
-		<button class="" onclick="window.block_friend('{{invite}}')">Block</button>
+		<button class="fas fa-user" onclick="window.accept_friend('{{invite}}')">Accept</button>
+		<button class="fas fa-user" onclick="window.block_friend('{{invite}}')">Block</button>
 	</section>
 	{% endfor %}
 	<h3>Add a new friend</h3>
