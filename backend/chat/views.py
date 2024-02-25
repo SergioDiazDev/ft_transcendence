@@ -34,14 +34,16 @@ def mark_message_as_read(request, message_id):
 
 def mark_history_as_read(request, chat_id, user_name):
     try:
-        user = get_object_or_404(Player, username=user_name)
-        unread_messages = Message.objects.filter(chat_id=chat_id).exclude(sender_id=user).filter(read=False)
+        player = Player.objects.get(username=user_name)
+        chat = Chat.objects.filter(id=chat_id).first()
         
-        # Iterar sobre los mensajes y marcarlos como leídos
-        for message in unread_messages:
-            message.read = True
-            message.save()
+        # Actualizar la variable unread del chat
+        if chat.player_a == player:
+            chat.unread_A = False
+        elif chat.player_b == player:
+            chat.unread_B = False
+        chat.save()
 
         return JsonResponse({'success': True})
-    except Message.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Message does not exist'})
+    except (Player.DoesNotExist, Chat.DoesNotExist):
+        return JsonResponse({'success': False, 'error': 'Player or Chat does not exist'})
