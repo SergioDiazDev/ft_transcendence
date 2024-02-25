@@ -36,7 +36,9 @@ def signup(request):
 
 @login_required
 def main(request):
-	Player.objects.filter(id = request.user.id).update(online=1)
+	# Player.objects.filter(id = request.user.id).update(online=1)
+	Player.objects.filter(id = request.user.id).update(last_login=datetime.now())
+	isactive(request)
 	return render(request, 'main.html', context={"user": request.user})
 
 @login_required
@@ -148,17 +150,17 @@ def showFriends(request):
 	if find:
 		find_user = PlayerFriend.objects.filter(myFriend__username=find).first()
 	
-	now_utc = datetime.now(timezone.utc)
+	# now_utc = datetime.now(timezone.utc)
 
 	# Definir el límite de una hora atrás en UTC
-	one_hour_ago_utc = now_utc - timedelta(hours=1)
+	# one_hour_ago_utc = now_utc - timedelta(hours=1)
 
-	for user in users:
-		if user.last_login and user.last_login.replace(tzinfo=timezone.utc) > one_hour_ago_utc:
-			user.isactive = True
-		else:
-			user.isactive = False
-	# 	has_messages = has_unread_messages( request.user.id ,user.id)
+	# for user in users:
+	# 	if user.last_login and user.last_login.replace(tzinfo=timezone.utc) > one_hour_ago_utc:
+	# 		user.isactive = True
+	# 	else:
+	# 		user.isactive = False
+	# # 	has_messages = has_unread_messages( request.user.id ,user.id)
 	# print("USER:")
 	# print(dir(request))
 	return render(request, 'friends.html', {'friends': friends, "users": users, "find_user": find_user})
@@ -224,16 +226,19 @@ def blockFriendName(request, username):
 
 @login_required
 def isactive(request):
-	users = Player.objects.all()
+	# users = Player.objects.all()
 	now_utc = datetime.now(timezone.utc)
 	one_hour_ago_utc = now_utc - timedelta(hours=1)
 
-	for user in users:
-		if user.last_login and user.last_login.replace(tzinfo=timezone.utc) > one_hour_ago_utc:
-			user.isactive = True
-		else:
-			user.isactive = False
-	return render(request, 'friends.html', {'users': users})
+	# Actualizar el campo 'online' en función de 'last_login'
+	Player.objects.filter(last_login__gt=one_hour_ago_utc).update(online=1)
+	Player.objects.exclude(last_login__gt=one_hour_ago_utc).update(online=0)
+	# for user in users:
+	# 	if user.last_login and user.last_login.replace(tzinfo=timezone.utc) > one_hour_ago_utc:
+	# 		user.isactive = True
+	# 	else:
+	# 		user.isactive = False
+	# return render(request, 'friends.html', {'users': users})
 
 
 #This method is used in tournament
