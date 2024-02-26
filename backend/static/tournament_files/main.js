@@ -33,8 +33,8 @@ window.searchMatch = function()
             .then(({enemy_avatar}) => {
                 console.log(enemy_avatar);
                 document.querySelector("#mm-player2").innerText = enemy_name;
-                document.querySelector("#mm-avatar-player2").src = `http://${window.location.hostname}:${window.location.port}/static/img/avatars/${enemy_avatar}`;
-                console.log(`http://${window.location.hostname}:${window.location.port}/static/img/avatars/${enemy_avatar}`);
+                document.querySelector("#mm-avatar-player2").src = `http://${window.location.hostname}:${window.location.port}/${enemy_avatar}`;
+                console.log(`http://${window.location.hostname}:${window.location.port}/${enemy_avatar}`);
                 document.querySelector("#loader-tournament").classList.add("no-display");
                 document.querySelector("#mm-enemy-box").classList.toggle("no-display");
 

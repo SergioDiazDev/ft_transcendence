@@ -185,7 +185,7 @@
 }
 
 .hidden {
-    display: none;
+    display: none!important;
 }
 
 .friends-record > article {

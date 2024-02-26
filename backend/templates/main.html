@@ -109,11 +109,11 @@
     };
 
 	function hide_sidebar() {
-		var status = document.querySelector("#transcendence-sidebar").className;
+		var status = document.querySelector("#transcendence-panel").className;
 		if (status === "hidden")
-			document.querySelector("#transcendence-sidebar").className = "";
+			document.querySelector("#transcendence-panel").className = "";
 		else
-			document.querySelector("#transcendence-sidebar").className = "hidden";
+			document.querySelector("#transcendence-panel").className = "hidden";
 	}
 
  	document.addEventListener('DOMContentLoaded', handleInitialLoad);

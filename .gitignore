@@ -1,6 +1,7 @@
 .devcontainer/
 .github/
 backend/virtual_env
+backend/static/img/avatars/
 postgres_data
 .vscode/
 

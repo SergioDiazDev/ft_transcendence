@@ -6,7 +6,7 @@
 	<div class="scroll">
 	{% for friend in friends %}
 	<section class="row friends-record">
-			<article><img class="friends-avatar" src="/static/img/avatars/{{ friend.avatar }}"></article>
+			<article><img class="friends-avatar" src="/{{ friend.avatar }}"></article>
 			<article>{{ friend.username }}</article>
 			<article><a link href="{% url 'profile' friend.username %}" class="fas fa-user"></a></article>
 
@@ -30,7 +30,7 @@
 	{% endif %}
 	{% for invite, player in pending_invites %}
 	<section class="row friends-record">
-		<article><img class="friends-avatar" width="24px" height="24px" src="/static/img/avatars/{{ player.avatar }}"></article>
+		<article><img class="friends-avatar" width="24px" height="24px" src="/{{ player.avatar }}"></article>
 		<article>{{ player.username }}</article>
 		<article><a link href="{% url 'profile' player.username %}" class="fas fa-user"></a></article>
 		<article><a class="fas fa-user-check" onclick="window.accept_friend('{{invite}}')" style="width: fit-content;"></a></article>

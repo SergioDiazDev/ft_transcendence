@@ -88,14 +88,6 @@ def edit_profile(request):
 		password_form = PasswordChangeForm(user=request.user, data=request.POST)
 
 		if user_form.is_valid() and user_form.has_changed():
-			avatar = user_form.cleaned_data['avatar']
-			if avatar:
-				filename = f"avatar_{request.user.id}.{avatar.name.split(".")[-1]}"
-				avatar_path = f"static/img/avatars/{filename}"
-				with open(avatar_path, 'wb+') as destination:
-					for chunk in avatar.chunks():
-						destination.write(chunk)
-				request.user.avatar = filename
 			user_form.save()
 			messages.success(request, "Profile details updated.")
 		else:
