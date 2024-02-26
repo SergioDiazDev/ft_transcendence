@@ -19,7 +19,10 @@
         <button class="nav-button" id="chat-button" onclick="join_chat()">Join chat</button>
     </div>
 
-<div id="chat-container" class="hidden container-fluid col-10 container">
+<div id="chat-container" class="hidden col-10">
+    <div id="chat-title">
+        <h2>Chat from {{ a_name }} and {{ b_name }}</h2>
+    </div>
     <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
         <div class="div-chat-text" id="chat-content"></div>
         <div class="chat-controls">

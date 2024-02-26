@@ -1,16 +1,26 @@
 {% include 'messages_modal.html' %}
 
-<main class="container" id="main-container">
-	<section class="row text-light col-sm-6">
-		<h1>Transcendence home page</h1>
-		{% if user.is_authenticated %}
-		<p>You are logged in as: {{ user.username }}</p>
-		<p>Your email address is: {{ user.email }}</p>
-
-		<a link class="home-search-button" href="/matchmaking/"><p>Matchmaking</p></a>
-		<a link class="home-search-button" href="#"><p>Tournament</p></a>
-		{% else %}
-		<p>You are not logged in.</p>
-		{% endif %}
+<main>
+	<section id="home-buttons-container">
+		<a link href="/matchmaking/" class="home-button">
+			<article class="home-option" id="matchmaking">
+				<div class="title-option">
+					<div class="title-img-container">
+						<img src="/static/img/matchmaking.png" alt="">
+					</div>
+					<p>Matchmaking</p>
+				</div>
+			</article>
+		</a>
+		<a link href="#" class="home-button">
+			<article class="home-option" id="tournament-mode">
+				<div class="title-option">
+					<div class="title-img-container">
+						<img src="/static/img/tournament.png" alt="">
+					</div>
+					<p>Tournament mode</p>
+				</div>
+			</article>
+		</a>
 	</section>
 </main>

@@ -1,31 +1,41 @@
+{% load accounts_extra %}
 
 <aside class="col-3" id="section-profile-right">
 	<h3>Online friends</h3>
 	<input type="hidden" id="csrf-token" value="{{ csrf_token }}">
 	<div class="scroll">
 	{% for friend in friends %}
-		<section class="row friends-record">
-			<article><img class="friends-avatar" src="/static/img/avatars/{{ friend.avatar }}"></article>
+	<section class="row friends-record">
+			<article><img class="friends-avatar" src="/{{ friend.avatar }}"></article>
 			<article>{{ friend.username }}</article>
 			<article><a link href="{% url 'profile' friend.username %}" class="fas fa-user"></a></article>
-			<article><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank"></a></article>
+
+			{% if friend in friends_unread %}
+				<article><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank" style="color: aqua;"></a></article>
+			{% else %}
+				<article><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank"></a></article>
+			{% endif %}
+
+			<article><a class="fas fa-user-lock" onclick="window.block_friend_name('{{friend.username}}')" style="color: #ee5353;"></a></article>
+
+			{% if friend.last_login|isOnline%}
+				<article><i class="fas fa-circle" style="color: green;"></i></article>
+			{% else %}
+				<article><i class="fas fa-circle" style="color: #867b7b;"></i></article>
+			{% endif %}
 		</section>
 	{% endfor %}
+	{% if pending_invites %}
+	<h3>Friend requests</h3>
+	{% endif %}
 	{% for invite, player in pending_invites %}
-	<section class="row">
-		<article class="col-2"><img width="24px" height="24px" src="/static/img/avatars/{{ player.avatar }}"></article>
-		<article class="col-6">{{ player.username }}</article>
-		<article class="col-2"><a link href="{% url 'profile' player.username %}" class="fas fa-user"></a></article>
-		<button class="" onclick="window.accept_friend('{{invite}}')">Accept</button>
-		<button class="" onclick="window.block_friend('{{invite}}')">Block</button>
+	<section class="row friends-record">
+		<article><img class="friends-avatar" width="24px" height="24px" src="/{{ player.avatar }}"></article>
+		<article>{{ player.username }}</article>
+		<article><a link href="{% url 'profile' player.username %}" class="fas fa-user"></a></article>
+		<article><a class="fas fa-user-check" onclick="window.accept_friend('{{invite}}')" style="width: fit-content;"></a></article>
+		<article><a class="fas fa-user-lock" onclick="window.block_friend('{{invite}}')" style="width: fit-content; color: #ee5353;"></a></article>
 	</section>
 	{% endfor %}
-	<h3>Add a new friend</h3>
-	<section class="row">
-		<article>Username:</article>
-		<input type="text" id="username_find" name="user_find" required>
-		<button class="nav-button" onclick="window.find_user(document.getElementById('username_find').value)">Find</button>
-		<div id="find_container">
-	</section>
 	</div>
 </aside>
