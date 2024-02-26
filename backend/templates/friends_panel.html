@@ -9,8 +9,15 @@
 			<article><img class="friends-avatar" src="/static/img/avatars/{{ friend.avatar }}"></article>
 			<article>{{ friend.username }}</article>
 			<article><a link href="{% url 'profile' friend.username %}" class="fas fa-user"></a></article>
-			<article><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank"></a></article>
+
+			{% if friend in friends_unread %}
+				<article><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank" style="color: aqua;"></a></article>
+			{% else %}
+				<article><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank"></a></article>
+			{% endif %}
+
 			<article><a class="fas fa-user-lock" onclick="window.block_friend_name('{{friend.username}}')" style="color: #ee5353;"></a></article>
+
 			{% if friend.last_login|isOnline%}
 				<article><i class="fas fa-circle" style="color: green;"></i></article>
 			{% else %}

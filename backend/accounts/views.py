@@ -47,11 +47,15 @@ def friends_panel(request):
 	pending_invites = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=False)).values_list("id", flat=True)
 	player_invited = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=False)).values_list("myUser", flat=True)
 
+	player_unread_messages = chain(Chat.objects.filter(Q(player_a=request.user.id) & Q(unread_A=True)).values_list("player_b", flat=True),
+			  	 Chat.objects.filter(Q(player_b=request.user.id) & Q(unread_B=True)).values_list("player_a", flat=True))
+
+	friends_unread = Player.objects.filter(id__in=player_unread_messages)
 	friends = Player.objects.filter(id__in=friends_join)
 	invites = Player.objects.filter(id__in=player_invited)
-	
+
 	return render(request, 'friends_panel.html', context={"user": request.user, "friends": friends,
-		"pending_invites": zip(pending_invites, invites)})
+		"pending_invites": zip(pending_invites, invites), "friends_unread": friends_unread})
 
 @login_required
 def home(request):
