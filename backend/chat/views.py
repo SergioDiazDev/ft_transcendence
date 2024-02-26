@@ -12,7 +12,9 @@ def room(request, room_name):
         return HttpResponseForbidden("No tienes permiso para acceder a esta sala de chat.")
     if request.user.username != chat.player_a.username and request.user.username != chat.player_b.username:
         return HttpResponseForbidden("No tienes permiso para acceder a esta sala de chat.")
-    return render(request, "chat/room.html", {"room_name": room_name})
+    return render(request, "chat/room.html", {"room_name": room_name,
+                                              "a_name": chat.player_a.username,
+                                              "b_name": chat.player_b.username })
 
 
 def chat_view(request, user1, user2):

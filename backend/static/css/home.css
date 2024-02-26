@@ -201,7 +201,6 @@
 }
 
 #chat-container {
-    padding: 12px;
     min-height: 100%;
     border: 3px solid #C3A5EC;
     background-color: #302D3D;
@@ -214,4 +213,14 @@
 
 #chat-message-submit {
     min-width: 8rem;
+}
+
+#chat-title {
+    width: 100%;
+    text-align: center;
+    color: #C3A5EC;
+    background-color: #202646;
+    padding: 1rem;
+    border: inherit;
+    border-top: none;
 }
