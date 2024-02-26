@@ -79,10 +79,7 @@ function block_friend_name(username) {
 				if (json.status === "ok")
 					loadPanel("/accounts/friends_panel");
 			});
-		console.log("La acción se realizará.");
-	  } else {
-		console.log("La acción ha sido cancelada.");
-	  }
+	}
 	
 }
 
