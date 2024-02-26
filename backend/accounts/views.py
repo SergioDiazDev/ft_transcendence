@@ -110,7 +110,6 @@ def edit_profile(request):
 
 @login_required
 def my_logout(request):
-	Player.objects.filter(id = request.user.id).update(online=0)
 	logout(request)
 	return redirect("login")
 

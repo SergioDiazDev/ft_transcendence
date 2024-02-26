@@ -5,28 +5,26 @@
 	<input type="hidden" id="csrf-token" value="{{ csrf_token }}">
 	<div class="scroll">
 	{% for friend in friends %}
-		
 	<section class="row friends-record">
+			<article><img class="friends-avatar" src="/static/img/avatars/{{ friend.avatar }}"></article>
+			<article>{{ friend.username }}</article>
+			<article><a link href="{% url 'profile' friend.username %}" class="fas fa-user"></a></article>
+			<article><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank"></a></article>
+			<article><a class="fas fa-user-lock" onclick="window.block_friend_name('{{friend.username}}')"></a></article>
 			{% if friend.last_login|isOnline%}
 				<article><i class="fas fa-circle" style="color: green;"></i></article>
 			{% else %}
-				<article><i class="fas fa-circle" style="color: red;"></i></article>
+				<article><i class="fas fa-circle" style="color: #867b7b;"></i></article>
 			{% endif %}
-			<article><img class="friends-avatar" src="/static/img/avatars/{{ friend.avatar }}"></article>
-			<article>{{ friend.username }}</article>
-			<article><button class="fas fa-user" onclick="window.block_friend_name('{{friend.username}}')">B</button></article>
-			<article><a link href="{% url 'profile' friend.username %}" class="fas fa-user"></a></article>
-			<article><a link href="{% url 'sala' user1=friend.username user2=user.username %}" class="fas fa-inbox" target="_blank"></a></article>
 		</section>
-		
 	{% endfor %}
 	{% for invite, player in pending_invites %}
-	<section class="row">
-		<article class="col-2"><img width="24px" height="24px" src="/static/img/avatars/{{ player.avatar }}"></article>
-		<article class="col-6">{{ player.username }}</article>
-		<article class="col-2"><a link href="{% url 'profile' player.username %}" class="fas fa-user"></a></article>
-		<button class="fas fa-user" onclick="window.accept_friend('{{invite}}')">Accept</button>
-		<button class="fas fa-user" onclick="window.block_friend('{{invite}}')">Block</button>
+	<section class="row friends-record">
+		<article><img class="friends-avatar" width="24px" height="24px" src="/static/img/avatars/{{ player.avatar }}"></article>
+		<article>{{ player.username }}</article>
+		<article><a link href="{% url 'profile' player.username %}" class="fas fa-user"></a></article>
+		<article><a class="fas fa-user-check" onclick="window.accept_friend('{{invite}}')" style="width: fit-content;"></a></article>
+		<article><a class="fas fa-user-lock" onclick="window.block_friend('{{invite}}')" style="width: fit-content;"></a></article>
 	</section>
 	{% endfor %}
 	<h3>Add a new friend</h3>
