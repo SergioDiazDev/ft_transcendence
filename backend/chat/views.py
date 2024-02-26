@@ -23,16 +23,7 @@ def chat_view(request, user1, user2):
     # Redirigir a la página de la sala de chat con el ID de la sala de chat en la URL
     return redirect(reverse('chat', kwargs={'room_name': chat_id}))
 
-def mark_message_as_read(request, message_id):
-    try:
-        message = Message.objects.get(id=message_id)
-        message.read = True
-        message.save()
-        return JsonResponse({'success': True})
-    except Message.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Message does not exist'})
-
-def mark_history_as_read(request, chat_id, user_name):
+def mark_chat_as_read(request, chat_id, user_name):
     try:
         player = Player.objects.get(username=user_name)
         chat = Chat.objects.filter(id=chat_id).first()

@@ -17,17 +17,12 @@ window.join_chat = function join_chat() {
 		if (data.message_history) {
 			data.message_history.forEach(elem => {
 				addMessage(elem, data.user);
-				// if (elem.sender != data.user)
-				// 	markMessageAsRead(elem.id);
 			});
-			markHistoryAsRead(data.chat_id, data.user)
+			markChatAsRead(data.chat_id, data.user)
 		}
 		if (data.message) {
-			// document.querySelector('#chat-log').value += (`${data.sender}: ${data.message}` + '\n');
 			addMessage(data, data.user);
-			// if (data.sender != data.user)
-			// 	markMessageAsRead(data.message_id);
-			markHistoryAsRead(data.chat_id, data.user)
+			markChatAsRead(data.chat_id, data.user)
 		}
 	};
 
@@ -38,29 +33,8 @@ window.join_chat = function join_chat() {
 		document.querySelector("#chat-content").prepend(chat_message);
 	}
 
-	function markHistoryAsRead(chat_id, user_name) {
-		const url = '/chat/mark-history-as-read/' + chat_id + '/' + user_name + '/';
-		fetch(url, {
-			method: 'POST',
-			headers: {
-				'X-CSRFToken': csrfToken
-			},
-			credentials: 'same-origin'
-		})
-			.then(response => {
-				if (response.ok) {
-					console.log('Mensaje marcado como leído en la base de datos');
-				} else {
-					console.error('Error al marcar el mensaje como leído');
-				}
-			})
-			.catch(error => {
-				console.error('Error:', error);
-			});
-	}
-
-	function markMessageAsRead(messageId) {
-		const url = '/chat/mark-message-as-read/' + messageId + '/';
+	function markChatAsRead(chat_id, user_name) {
+		const url = '/chat/mark-chat-as-read/' + chat_id + '/' + user_name + '/';
 		fetch(url, {
 			method: 'POST',
 			headers: {

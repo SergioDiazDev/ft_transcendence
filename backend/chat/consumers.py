@@ -38,7 +38,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             message_object = await sync_to_async(Message.create)(self.chat_id, message_content, sender)
             message_id = message_object.id
             # self.chat_id, sender comprobar quien no es el sender
-            await self.update_unread_field(sender)
+            await self.update_unread_field(sender.username)
 
             await self.channel_layer.group_send(
                 self.room_group_name, {
@@ -52,29 +52,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def update_unread_field(self, sender_username):
         chat = await sync_to_async(Chat.objects.select_related('player_a', 'player_b').get)(id=self.chat_id)
-        print(chat.id, flush=True)
-        print("entrando", flush=True)
-        print(sender_username, flush=True)
 
         player_a = chat.player_a.username
         player_b = chat.player_b.username
 
         if player_a:
-            print(player_a, flush=True)
-            print("chat.player_a.username", flush=True)
             if sender_username == player_a:
-                print(" soy b", flush=True)
                 chat.unread_B = True
-        if player_b:
-            print("soy b:", player_b, "...." ,flush=True)
-            print("chat.player_b.username", flush=True)
-            print("soy b:", sender_username, "...." , flush=True)
-
+        elif player_b:
             if sender_username == player_b:
-                print(" soy a", flush=True)
                 chat.unread_A = True
-            else:
-                print("se salto el if", flush=True)
         
         await sync_to_async(chat.save)()
 
