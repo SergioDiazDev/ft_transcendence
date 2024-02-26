@@ -224,3 +224,18 @@
     border: inherit;
     border-top: none;
 }
+
+#transcendence-panel {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 5em);
+    width: 20vw;
+}
+
+#add-friend-container {
+    width: 100%;
+    background-color: #110E1F;
+    border: 3px solid #C3A5EC;
+    border-radius: 10px;
+    border-top: none;
+}

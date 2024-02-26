@@ -25,6 +25,9 @@
 			{% endif %}
 		</section>
 	{% endfor %}
+	{% if pending_invites %}
+	<h3>Friend requests</h3>
+	{% endif %}
 	{% for invite, player in pending_invites %}
 	<section class="row friends-record">
 		<article><img class="friends-avatar" width="24px" height="24px" src="/static/img/avatars/{{ player.avatar }}"></article>
@@ -34,10 +37,5 @@
 		<article><a class="fas fa-user-lock" onclick="window.block_friend('{{invite}}')" style="width: fit-content; color: #ee5353;"></a></article>
 	</section>
 	{% endfor %}
-	<h3>Add a new friend</h3>
-	<section class="row friends-record">
-		<input type="text" id="username_find" class="form-control" name="user_find" required style="max-width: 14vw;">
-		<article><a class="fas fa-binoculars" onclick="window.find_user(document.getElementById('username_find').value)"></a></article>
-	</section>
 	</div>
 </aside>

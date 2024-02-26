@@ -54,8 +54,10 @@ def friends_panel(request):
 	friends = Player.objects.filter(id__in=friends_join)
 	invites = Player.objects.filter(id__in=player_invited)
 
+	pending_zip = zip(pending_invites, invites)
+
 	return render(request, 'friends_panel.html', context={"user": request.user, "friends": friends,
-		"pending_invites": zip(pending_invites, invites), "friends_unread": friends_unread})
+		"pending_invites": pending_zip if len(pending_invites) > 0 else None, "friends_unread": friends_unread})
 
 @login_required
 def home(request):

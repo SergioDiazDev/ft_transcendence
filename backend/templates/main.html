@@ -29,8 +29,10 @@
 
 	<div id="transcendence-container">
 		<div style="height: calc(100vh - 5em); width: 100%;" id="transcendence-app"></div>
-		<div id="transcendence-sidebar">
-			{% include 'friends_panel.html' %}
+		<div id="transcendence-panel">
+			<div id="transcendence-sidebar">
+				{% include 'friends_panel.html' %}
+			</div>
 		</div>
 	</div>
 	{% include 'messages_modal.html' %}
@@ -81,6 +83,20 @@
 		.then(response => response.text())
 		.then(html => {
 				document.querySelector('#transcendence-sidebar').innerHTML = html;
+				if (document.querySelector("#new-friend") === null)
+				{
+					var add_friend = document.createElement("div");
+					add_friend.id = "add-friend-container";
+					add_friend.innerHTML = `
+							<section id="new-friend">
+									<h3>Add a new friend</h3>
+									<section class="row friends-record">
+										<input type="text" id="username_find" class="form-control" name="user_find" required style="max-width: 14vw;">
+										<article><a class="fas fa-binoculars" onclick="window.find_user(document.getElementById('username_find').value)"></a></article>
+									</section>
+								</section>`.trim();
+					document.querySelector("#transcendence-panel").appendChild(add_friend);
+				}
 			})
 			.catch(error => console.error('Error when going to ', href, error));
 	}
@@ -124,7 +140,7 @@
 	}
 	loadPanel("/accounts/friends_panel");
 	// Long polling to check if the friends got updated
-	//setInterval(loadPanel, 5000, "/accounts/friends_panel");
+	setInterval(loadPanel, 5000, "/accounts/friends_panel");
 	</script>
 </body>
 </html>
