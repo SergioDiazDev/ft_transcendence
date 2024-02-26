@@ -20,7 +20,7 @@ class Match(models.Model):
         # create the AI player if it doesn't exist
         if player2_name == "AI" and not Player.objects.filter(username='AI').exists():
             ai_player = Player.objects.create_user(username='AI', password=str(uuid.uuid4()),
-                                                   avatar="ai.jpg")
+                                                   avatar="static/img/avatars/ai.jpg")
             ai_player.save()
 
         player1 = Player.objects.get(username__exact=player1_name)
