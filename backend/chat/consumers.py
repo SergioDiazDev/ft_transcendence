@@ -1,6 +1,5 @@
 import json
-from chat.models import Chat
-from chat.models import Message
+from chat.models import Chat, Message
 from django.shortcuts import redirect
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
@@ -23,6 +22,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.send(text_data=json.dumps({"message_history": message_history,
                                               "user": user.username,
+                                              "chat_id": self.chat_id,
                                               }))
 
     async def disconnect(self, close_code):
@@ -37,6 +37,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if self.chat_id and message_content != "":
             message_object = await sync_to_async(Message.create)(self.chat_id, message_content, sender)
             message_id = message_object.id
+            # self.chat_id, sender comprobar quien no es el sender
+            await self.update_unread_field(sender.username)
 
             await self.channel_layer.group_send(
                 self.room_group_name, {
@@ -46,6 +48,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     "sender": sender.username,
                     }
             )
+
+
+    async def update_unread_field(self, sender_username):
+        chat = await sync_to_async(Chat.objects.select_related('player_a', 'player_b').get)(id=self.chat_id)
+
+        player_a = chat.player_a.username
+        player_b = chat.player_b.username
+
+        if player_a:
+            if sender_username == player_a:
+                chat.unread_B = True
+        elif player_b:
+            if sender_username == player_b:
+                chat.unread_A = True
+        
+        await sync_to_async(chat.save)()
+
 
     # Receive message from room group
     async def chat_message(self, event):
@@ -60,4 +79,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "sender": sender,
             "message_id": message_id,
             "user": user.username,
+            "chat_id": self.chat_id,
         }))

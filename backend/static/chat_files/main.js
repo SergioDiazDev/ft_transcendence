@@ -17,15 +17,12 @@ window.join_chat = function join_chat() {
 		if (data.message_history) {
 			data.message_history.forEach(elem => {
 				addMessage(elem, data.user);
-				if (elem.sender != data.user)
-					markMessageAsRead(elem.id);
 			});
+			markChatAsRead(data.chat_id, data.user)
 		}
 		if (data.message) {
-			// document.querySelector('#chat-log').value += (`${data.sender}: ${data.message}` + '\n');
 			addMessage(data, data.user);
-			if (data.sender != data.user)
-				markMessageAsRead(data.message_id);
+			markChatAsRead(data.chat_id, data.user)
 		}
 	};
 
@@ -36,8 +33,8 @@ window.join_chat = function join_chat() {
 		document.querySelector("#chat-content").prepend(chat_message);
 	}
 
-	function markMessageAsRead(messageId) {
-		const url = '/mark-message-as-read/' + messageId + '/';
+	function markChatAsRead(chat_id, user_name) {
+		const url = '/chat/mark-chat-as-read/' + chat_id + '/' + user_name + '/';
 		fetch(url, {
 			method: 'POST',
 			headers: {

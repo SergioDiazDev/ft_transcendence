@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from chat.models import Chat, Message
 from django.urls import reverse
 from django.http import HttpResponseForbidden, JsonResponse
-
+from accounts.models import Player
 def index(request):
     return render(request, "chat/index.html")
 
@@ -23,12 +23,18 @@ def chat_view(request, user1, user2):
     # Redirigir a la página de la sala de chat con el ID de la sala de chat en la URL
     return redirect(reverse('chat', kwargs={'room_name': chat_id}))
 
-def mark_message_as_read(request, message_id):
+def mark_chat_as_read(request, chat_id, user_name):
     try:
-        message = Message.objects.get(id=message_id)
-        message.read = True
-        message.save()
-        return JsonResponse({'success': True})
-    except Message.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Message does not exist'})
+        player = Player.objects.get(username=user_name)
+        chat = Chat.objects.filter(id=chat_id).first()
+        
+        # Actualizar la variable unread del chat
+        if chat.player_a == player:
+            chat.unread_A = False
+        elif chat.player_b == player:
+            chat.unread_B = False
+        chat.save()
 
+        return JsonResponse({'success': True})
+    except (Player.DoesNotExist, Chat.DoesNotExist):
+        return JsonResponse({'success': False, 'error': 'Player or Chat does not exist'})

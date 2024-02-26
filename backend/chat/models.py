@@ -4,6 +4,8 @@ from accounts.models import Player
 class Chat(models.Model):
 	player_a = models.ForeignKey(Player, related_name="player_a", on_delete=models.CASCADE)
 	player_b = models.ForeignKey(Player, related_name="player_b", on_delete=models.CASCADE)
+	unread_A = models.BooleanField(default=False)
+	unread_B = models.BooleanField(default=False)
 
 	class Meta:
 		constraints = [
@@ -33,7 +35,6 @@ class Message(models.Model):
 	content = models.TextField()
 	created_at = models.DateTimeField(auto_now_add=True)
 	sender = models.ForeignKey(Player, on_delete=models.CASCADE)
-	read = models.BooleanField(default=False)
 	class Meta:
 		ordering = ['id'] 
 
