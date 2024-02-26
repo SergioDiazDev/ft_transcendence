@@ -113,18 +113,16 @@ def my_logout(request):
 	logout(request)
 	return redirect("login")
 
-#PlayerFriends
-
-# def has_unread_messages(user, other_user):
-#     # Buscar si hay una conversación abierta con el otro usuario
-#     chat_id = Chat.objects.filter(Q(player_a=user, player_b=other_user) | Q(player_a=other_user, player_b=user)).first()
-    
-#     if chat_id:
-#         # Si se encuentra una conversación, obtener los mensajes no leídos
-#         unread_messages = Message.objects.filter(chat_id=chat_id, read='f', sender=other_user)
-#         return True
-    
-#     return False
+def has_unread_messages(user, other_user):
+	# Buscar si hay una conversación abierta con el otro usuario
+	chat = Chat.objects.filter(Q(player_a=user, player_b=other_user) | Q(player_a=other_user, player_b=user)).first()
+	
+	if chat:
+		if chat.player_a == user and chat.unread_A:
+			return True
+		elif chat.player_b == user and chat.unread_B:
+			return True
+		return False
 
 @login_required
 def showFriends(request):
@@ -138,6 +136,19 @@ def showFriends(request):
 	if find:
 		find_user = PlayerFriend.objects.filter(myFriend__username=find).first()
 	
+	now_utc = datetime.now(timezone.utc)
+
+	# Definir el límite de una hora atrás en UTC
+	one_hour_ago_utc = now_utc - timedelta(hours=1)
+
+	for user in users:
+		if user.last_login and user.last_login.replace(tzinfo=timezone.utc) > one_hour_ago_utc:
+			user.isactive = True
+		else:
+			user.isactive = False
+		# has_messages = has_unread_messages( request.user.id ,user.id)
+		# print("tiene el usuario: ", user.username, "mensajes sin leer de: ", request.user.username, "  ", has_messages)
+
 	return render(request, 'friends.html', {'friends': friends, "users": users, "find_user": find_user})
 
 @login_required

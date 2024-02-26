@@ -59,7 +59,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if player_a:
             if sender_username == player_a:
                 chat.unread_B = True
-        elif player_b:
+        if player_b:
             if sender_username == player_b:
                 chat.unread_A = True
         
