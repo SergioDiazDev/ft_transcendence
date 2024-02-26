@@ -9,6 +9,7 @@ urlpatterns = [
     path('edit_profile/', views.edit_profile, name="edit_profile"),
     path('logout/', views.my_logout, name="logout"),
     path('make-friend/<str:myFriend>', views.makeFriend, name="make_friend"),
+    path('user/<str:find>', views.findUser, name="user_find"),
     path('accept-friend/<str:invitation_id>', views.acceptFriend, name="accept_friend"),
     path('block-friend/<str:invitation_id>', views.blockFriend, name="block_friend"),
     path('block-friend-name/<str:username>', views.blockFriendName, name="block_friend_name"),

@@ -109,6 +109,20 @@ def my_logout(request):
 	return redirect("login")
 
 @login_required
+def findUser(request, find):#BORRAR
+
+	if find:
+		user = Player.objects.filter(username = find).first()
+	else:
+		user = None
+	if user == None:
+		#TODO: Add a message to the user
+		#messages.info(request, 'User not found.')
+		#reload the page
+		return JsonResponse({"username": None, "id": None})
+	return JsonResponse({'username': user.username, 'id': user.id })
+
+@login_required
 def makeFriend(request, myFriend):
 	myUser = request.user 
 
