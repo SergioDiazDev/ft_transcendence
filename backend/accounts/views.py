@@ -17,7 +17,6 @@ from game.models import Match
 
 from datetime import datetime, timedelta, timezone
 
-from datetime import datetime
 
 from .models import Player
 
@@ -36,13 +35,13 @@ def signup(request):
 
 @login_required
 def main(request):
-	# Quizas deberia ir en otro sitio
-	Player.objects.filter(id = request.user.id).update(last_login=datetime.now())
-	isactive(request)
 	return render(request, 'main.html', context={"user": request.user})
 
 @login_required
 def friends_panel(request):
+
+	Player.objects.filter(id = request.user.id).update(last_login=datetime.now())
+
 	friends_join = chain(PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=True)).values_list("myUser", flat=True),
 					PlayerFriend.objects.filter((Q(myUser=request.user.id) & Q(block=False) & Q(status=True))).values_list("myFriend", flat=True))
 	pending_invites = PlayerFriend.objects.filter(Q(myFriend=request.user.id ) & Q(block=False) & Q(status=False)).values_list("id", flat=True)
@@ -198,17 +197,6 @@ def blockFriendName(request, username):
 	Chat.objects.filter(id=chat).delete()
 	PlayerFriend.objects.filter(id = invitation_id).update(block=True)
 	return JsonResponse({"status": "ok"})
-
-
-
-@login_required
-def isactive(request):
-	now_utc = datetime.now(timezone.utc)
-	one_hour_ago_utc = now_utc - timedelta(hours=1)
-
-	# Actualizar el campo 'online' en función de 'last_login'
-	Player.objects.filter(last_login__gt=one_hour_ago_utc).update(online=1)
-	Player.objects.exclude(last_login__gt=one_hour_ago_utc).update(online=0)
 
 
 #This method is used in tournament

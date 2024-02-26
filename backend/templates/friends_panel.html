@@ -1,3 +1,4 @@
+{% load accounts_extra %}
 
 <aside class="col-3" id="section-profile-right">
 	<h3>Online friends</h3>
@@ -5,9 +6,8 @@
 	<div class="scroll">
 	{% for friend in friends %}
 		
-		<section class="row friends-record">
-
-			{% if friend.online %}
+	<section class="row friends-record">
+			{% if friend.last_login|isOnline%}
 				<article><i class="fas fa-circle" style="color: green;"></i></article>
 			{% else %}
 				<article><i class="fas fa-circle" style="color: red;"></i></article>
