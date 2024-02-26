@@ -19,8 +19,10 @@ function make_friend(username) {
 	})
 		.then(response => response.json())
 		.then( json => {
-			alert("Invitation Sent.");
-			console.log(json);
+			if(json.status === "ok")
+				alert("Invitation Sent.");
+			else
+				alert("Friend not found.");
 		});
 }
 
@@ -57,10 +59,7 @@ function block_friend(invitation_id) {
 				if (json.status === "ok")
 					loadPanel("/accounts/friends_panel");
 			});
-		console.log("La acción se realizará.");
-	  } else {
-		console.log("La acción ha sido cancelada.");
-	  }
+	}
 }
 
 function block_friend_name(username) {
@@ -88,14 +87,18 @@ function block_friend_name(username) {
 }
 
 window.find_user = function find_user(find) {
+	if (find.trim() === "")
+		return;
 	var url = "/accounts/user/" + find;
 	fetch(url)
 		.then(response => response.json())
 		.then(json => {
 			if (json.username && json.id)
 				make_friend(json.username);
+			else
+				alert("Friend not found.");
 		})
 		.catch(error => {
-			alert("User not found.");
+			alert("Friend not found.");
 		});;
 }

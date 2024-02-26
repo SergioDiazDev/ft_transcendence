@@ -140,7 +140,8 @@ def acceptFriend(request, invitation_id):
 @login_required
 def blockFriend(request, invitation_id):
 	PlayerFriend.objects.filter(id = invitation_id).update(block=True)
-	Chat.search_or_create(request.user.username, PlayerFriend.objects.filter(id = invitation_id).first().myFriend.username).delete()
+	chat = Chat.search_or_create(request.user.username, PlayerFriend.objects.filter(id = invitation_id).first().myFriend.username)
+	Chat.objects.get(id=chat).delete()
 	return JsonResponse({"status": "ok"})
 
 @login_required
@@ -150,7 +151,7 @@ def blockFriendName(request, username):
 	invitation_id = PlayerFriend.objects.filter(Q(myUser=myUser.id ) & Q(myFriend=myFriend.id) |
 												Q(myUser=myFriend.id ) & Q(myFriend=myUser.id)).first().id
 	chat = Chat.search_or_create(request.user.username, myFriend.username)
-	Chat.objects.filter(id=chat).delete()
+	Chat.objects.get(id=chat).delete()
 	PlayerFriend.objects.filter(id = invitation_id).update(block=True)
 	return JsonResponse({"status": "ok"})
 
