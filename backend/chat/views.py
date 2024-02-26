@@ -28,10 +28,9 @@ def mark_chat_as_read(request, chat_id, user_name):
 
         # Actualizar la variable unread del chat
         if chat.player_a == player:
-            chat.unread_A = False
-        elif chat.player_b == player:
-            chat.unread_B = False
-        chat.save()
+            Chat.objects.filter(id=chat_id).update(unread_A=False)
+        if chat.player_b == player:
+            Chat.objects.filter(id=chat_id).update(unread_B=False)
 
         return JsonResponse({'success': True})
     except (Player.DoesNotExist, Chat.DoesNotExist):
