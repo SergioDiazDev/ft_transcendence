@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -10,15 +10,12 @@ from django.db.models import Q
 from .forms import SignupForm, UpdatePlayerForm
 
 from .models import Player, PlayerFriend
-from chat.models import Chat, Message
+from chat.models import Chat
 from itertools import chain
 
 from game.models import Match
 
 from datetime import datetime, timedelta, timezone
-
-
-from .models import Player
 
 from django.contrib.auth.decorators import login_required
 
@@ -111,63 +108,6 @@ def my_logout(request):
 	logout(request)
 	return redirect("login")
 
-def has_unread_messages(user, other_user):
-	# Buscar si hay una conversación abierta con el otro usuario
-	chat = Chat.objects.filter(Q(player_a=user, player_b=other_user) | Q(player_a=other_user, player_b=user)).first()
-	
-	if chat:
-		if chat.player_a == user and chat.unread_A:
-			return True
-		elif chat.player_b == user and chat.unread_B:
-			return True
-		return False
-
-@login_required
-def showFriends(request):
-	friends = PlayerFriend.objects.filter(myUser=request.user)
-
-	users = Player.objects.all()
-
-	find_user = None
-	find = request.GET.get('user')
-	#print("find =", request.GET.get('user'))#BORRAR
-	if find:
-		find_user = PlayerFriend.objects.filter(myFriend__username=find).first()
-	
-	now_utc = datetime.now(timezone.utc)
-
-	# Definir el límite de una hora atrás en UTC
-	one_hour_ago_utc = now_utc - timedelta(hours=1)
-
-	for user in users:
-		if user.last_login and user.last_login.replace(tzinfo=timezone.utc) > one_hour_ago_utc:
-			user.isactive = True
-		else:
-			user.isactive = False
-		# has_messages = has_unread_messages( request.user.id ,user.id)
-		# print("tiene el usuario: ", user.username, "mensajes sin leer de: ", request.user.username, "  ", has_messages)
-
-	return render(request, 'friends.html', {'friends': friends, "users": users, "find_user": find_user})
-
-@login_required
-def showAll(request):#BORRAR
-	users = Player.objects.all()
-	return render(request, 'users.html', {'users': users})
-
-@login_required
-def findUser(request, find):#BORRAR
-
-	if find:
-		user = Player.objects.filter(username = find).first()
-	else:
-		user = None
-	if user == None:
-		#TODO: Add a message to the user
-		#messages.info(request, 'User not found.')
-		#reload the page
-		return JsonResponse({"username": None, "id": None})
-	return JsonResponse({'username': user.username, 'id': user.id })
-
 @login_required
 def makeFriend(request, myFriend):
 	myUser = request.user 
@@ -180,32 +120,25 @@ def makeFriend(request, myFriend):
 
 @login_required
 def acceptFriend(request, invitation_id):
-	myUser = request.user
-	#TODO Block User
 	PlayerFriend.objects.filter(id = invitation_id).update(status=True)
 	return JsonResponse({"status": "ok"})
 
 @login_required
 def blockFriend(request, invitation_id):
-
 	PlayerFriend.objects.filter(id = invitation_id).update(block=True)
-	print(Chat.search_or_create(request.user.username, PlayerFriend.objects.filter(id = invitation_id).first().myFriend.username), flush = True)
 	Chat.search_or_create(request.user.username, PlayerFriend.objects.filter(id = invitation_id).first().myFriend.username).delete()
 	return JsonResponse({"status": "ok"})
 
 @login_required
 def blockFriendName(request, username):
-
 	myUser = request.user
 	myFriend = Player.objects.filter(username = username).first()
 	invitation_id = PlayerFriend.objects.filter(Q(myUser=myUser.id ) & Q(myFriend=myFriend.id) |
 												Q(myUser=myFriend.id ) & Q(myFriend=myUser.id)).first().id
-	#print(Chat.search_or_create(request.user.username, myFriend.username), flush = True)#BORRAR
 	chat = Chat.search_or_create(request.user.username, myFriend.username)
 	Chat.objects.filter(id=chat).delete()
 	PlayerFriend.objects.filter(id = invitation_id).update(block=True)
 	return JsonResponse({"status": "ok"})
-
 
 #This method is used in tournament
 @login_required

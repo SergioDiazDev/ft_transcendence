@@ -62,7 +62,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if player_b:
             if sender_username == player_b:
                 chat.unread_A = True
-        
+
         await sync_to_async(chat.save)()
 
 

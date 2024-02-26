@@ -2,6 +2,7 @@
 .github/
 backend/virtual_env
 backend/static/img/avatars/
+backend/*/migrations/*.py
 postgres_data
 .vscode/
 

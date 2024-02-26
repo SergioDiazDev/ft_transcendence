@@ -23,8 +23,8 @@ class Chat(models.Model):
 
 		chat = Chat.objects.filter(player_a=player1, player_b=player2) | \
 				Chat.objects.filter(player_a=player2, player_b=player1)
-		
-		if len(chat) == 0:
+
+		if chat.count() == 0:
 			chat = Chat.objects.create(player_a=player1, player_b=player2)
 		else:
 			chat = chat.first()
