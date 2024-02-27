@@ -29,7 +29,12 @@ window.join_chat = function join_chat() {
 
 	function addMessage(data, user) {
 		var chat_message = document.createElement("p");
-		chat_message.innerHTML = data.message;
+
+		if (data.message.startsWith('<a link href="/game/') && data.message.endsWith('">Hi! I would like to invite you to play a game. Do you accept?</a>')) {
+			chat_message.innerHTML = data.message;
+		} else {
+			chat_message.innerText = data.message;
+		}
 		chat_message.className = data.sender == user ?  "me" : "you";
 		document.querySelector("#chat-content").prepend(chat_message);
 	}
