@@ -209,6 +209,20 @@
     flex-grow: 1;
 }
 
+.friends-record2 {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.friends-record2 input[type="text"] {
+    flex: 0 0 80%; /* Ocupa el 80% del espacio disponible */
+}
+
+.friends-record2 article {
+    flex: 0 0 20%; /* Ocupa el 20% del espacio disponible */
+    overflow: hidden;
+}
+
 #chat-container {
     min-height: 100%;
     border: 3px solid #C3A5EC;
