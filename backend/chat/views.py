@@ -12,7 +12,8 @@ def room(request, room_name):
         return HttpResponseForbidden("You are not allowed to join this chat room.")
     return render(request, "chat/room.html", {"room_name": room_name,
                                               "a_name": chat.player_a.username,
-                                              "b_name": chat.player_b.username })
+                                              "b_name": chat.player_b.username,
+                                              "id_chat": chat.id })
 
 def chat_view(request, user1, user2):
     # Buscar o crear la sala de chat y obtener su ID
