@@ -108,7 +108,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         len_keys = len(data_json.keys())
         if len_keys > 0:
             if "info" in data_json.keys():
-                self.check_user_is_present(self.username)
+                self.check_user_is_present(self.username, remove = True)
                 if data_json["info"] == "SEARCHING4":
                     keys = self.get_slot_4(self.username)
                     self.own_group_name = f"{keys["tournament_key"]}{keys["room_key"]}{self.username}"
@@ -140,7 +140,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                             # User found
                             if remove:
                                 TournamentConsumer.four_player_tournaments[tournament_key][room_key].remove(username)
-                                number_player = TournamentConsumer.four_player_tournaments[tournament_key][room_key].index()
+                                number_player = TournamentConsumer.four_player_tournaments[tournament_key][room_key].index(username)
                                 if number_player == 0:
                                     TournamentConsumer.four_player_tournaments_results[tournament_key][room_key] = TournamentConsumer.second_win
                                 else:

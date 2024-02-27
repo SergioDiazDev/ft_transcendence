@@ -101,12 +101,12 @@ window.fourPlayerTournament = function()
                                     }
                                     else if($most_internal_elem.tagName === "DIV")
                                     {
-                                        if(data_object["players"][`sala0${room}`][player] !== "undefined")
+                                        if(data_object["players"][`sala0${room}`][player] !== undefined)
                                             $most_internal_elem.classList.add("no-display");
                                     }
                                     else if($most_internal_elem.tagName === "IMG")
                                     {
-                                        if(data_object["players"][`sala0${room}`][player] !== "undefined")
+                                        if(data_object["players"][`sala0${room}`][player] !== undefined)
                                             $most_internal_elem.classList.remove("no-display");                                        
                                     }
                                 });
