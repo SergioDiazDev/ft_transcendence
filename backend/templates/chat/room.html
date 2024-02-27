@@ -25,12 +25,10 @@
         <h2>Chat from {{ a_name }} and {{ b_name }}</h2>
     </div>
     <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
-        <div class="div-chat-text" id="chat-content"></div>
-        <div class="chat-controls">
-            <input id="chat-message-input" class="form-control" type="text">
-            <input id="chat-message-submit" class="btn-purple fw-bold p-1 rounded-5" type="button" value="Send">
-            <a id="chat-message-invite" class="fas fa-solid fa-trophy" onclick="invite_game({{id_chat}})" link href="/game/{{id_chat}}"></a>
-        </div>
-    </section>
+    <div class="div-chat-text" id="chat-content"></div>
+    <div class="chat-controls">
+    <input id="chat-message-input" class="form-control" type="text">
+    <input id="chat-message-submit" class="btn-purple fw-bold p-1 rounded-5" type="button" value="Send">
+    <div><a id="chat-message-invite" class="fas fa-trophy fa-lg" onclick="invite_game({{id_chat}})" link href="/game/{{id_chat}}"></a></div>
 </div>
 </main>
