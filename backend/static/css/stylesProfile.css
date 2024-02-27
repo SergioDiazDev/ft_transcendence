@@ -41,7 +41,7 @@ main {
     border-radius: 10px;
 }
 
-#section-profile-right {
+#section-profile-right, #add-friend-container {
     width: 100%;
     background-color: #110E1F;
     border: 3px solid #C3A5EC;
@@ -82,8 +82,6 @@ section > span {
 }
 
 #transcendence-sidebar {
-    height: calc(100vh - 5em);
-    width: 20vw;
 }
 
 /* Image */
@@ -192,15 +190,14 @@ td {
 
 /* aside right */
 
-#section-profile-right h3 {
+#section-profile-right h3,#add-friend-container h3 {
     padding: 1em;
     color: #3AAEE0;
     font-size: 20px;
     text-align: center;
 }
 
-#section-profile-right section {
-    height: 2em;
+#section-profile-right section, #add-friend-container section {
     border: 1px solid #C3A5EC;
 }
 
@@ -208,7 +205,7 @@ a.fas {
     color: #C3A5EC;
 }
 
-#section-profile-right section > article {
+#section-profile-right section > article, #add-friend-container section > article {
     display: flex;
     background-color: #302D3D;
     justify-content: center;
@@ -230,10 +227,14 @@ a.fas {
     justify-content: center;
 }
 
-#section-profile-right .row {
+#section-profile-right .row, #add-friend-container .row {
     margin-top: 0;
     margin-left: 0;
     margin-right: 0;
+}
+
+a:hover {
+    cursor: pointer;
 }
 
 /* Medida a la que se rompe 950*/

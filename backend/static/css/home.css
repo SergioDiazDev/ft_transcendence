@@ -134,42 +134,46 @@
 /* CONTAINER OPTION */
 
 .container-option {
-    position: relative;
     top: 8em;
     min-width: 20em;
     min-height: 35em;
 }
 
-.home-option {
-    position: relative;
-    float: left;
-    margin-bottom: 2em;
-    min-width: 30em;
-    min-height: 35em;
-    margin-left: 2em;
-    background-repeat: no-repeat;
-    background-size: 100% 95%;
-    background-position: center center;
+#home-buttons-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 90vh;
+    align-items: center;
 }
 
-#matchmaking {
-    background-image: url("../img/home-option1.png");
-}
-
-#tournament-mode {
-    background-image: url("../img/home-option2.png");
+.home-button {
+    width: auto;
+    max-height: fit-content;
 }
 
 .title-option {
-    position: relative;
-    top: 30.3em;
+    display: flex;
+    flex-direction: column;
     background-color: #202646;
-    min-width: 30em;
-    min-height: 4em;
     border: 3px solid #C3A5EC;
-    border-radius: 0 0 10px 10px;
+    border-radius: 10px;
+    width: 30vw;
+    height: 30vw;
+    align-items: center;
+    justify-content: space-between;
 }
 
+.title-img-container {
+    width: 100%;
+    height: 100%;
+}
+
+.title-option img {
+    width: 100%;
+    height: 100%;
+    border-bottom: 3px solid #C3A5EC;
+}
 
 .title-option > p{
     text-align: center;
@@ -185,7 +189,7 @@
 }
 
 .hidden {
-    display: none;
+    display: none!important;
 }
 
 .friends-record > article {
@@ -201,7 +205,6 @@
 }
 
 #chat-container {
-    padding: 12px;
     min-height: 100%;
     border: 3px solid #C3A5EC;
     background-color: #302D3D;
@@ -214,4 +217,27 @@
 
 #chat-message-submit {
     min-width: 8rem;
+}
+
+#chat-title {
+    width: 100%;
+    text-align: center;
+    color: #C3A5EC;
+    background-color: #202646;
+    padding: 1rem;
+    border: inherit;
+    border-top: none;
+}
+
+#transcendence-panel {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 5em);
+    width: 20vw;
+}
+
+#add-friend-container {
+    width: 100%;
+    background-color: #110E1F;
+    border: 3px solid #C3A5EC;
 }

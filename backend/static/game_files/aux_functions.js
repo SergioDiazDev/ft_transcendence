@@ -37,7 +37,7 @@ export function countdown(containerId, count) {
 
 function create_avatar(src) {
 	let img = document.createElement("img");
-	img.src = "/static/img/avatars/" + src;
+	img.src = "/" + src;
 	return img
 }
 
