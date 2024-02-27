@@ -5,7 +5,7 @@ function friend_html(username, id) {
 		<button onclick="make_friend('${username}')"> ${username} </button>
 	</div>
 	</section>`);
-}
+}//No se si se usa Borrar?
 
 function make_friend(username) {
 	const csrfToken = document.getElementById('csrf-token').value;

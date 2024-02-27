@@ -44,9 +44,9 @@ window.join_chat = function join_chat() {
 		})
 			.then(response => {
 				if (response.ok) {
-					console.log('Mensaje marcado como leído en la base de datos');
+					//console.log('Mensaje marcado como leído en la base de datos');
 				} else {
-					console.error('Error al marcar el mensaje como leído');
+					console.error('Error al marcar el mensaje como leído');//Borrar?
 				}
 			})
 			.catch(error => {
