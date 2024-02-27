@@ -162,7 +162,9 @@
     height: 30vw;
     align-items: center;
     justify-content: space-between;
+    overflow: hidden;
 }
+
 
 .title-img-container {
     width: 100%;
@@ -178,7 +180,10 @@
 .title-option > p{
     text-align: center;
     color: #FFFFFF;
-    font-size: 40px;
+    font-size: 1.2rem;
+    
+    
+    
 }
 
 #transcendence-container {
@@ -233,7 +238,7 @@
     display: flex;
     flex-direction: column;
     height: calc(100vh - 5em);
-    width: 20vw;
+    /*width: 20vw;*/
 }
 
 #add-friend-container {
