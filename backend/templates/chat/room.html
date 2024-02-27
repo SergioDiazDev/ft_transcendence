@@ -1,3 +1,4 @@
+
 <!-- chat/templates/chat/room.html -->
 <style>
     #chat-button {
@@ -27,8 +28,8 @@
         <div class="div-chat-text" id="chat-content"></div>
         <div class="chat-controls">
             <input id="chat-message-input" class="form-control" type="text">
-            <article><a id="chat-message-invite" class="fas fa-solid fa-trophy" link href="/game/{{id_chat}}"><a></article>
             <input id="chat-message-submit" class="btn-purple fw-bold p-1 rounded-5" type="button" value="Send">
+            <a id="chat-message-invite" class="fas fa-solid fa-trophy" onclick="invite_game({{id_chat}})" link href="/game/{{id_chat}}"></a>
         </div>
     </section>
 </div>

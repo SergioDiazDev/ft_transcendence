@@ -1,3 +1,4 @@
+
 window.join_chat = function join_chat() {
 	window.isChatting = true;
 	const roomName = JSON.parse(document.getElementById('room-name').textContent);
@@ -28,7 +29,7 @@ window.join_chat = function join_chat() {
 
 	function addMessage(data, user) {
 		var chat_message = document.createElement("p");
-		chat_message.innerText = data.message;
+		chat_message.innerHTML = data.message;
 		chat_message.className = data.sender == user ?  "me" : "you";
 		document.querySelector("#chat-content").prepend(chat_message);
 	}
@@ -81,4 +82,10 @@ window.close_chat = function close_chat() {
 
 	}
 	window.isChatting = false;
+}
+
+window.invite_game = function invite_game(id_chat){
+	var message = '<a link href="/game/' + id_chat + '">Hi! I would like to invite you to play a game. Do you accept?</a>';
+	document.getElementById('chat-message-input').value = message;
+	document.getElementById('chat-message-submit').click();
 }
