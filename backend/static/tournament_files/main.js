@@ -50,3 +50,41 @@ window.searchMatch = function()
         }
     }
 }
+
+
+//---------------------------- Tournaments --------------------------------
+
+window.fourPlayerTournament = function()
+{
+    const $four_players_section = document.querySelector("#four-players-tournament");
+    const match_sock = new WebSocket(`ws://${window.location.host}/ws/tournament/`);
+    
+    //Displaying tournament table
+    $four_players_section.classList.remove("no-display");
+
+    match_sock.onopen = function() {
+        match_sock.send(JSON.stringify({
+            info: "SEARCHING4"
+        }));
+    }
+
+    match_sock.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const data_object = data["message"];
+        const keys = Object.keys(data_object);
+        if(keys.length > 0)
+        {
+            // Check fields now
+            if(keys.includes("info"))
+            {
+                // Check what type of info does return 
+                if(data_object["info"] === "FOUND")
+                {
+                    console.log("Es found");
+                }
+            }
+        }
+    }
+
+
+}

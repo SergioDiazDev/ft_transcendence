@@ -13,6 +13,7 @@ class Match(models.Model):
                                blank=True, null=True)
     game_url = models.CharField(max_length = 100)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    match_ended = models.BooleanField(default = False)
 	# TODO: add the tournament ID when we have tournaments implemented
 
     @classmethod
@@ -47,7 +48,7 @@ class Match(models.Model):
             match.winner = match.player1
         elif player2_score > player1_score:
             match.winner = match.player2
-
+        match.match_ended = True
         match.save()
 
     @classmethod

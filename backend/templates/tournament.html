@@ -3,12 +3,18 @@
 <main class="container" id="main-container">
     <section class="tournament-display">
         <div class="tournament-selection">
-            <button id="4players-button"  class="tournament-selection-button">4 players</button>
-            <button id="8players-button"  class="tournament-selection-button">8 players</button>
-            <button id="16players-button" class="tournament-selection-button">16 players</button>
+            <button id="4players-button"  class="tournament-selection-button" onclick="handleSelectPlayersTournament()">
+                4 players
+            </button>
+            <button id="8players-button"  class="tournament-selection-button" onclick="handleSelectPlayersTournament()">
+                8 players
+            </button>
+            <button id="16players-button" class="tournament-selection-button" onclick="handleSelectPlayersTournament()">
+                16 players
+            </button>
         </div>
 
-        <section class="tournament-table">
+        <section id="four-players-tournament" class="tournament-table no-display">
             <h2>Tournament Mode</h2>
             <hr class="tournament-separator">
 
@@ -30,50 +36,104 @@
                 </div>
 
                 <div class="col4 first-column"> <!-- Primera columna-->
-                    <div class="match-col4">
-                            <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 1</p></div>
+                    <div id="first-match-4" class="match-col4">
+                            <div>
+                                <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                                <div class="loader2 status-img"></div>
+                                <p>Undefined</p>
+                            </div>
                             <hr>
-                            <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 2</p></div>   
+                            <div>
+                                <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                                <div class="loader2 status-img"></div>
+                                <p>Undefined</p>
+                            </div>   
                         </div>
                     
-                    <div class="match-col4">
-                        <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 3</p></div>
+                    <div id="second-match-4" class="match-col4">
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p>Undefined</p>
+                        </div>
                         <hr>
-                        <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 4</p></div>   
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p>Undefined</p>
+                        </div>   
                     </div>
                     
-                    <div class="match-col4">
-                        <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 5</p></div>
+                    <div id="third-match-4" class="match-col4">
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p>Undefined</p></div>
                         <hr>
-                        <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 6</p></div>   
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p>Undefined</p>
+                        </div>   
                     </div>
                     
-                    <div class="match-col4">
-                        <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 7</p></div>
+                    <div id="fourth-match-4" class="match-col4">
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p>Undefined</p></div>
                         <hr>
-                        <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 8</p></div>   
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p>Undefined</p>
+                        </div>   
                     </div>
                 </div> <!-- Acaba primera columna-->
 
                 <div class="col4"> <!-- Segunda columna -->
                     <div class="match-col4 second-col-4">
-                        <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 1</p></div>
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p>Undefined</p>
+                        </div>
                         <hr>
-                        <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 2</p></div>   
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p>Undefined</p>
+                            </div>   
                     </div>
                 
                     <div class="match-col4 second-col-4">
-                        <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 3</p></div>
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p>Undefined</p>
+                        </div>
                         <hr>
-                        <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 4</p></div>   
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p>Undefined</p>
+                        </div>   
                     </div>
                 </div> <!-- Acaba segunda columna -->
 
                 <div class="col4">
                         <div class="match-col4 third-col-4"> <!-- Tercera columna -->
-                        <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 3</p></div>
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p>Undefined</p>
+                        </div>
                         <hr>
-                        <div><img src="/static/img/undefined.png" alt="Imagen resultado"><p>Nombre 4</p></div>
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p>Undefined</p>
+                        </div>
                     </div>
                 </div> <!-- Acaba tercera columna -->
             </div>

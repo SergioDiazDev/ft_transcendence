@@ -29,11 +29,6 @@
     font-size: 100px;
 }
 
-.no-display
-{
-    display: none;
-}
-
 .loader {
     --d:22px;
     width: 4px;
@@ -54,6 +49,15 @@
 @keyframes l27 {
     100% {transform: rotate(1turn)}
 }
+
+/* HTML: <div class="loader2"></div> */
+.loader2 {
+    width: 25px;
+    aspect-ratio: 4;
+    background: radial-gradient(circle closest-side,#FFF 90%,#0000) 0/calc(100%/3) 100% no-repeat;
+    animation: l2 1s steps(3) infinite;
+  }
+  @keyframes l2 {to{background-position: 150%}}
 
 .tournament-display {
     display: flex;
@@ -132,7 +136,6 @@
     margin-bottom: var(--margin-text-tournament);
 }
 
-/*FIXME: Its not working*/
 .tournament-separator {
     border-top: calc(var(--separator) / 2) solid black;
     border-bottom: calc(var(--separator) / 2) solid black;
@@ -148,6 +151,7 @@
 }
 
 .match-col4{
+    --side-size: 25px;
     width: var(--width-match4);
     height: var(--vertical-height);
     background-color: #7857DC;
@@ -157,6 +161,14 @@
     flex-direction: column;
     justify-content: space-evenly;
     margin-bottom: var(--vertical-margin);
+    border-radius: 10px;
+}
+
+.match-col4 > hr {
+    --border-intern-hr: 1px;
+    border-top: var(--border-intern-hr) solid black;
+    border-bottom: var(--border-intern-hr) solid black;
+    opacity: 1;
 }
 
 .match-col4:first-child {
@@ -167,8 +179,9 @@
     justify-content: space-evenly;
     align-items: center;
 }
-.match-col4  img {
-    --side-size: 25px;
+
+.match-col4 .status-img {
+
     max-height: var(--side-size);
     max-width: var(--side-size);
     height: var(--side-size);
@@ -264,4 +277,10 @@
 .third-bracket .upper-bracket-horizontal4:nth-of-type(3){
     top: calc(var(--vertical-offset) + (3 * var(--vertical-margin)) + (3 * var(--vertical-height)) +
         (var(--vertical-margin) / 2) - (var(--height-third-bracket) / 2));
+}
+
+/* Its placed here due to cascade*/
+.no-display
+{
+    display: none;
 }
