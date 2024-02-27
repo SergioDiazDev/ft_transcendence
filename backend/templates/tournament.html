@@ -2,19 +2,8 @@
 
 <main class="container" id="main-container">
     <section class="tournament-display">
-        <div class="tournament-selection">
-            <button id="4players-button"  class="tournament-selection-button" onclick="handleSelectPlayersTournament()">
-                4 players
-            </button>
-            <button id="8players-button"  class="tournament-selection-button" onclick="handleSelectPlayersTournament()">
-                8 players
-            </button>
-            <button id="16players-button" class="tournament-selection-button" onclick="handleSelectPlayersTournament()">
-                16 players
-            </button>
-        </div>
 
-        <section id="four-players-tournament" class="tournament-table no-display">
+        <section id="eight-players-tournament" class="tournament-table">
             <h2>Tournament Mode</h2>
             <hr class="tournament-separator">
 
@@ -40,13 +29,13 @@
                             <div>
                                 <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                                 <div class="loader2 status-img"></div>
-                                <p>Undefined</p>
+                                <p>undefined</p>
                             </div>
                             <hr>
                             <div>
                                 <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                                 <div class="loader2 status-img"></div>
-                                <p>Undefined</p>
+                                <p>undefined</p>
                             </div>   
                         </div>
                     
@@ -54,13 +43,13 @@
                         <div>
                             <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                             <div class="loader2 status-img"></div>
-                            <p>Undefined</p>
+                            <p>undefined</p>
                         </div>
                         <hr>
                         <div>
                             <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                             <div class="loader2 status-img"></div>
-                            <p>Undefined</p>
+                            <p>undefined</p>
                         </div>   
                     </div>
                     
@@ -68,12 +57,12 @@
                         <div>
                             <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                             <div class="loader2 status-img"></div>
-                            <p>Undefined</p></div>
+                            <p>undefined</p></div>
                         <hr>
                         <div>
                             <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                             <div class="loader2 status-img"></div>
-                            <p>Undefined</p>
+                            <p>undefined</p>
                         </div>   
                     </div>
                     
@@ -81,12 +70,12 @@
                         <div>
                             <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                             <div class="loader2 status-img"></div>
-                            <p>Undefined</p></div>
+                            <p>undefined</p></div>
                         <hr>
                         <div>
                             <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                             <div class="loader2 status-img"></div>
-                            <p>Undefined</p>
+                            <p>undefined</p>
                         </div>   
                     </div>
                 </div> <!-- Acaba primera columna-->
@@ -96,13 +85,13 @@
                         <div>
                             <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                             <div class="loader2 status-img"></div>
-                            <p>Undefined</p>
+                            <p>undefined</p>
                         </div>
                         <hr>
                         <div>
                             <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                             <div class="loader2 status-img"></div>
-                            <p>Undefined</p>
+                            <p>undefined</p>
                             </div>   
                     </div>
                 
@@ -110,13 +99,13 @@
                         <div>
                             <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                             <div class="loader2 status-img"></div>
-                            <p>Undefined</p>
+                            <p>undefined</p>
                         </div>
                         <hr>
                         <div>
                             <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                             <div class="loader2 status-img"></div>
-                            <p>Undefined</p>
+                            <p>undefined</p>
                         </div>   
                     </div>
                 </div> <!-- Acaba segunda columna -->
@@ -126,18 +115,22 @@
                         <div>
                             <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                             <div class="loader2 status-img"></div>
-                            <p>Undefined</p>
+                            <p>undefined</p>
                         </div>
                         <hr>
                         <div>
                             <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
                             <div class="loader2 status-img"></div>
-                            <p>Undefined</p>
+                            <p>undefined</p>
                         </div>
                     </div>
                 </div> <!-- Acaba tercera columna -->
             </div>
 
         </section>
+
+        <a link id="tournament-button" class="tournament-selection-button" onclick="handlePlayerTournament(event)">
+            Start Matchmaking
+        </a>
     </section>
 </main>

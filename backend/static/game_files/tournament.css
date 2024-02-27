@@ -75,6 +75,8 @@
     justify-content: space-evenly;
 }
 .tournament-selection-button {
+    --button-width: 400px;
+    --button-height: 100px;
 	background-color: #7857DC;
 	color: white;
 	border-radius: 2rem;
@@ -84,15 +86,23 @@
 	border-width: 1px;
 	border-color: white;
 	border-style: solid;
-	min-height: 10vh;
-    max-height: 10vh;
-	min-width: 300px;
+	min-height: var(--button-height);
+    max-height: var(--button-height);
+	min-width: var(--button-width);
 	/*padding: 2rem;*/
 	font-weight: 900;
 	z-index: 101;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+    position: absolute;
+    left: calc(1024px  + 50px + 100px);
+    top: calc(( (768px - var(--button-height)) / 2) + 130px);
+}
+
+.tournament-selection-button:hover {
+    text-decoration: none;
+    color: white;
 }
 
 
@@ -113,8 +123,8 @@
     min-height: var(--height-panel-tournament);
     width: var(--width-panel-tournament);
     height: var(--height-panel-tournament);
-    top: 10vh;
-    left: 2vw;
+    top: 130px;
+    left: 50px;
     z-index: 101;
     background-color: gray;
     font-family: 'IBM Plex Mono';
@@ -169,6 +179,12 @@
     border-top: var(--border-intern-hr) solid black;
     border-bottom: var(--border-intern-hr) solid black;
     opacity: 1;
+    margin: 0;
+}
+
+.match-col4 p {
+    margin: 0;
+    margin-right: 40px;
 }
 
 .match-col4:first-child {
@@ -176,7 +192,7 @@
 }
 .match-col4 > div {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -186,6 +202,7 @@
     max-width: var(--side-size);
     height: var(--side-size);
     width: var(--side-size);
+    margin-left: 50px; 
 }
 
 /* Second column*/
@@ -284,3 +301,8 @@
 {
     display: none;
 }
+
+.disabled {
+    pointer-events: none;
+    cursor: default;
+ }

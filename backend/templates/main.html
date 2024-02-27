@@ -139,18 +139,14 @@
 		searchMatch();
 	}
 
-	function handleSelectPlayersTournament()
+	function handlePlayerTournament(event)
 	{
-		const $select_buttons = document.querySelector(".tournament-selection");
 		event.stopPropagation();
-		$select_buttons.classList.add("no-display");
-		
-		if(event.target.id === "4players-button")
-			fourPlayerTournament();
-		else if(event.target.id === "8players-button")
-			console.log("8");
-		else if(event.target.id === "16players-button")
-			console.log("16");
+		event.preventDefault();
+		event.target.classList.add("disabled");
+		event.target.innerText = "Searching Tournament...";		
+		fourPlayerTournament();
+
 	}
 	loadPanel("/accounts/friends_panel");
 	// Long polling to check if the friends got updated

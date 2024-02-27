@@ -56,8 +56,9 @@ window.searchMatch = function()
 
 window.fourPlayerTournament = function()
 {
-    const $four_players_section = document.querySelector("#four-players-tournament");
+    const $four_players_section = document.querySelector("#eight-players-tournament");
     const $first_column = document.querySelector("#first-col4");
+    const $tournament_buttton = document.querySelector("#tournament-button");
     const match_sock = new WebSocket(`ws://${window.location.host}/ws/tournament/`);
 
     //Displaying tournament table
@@ -73,6 +74,7 @@ window.fourPlayerTournament = function()
         const data = JSON.parse(e.data);
         const data_object = data["message"];
         const keys = Object.keys(data_object);
+        console.log(data_object);
         if(keys.length > 0)
         {
             // Check fields now
@@ -92,8 +94,6 @@ window.fourPlayerTournament = function()
                             if(internal_elem.localName === "div")
                             {
                                 const $most_internal_elems = internal_elem.children;
-
-                                console.log($most_internal_elems);
                                 Array.from($most_internal_elems).forEach($most_internal_elem => {
                                     if($most_internal_elem.tagName === "P")
                                     {
@@ -118,7 +118,27 @@ window.fourPlayerTournament = function()
                         player = 0;
                     });
                 }
+
+                // Obtain game key to play
+                if(data_object["info"] === "MATCH_FOUND")
+                {
+                    $tournament_buttton.innerText = "Tournament Ready";
+                    $tournament_buttton.href = `/game/${data_object["game_key"]}`;
+                    $tournament_buttton.classList.remove("disabled");
+                    $tournament_buttton.onclick = null;
+                    console.log(data_object["game_key"]);    
+                }
             }
+
+            //Check if tournament is ready to play
+            if(keys.includes("tournament_ready") && (data_object["tournament_ready"] === true))
+            {
+                console.log("Le llega ready");
+                match_sock.send(JSON.stringify({
+                    info: "READY"
+                }));                   
+            }
+
         }
     }
 
