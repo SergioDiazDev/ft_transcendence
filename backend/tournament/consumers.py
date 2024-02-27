@@ -75,8 +75,11 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         {
             "sala00": ["jugador1", "jugador 2"],
             "sala01": ["jugador3"],
-            "sala03": ["jugador5", "jugador6"],
-            "sala04": ["jugador7", "jugador8"]
+            "sala02": ["jugador5", "jugador6"],
+            "sala03": ["jugador7"],
+            "sala04": [],
+            "sala05": [],
+            "sala06": []
         }
     }
 
@@ -110,7 +113,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     keys = self.get_slot_4(self.username)
                     self.own_group_name = f"{keys["tournament_key"]}{keys["room_key"]}{self.username}"
                     await self.channel_layer.group_add(self.own_group_name, self.channel_name)
-                    message = {"info": "FOUND", "players": TournamentConsumer.four_player_tournaments}
+                    message = {"info": "FOUND", "players": TournamentConsumer.four_player_tournaments[keys["tournament_key"]]}
                     await self.channel_layer.group_send(
                     self.own_group_name, {"type": "tournament.message", "message": message}
                     )
@@ -148,6 +151,11 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         return False
 
 
+    def check_not_valid_rooms_4(self, room_key):
+        if room_key == "sala04" or room_key == "sala05" or room_key == "sala05":
+            return True
+        return False
+
     def get_slot_4(self, username):
         tournament_keys = TournamentConsumer.four_player_tournaments.keys()
 
@@ -161,7 +169,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 room_keys = TournamentConsumer.four_player_tournaments[tournament_key].keys()
                 if len(room_keys) > 0:
                     for room_key in room_keys:
-                        if len(TournamentConsumer.four_player_tournaments[tournament_key][room_key]) < 2:
+                        if len(TournamentConsumer.four_player_tournaments[tournament_key][room_key]) < 2 and not self.check_not_valid_rooms_4(room_key):
                             TournamentConsumer.four_player_tournaments[tournament_key][room_key].append(username)
                             return {"tournament_key": tournament_key, "room_key": room_key}
             return {"tournament_key": "", "room_key": ""}

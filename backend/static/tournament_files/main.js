@@ -57,8 +57,9 @@ window.searchMatch = function()
 window.fourPlayerTournament = function()
 {
     const $four_players_section = document.querySelector("#four-players-tournament");
+    const $first_column = document.querySelector("#first-col4");
     const match_sock = new WebSocket(`ws://${window.location.host}/ws/tournament/`);
-    
+
     //Displaying tournament table
     $four_players_section.classList.remove("no-display");
 
@@ -80,7 +81,42 @@ window.fourPlayerTournament = function()
                 // Check what type of info does return 
                 if(data_object["info"] === "FOUND")
                 {
-                    console.log("Es found");
+                    let room = 0, player = 0;
+
+                    const $first_column_children = $first_column.children;
+
+                    //Recorrer primera columna
+                    Array.from($first_column_children).forEach(elem =>{
+                        const $internal_elems = elem.children;
+                        Array.from($internal_elems).forEach(internal_elem => {
+                            if(internal_elem.localName === "div")
+                            {
+                                const $most_internal_elems = internal_elem.children;
+
+                                console.log($most_internal_elems);
+                                Array.from($most_internal_elems).forEach($most_internal_elem => {
+                                    if($most_internal_elem.tagName === "P")
+                                    {
+                                        $most_internal_elem.innerText = data_object["players"][`sala0${room}`][player];
+                                    }
+                                    else if($most_internal_elem.tagName === "DIV")
+                                    {
+                                        if(data_object["players"][`sala0${room}`][player] !== "undefined")
+                                            $most_internal_elem.classList.add("no-display");
+                                    }
+                                    else if($most_internal_elem.tagName === "IMG")
+                                    {
+                                        if(data_object["players"][`sala0${room}`][player] !== "undefined")
+                                            $most_internal_elem.classList.remove("no-display");                                        
+                                    }
+                                });
+                                player++;
+                            }
+                        });
+
+                        room++;
+                        player = 0;
+                    });
                 }
             }
         }
