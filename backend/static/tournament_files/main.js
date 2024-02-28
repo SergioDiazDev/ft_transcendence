@@ -76,6 +76,13 @@ window.fourPlayerTournament = function()
         }));
     }
 
+    tournament_socket.close = function()
+    {
+        window.tournament_socket = undefined;
+        let data_object = undefined;
+        let last_winner = false;        
+    }
+
     tournament_socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         data_object = data["message"];
@@ -291,6 +298,14 @@ window.fourPlayerTournament = function()
                 }
             }
 
+            if(data_object["info"] === "TOURNAMENT_WINNER")
+            {
+                document.querySelector("#pannel-win").classList.remove("no-display");
+                document.querySelector("#button-return-tournament").innerText = "Home";
+                document.querySelector("#button-return-tournament").href = `/`;
+
+            }
+
             //Check if tournament is ready to play
             if(keys.includes("tournament_ready") && (data_object["tournament_ready"] === true))
             {
@@ -328,6 +343,11 @@ function removeBackButtonAndUpdate(event)
     }, 200);
 }
 
+function eventLastWinner()
+{
+    document.querySelector("#tournament-button").removeEventListener(eventLastWinner);
+    last_winner = false;
+}
 
 function round_over(event)
 {

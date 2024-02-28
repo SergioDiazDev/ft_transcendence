@@ -73,9 +73,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     first_win = "first_win"
     second_win = "second_win"
     notdefined = "undefined"
-
+    """
     matches_played = {
-        "01234": 3,
+        "01234": 2,
     }
 
     locked_tournaments = []
@@ -86,9 +86,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             "sala00": ["jugador 1", "jugador 2"],
             "sala01": ["jugador 3", "jugador 4"],
             "sala02": [],
-            "sala03": ["jugador 7", "jugador 8"],
+            "sala03": [],
             "sala04": ["jugador 1", "jugador 4"],
-            "sala05": ["jugador 8"],
+            "sala05": [],
             "sala06": ["jugador 4"]
         }
     }
@@ -99,13 +99,21 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             "sala00": first_win,
             "sala01": second_win,
             "sala02": notdefined,
-            "sala03": second_win,
+            "sala03": notdefined,
             "sala04": second_win,
             "sala05": notdefined,
             "sala06": notdefined
         }
     }
-    
+    """
+    matches_played = {}
+
+    locked_tournaments = []
+
+    four_player_tournaments =  {}
+
+    four_player_tournaments_results = {}
+
     async def connect(self, *args, **kwargs):
         if self.scope["user"].is_authenticated:
             self.username = str(self.scope["user"])
@@ -219,7 +227,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                             self.own_group_name, {"type": "tournament.message", "message": message}
                         )
 
-                        print(TournamentConsumer.matches_played, type(TournamentConsumer.matches_played), flush = True)
                         if TournamentConsumer.matches_played[self.tournamentkey] == 4 or TournamentConsumer.matches_played[self.tournamentkey] == 6:
                             # This means all matches of first round are played
                             await self.channel_layer.group_add(self.match_group_name, self.channel_name)
@@ -228,10 +235,20 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                             self.match_group_name, {"type": "tournament.message", "message": message}
                             )
 
+
                             message = {"info": "UPDATE_YOUR_BUTTON"}
                             await self.channel_layer.group_send(
                                 self.own_group_name, {"type": "tournament.message", "message": message}
                             )
+                        elif TournamentConsumer.matches_played[self.tournamentkey] == 7:
+                            message = {"info" : "TOURNAMENT_WINNER"}
+                            await self.channel_layer.group_send(
+                                self.own_group_name, {"type": "tournament.message", "message": message}
+                            )
+
+                            self.cleanTournament(self.tournamentkey)
+                            self.disconnect(4001)
+
                     else:
                         # winner is the other guy
                         message = {"info": "DEFEAT"}
@@ -309,7 +326,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     # Creates a tournament and add a username to it, returns tournament_key and room_key
     def create_tournament(self, username):
         myuuid = self.generate_correct_uuid()
-
         # Defining rooms of my tournament
         TournamentConsumer.four_player_tournaments[myuuid] = {
             "sala00": [],
@@ -343,7 +359,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         # Check number of tournament keys
         if len(tournament_keys) <= 0:
             # Create tournaments if there is no one active
-            self.create_tournament(username)
+            return self.create_tournament(username)
 
         elif len(tournament_keys) > 0:
             for tournament_key in tournament_keys:
@@ -423,3 +439,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         elif self.roomkey == "sala05":
             TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala06"].append(self.username)
             self.roomkey = "sala06"
+
+    def cleanTournament(self, tournament_key):
+        del TournamentConsumer.four_player_tournaments[self.tournamentkey]
+        del TournamentConsumer.matches_played[self.tournamentkey]
+        del TournamentConsumer.four_player_tournaments_results[self.tournamentkey]
+        TournamentConsumer.locked_tournaments.remove(self.tournamentkey)

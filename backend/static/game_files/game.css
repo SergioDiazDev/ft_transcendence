@@ -153,3 +153,14 @@
     margin: 10vw;
 }
 
+#pannel-win {
+	width: 300px;
+	height: 100px;
+	text-align: center;
+	font-size: 3rem;
+	color: white;
+	font-weight: 400;
+	position: absolute;
+	left: calc((100vw - 300px) / 2);
+	top: calc((100vh - 100px) / 2);
+}
