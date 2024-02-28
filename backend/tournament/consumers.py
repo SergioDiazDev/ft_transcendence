@@ -73,6 +73,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     first_win = "first_win"
     second_win = "second_win"
     notdefined = "undefined"
+    matches_played = {
+        "01234": 3
+    }
     locked_tournaments = []
     four_player_tournaments =  {
         "01234":
@@ -81,20 +84,20 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             "sala01": ["jugador 3", "jugador 4"],
             "sala02": ["jugador 5", "jugador 6"],
             "sala03": [],
-            "sala04": [],
-            "sala05": [],
-            "sala06": []
+            "sala04": ["jugador 1", "jugador 4"],
+            "sala05": ["jugador 5"],
+            "sala06": ["jugador 4"]
         }
     }
 
     four_player_tournaments_results = {
         "01234":
         {
-            "sala00": notdefined,
-            "sala01": notdefined,
-            "sala02": notdefined,
+            "sala00": first_win,
+            "sala01": second_win,
+            "sala02": first_win,
             "sala03": notdefined,
-            "sala04": notdefined,
+            "sala04": second_win,
             "sala05": notdefined,
             "sala06": notdefined
         }
@@ -131,13 +134,15 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     await self.channel_layer.group_add(self.tournament_group_name, self.channel_name)
                     
                     # Send info back to client
-                    message = {"info": "FOUND", "players": TournamentConsumer.four_player_tournaments[keys["tournament_key"]]}
+                    message = {"info": "FOUND", "players": TournamentConsumer.four_player_tournaments[keys["tournament_key"]],
+                                "results": TournamentConsumer.four_player_tournaments_results[self.tournamentkey]}
                     await self.channel_layer.group_send(
                     self.own_group_name, {"type": "tournament.message", "message": message}
                     )
 
                     # Update all clients
-                    message = {"info": "UPDATE", "players": TournamentConsumer.four_player_tournaments[keys["tournament_key"]]}
+                    message = {"info": "UPDATE", "players": TournamentConsumer.four_player_tournaments[keys["tournament_key"]],
+                        "results": TournamentConsumer.four_player_tournaments_results[self.tournamentkey]}
                     await self.channel_layer.group_send(
                         self.tournament_group_name, {"type": "tournament.message", "message": message}
                     )
@@ -146,7 +151,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     if self.check_tournament_full(keys["tournament_key"]):
                         print("Esta lleno", flush = True)
                         TournamentConsumer.locked_tournaments.append(keys["tournament_key"])
-                        message = {"info": "UPDATE", "tournament_ready": True, "players": TournamentConsumer.four_player_tournaments[keys["tournament_key"]]}
+                        message = {"info": "UPDATE", "tournament_ready": True, "players": TournamentConsumer.four_player_tournaments[keys["tournament_key"]],
+                                    "results": TournamentConsumer.four_player_tournaments_results[self.tournamentkey]}
                         await self.channel_layer.group_send(
                             self.tournament_group_name, {"type": "tournament.message", "message": message}
                         )
@@ -170,6 +176,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         print(TournamentConsumer.four_player_tournaments[self.tournamentkey][self.roomkey], flush = True)
                         index_winner = TournamentConsumer.four_player_tournaments[self.tournamentkey][self.roomkey].index(winner)
                         if index_winner == 0:
+                            TournamentConsumer.matches_played = TournamentConsumer.matches_played[self.tournamentkey] + 1
                             TournamentConsumer.four_player_tournaments_results[self.tournamentkey][self.roomkey] = TournamentConsumer.first_win
                         else:
                             TournamentConsumer.four_player_tournaments_results[self.tournamentkey][self.roomkey] = TournamentConsumer.second_win
@@ -189,8 +196,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         # TODO: here we have to disconnect this user
 
                 elif data_json["info"] == "UPDATE":
-                    print("update", flush = True)
-                    message = {"info": "UPDATE", "players": TournamentConsumer.four_player_tournaments[self.tournamentkey]}
+                    message = {"info": "UPDATE", "players": TournamentConsumer.four_player_tournaments[self.tournamentkey], 
+                        "results": TournamentConsumer.four_player_tournaments_results[self.tournamentkey]}
 
                     await self.channel_layer.group_send(
                         self.own_group_name, {"type": "tournament.message", "message": message}
@@ -268,6 +275,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             "sala05": TournamentConsumer.notdefined,
             "sala06": TournamentConsumer.notdefined
         }
+
+        TournamentConsumer.matches_played = 0
 
         TournamentConsumer.four_player_tournaments[myuuid]["sala00"].append(username)
         return {"tournament_key": myuuid, "room_key": "sala00"}

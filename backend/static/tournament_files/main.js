@@ -85,9 +85,11 @@ window.fourPlayerTournament = function()
             // Check fields now
             if(keys.includes("info"))
             {
+                console.log(data_object);
                 // Check what type of info does return 
                 if(data_object["info"] === "FOUND" || data_object["info"] === "UPDATE")
                 {
+                    console.log(data_object["results"]);
                     let room = 0, player = 0;
 
                     const $first_column_children = $first_column.children;
@@ -112,7 +114,16 @@ window.fourPlayerTournament = function()
                                     else if($most_internal_elem.tagName === "IMG")
                                     {
                                         if(data_object["players"][`sala0${room}`][player] !== undefined)
-                                            $most_internal_elem.classList.remove("no-display");                                        
+                                            $most_internal_elem.classList.remove("no-display");
+                                            if(data_object["results"][`sala0${room}`] === "first_win" && player === 0)
+                                                $most_internal_elem.src = "/static/img/check.png"
+                                            else if(data_object["results"][`sala0${room}`] === "first_win" && player === 1)
+                                                $most_internal_elem.src = "/static/img/cross.png"
+                                            
+                                            if(data_object["results"][`sala0${room}`] === "second_win" && player === 0)
+                                                $most_internal_elem.src = "/static/img/cross.png"
+                                            else if(data_object["results"][`sala0${room}`] === "second_win" && player === 1)
+                                                $most_internal_elem.src = "/static/img/check.png"                                
                                     }
                                 });
                                 player++;
