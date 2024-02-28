@@ -130,6 +130,25 @@ window.fourPlayerTournament = function()
                     $tournament_buttton.classList.remove("disabled");
                     $tournament_buttton.onclick = null;  
                 }
+
+                if(data_object["info"] === "WIN")
+                {
+                    console.log("WIN");
+                    setTimeout(() => {
+                        document.querySelector("#button-return-tournament").innerText = "Back";
+                        document.querySelector("#button-return-tournament").href = `/tournament/`;    
+                    }, 500);
+                }
+
+                if(data_object["info"] === "DEFEAT")
+                {
+                    console.log("DEFEAT");
+                    setTimeout(() => {
+                        document.querySelector("#button-return-tournament").innerText = "Home";
+                        document.querySelector("#button-return-tournament").href = `/home/`;
+                        document.querySelector("#button-return-tournament").addEventListener("click", removeBackButton);                   
+                    }, 500);
+                }
             }
 
             //Check if tournament is ready to play
@@ -144,4 +163,9 @@ window.fourPlayerTournament = function()
     }
 
 
+}
+
+function removeBackButton(event) {
+    document.querySelector("#button-return-tournament").removeEventListener("click", removeBackButton);
+    document.querySelector("#button-return-tournament").classList.add("no-display");
 }

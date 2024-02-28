@@ -88,7 +88,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     }
 
     four_player_tournaments_results = {
-        "1234":
+        "01234":
         {
             "sala00": notdefined,
             "sala01": notdefined,
@@ -163,14 +163,29 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
                 elif data_json["info"] == "MATCH_ENDED":
                     winner = await sync_to_async(Match.get_winner)(f"{self.tournamentkey}{self.roomkey}")
+                    winner = str(winner)
+
                     # If result is already not set, we set it now
-                    if TournamentConsumer.four_player_tournaments_results[self.tournament_key][self.roomkey] == TournamentConsumer.notdefined:
+                    if TournamentConsumer.four_player_tournaments_results[self.tournamentkey][self.roomkey] == TournamentConsumer.notdefined:
+                        print(TournamentConsumer.four_player_tournaments[self.tournamentkey][self.roomkey], flush = True)
                         index_winner = TournamentConsumer.four_player_tournaments[self.tournamentkey][self.roomkey].index(winner)
                         if index_winner == 0:
                             TournamentConsumer.four_player_tournaments_results[self.tournamentkey][self.roomkey] = TournamentConsumer.first_win
                         else:
                             TournamentConsumer.four_player_tournaments_results[self.tournamentkey][self.roomkey] = TournamentConsumer.second_win
 
+                    if winner == self.username:
+                        print("Entro en winner", flush = True)
+                        message = {"info": "WIN"}
+                        await self.channel_layer.group_send(
+                            self.own_group_name, {"type": "tournament.message", "message": message}
+                        )
+                    else:
+                        # winner is the other guy
+                        message = {"info": "DEFEAT"}
+                        await self.channel_layer.group_send(
+                            self.own_group_name, {"type": "tournament.message", "message": message}
+                        )
 
 
     async def tournament_message(self, event):

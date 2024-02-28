@@ -49,14 +49,17 @@ window.game_main = function game_main(gameId, vsAI) {
 		// Solo se ejecuta si estamos en modo torneo
 		if (window.tournament_socket !== undefined)
 		{
-			document.querySelector("#button-return-tournament").addEventListener("click", () => {
+			function getDestiny(event) {
+				event.stopPropagation();
+				event.preventDefault();
+				document.querySelector("#button-return-tournament").removeEventListener("click", getDestiny);
 				window.tournament_socket.send(JSON.stringify(
 					{
 						info: "MATCH_ENDED",
-					}
-				));
-				document.querySelector("#button-return-tournament").classList.add("no-display");
-			});
+					})
+				);
+			}
+			document.querySelector("#button-return-tournament").addEventListener("click", getDestiny);
 			//Last step before leaving game, disable button 
 
 		}
