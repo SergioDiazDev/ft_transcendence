@@ -74,14 +74,13 @@ window.fourPlayerTournament = function()
         const data = JSON.parse(e.data);
         const data_object = data["message"];
         const keys = Object.keys(data_object);
-        console.log(data_object);
         if(keys.length > 0)
         {
             // Check fields now
             if(keys.includes("info"))
             {
                 // Check what type of info does return 
-                if(data_object["info"] === "FOUND")
+                if(data_object["info"] === "FOUND" || data_object["info"] === "UPDATE")
                 {
                     let room = 0, player = 0;
 
@@ -134,6 +133,7 @@ window.fourPlayerTournament = function()
             if(keys.includes("tournament_ready") && (data_object["tournament_ready"] === true))
             {
                 console.log("Le llega ready");
+                console.log(data_object);
                 match_sock.send(JSON.stringify({
                     info: "READY"
                 }));                   

@@ -70,13 +70,14 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     first_win = "first_win"
     second_win = "second_win"
     notdefined = "undefined"
+    locked_tournaments = []
     four_player_tournaments =  {
         "1234":
         {
             "sala00": ["jugador 1", "jugador 2"],
-            "sala01": [],
+            "sala01": ["jugador 3", "jugador 4"],
             "sala02": ["jugador 5", "jugador 6"],
-            "sala03": ["jugador 7", "jugador 8"],
+            "sala03": [],
             "sala04": [],
             "sala05": [],
             "sala06": []
@@ -89,7 +90,10 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             "sala00": notdefined,
             "sala01": notdefined,
             "sala02": notdefined,
-            "sala03": notdefined
+            "sala03": notdefined,
+            "sala04": notdefined,
+            "sala05": notdefined,
+            "sala06": notdefined
         }
     }
     
@@ -111,11 +115,12 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 if data_json["info"] == "SEARCHING4":
                     self.check_user_is_present(self.username, remove = True)
                     keys = self.get_slot_4(self.username)
+                    print(keys, flush = True)
+                    # Define names of each group
                     self.own_group_name = f"{keys["tournament_key"]}{keys["room_key"]}{self.username}"
                     self.match_group_name = f"{keys["tournament_key"]}{keys["room_key"]}"
                     self.tournament_group_name = f"tournament{keys["tournament_key"]}"
                     
-                    print(self.tournament_group_name, flush = True)
                     # Add groups to player
                     await self.channel_layer.group_add(self.own_group_name, self.channel_name)
                     await self.channel_layer.group_add(self.match_group_name, self.channel_name)
@@ -127,11 +132,17 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     self.own_group_name, {"type": "tournament.message", "message": message}
                     )
 
+                    # Update all clients
+                    message = {"info": "UPDATE", "players": TournamentConsumer.four_player_tournaments[keys["tournament_key"]]}
+                    await self.channel_layer.group_send(
+                        self.tournament_group_name, {"type": "tournament.message", "message": message}
+                    )
+
                     # Check if tournament is full, and if its full we notify to all players
                     if self.check_tournament_full(keys["tournament_key"]):
-                        
-                        message = {"tournament_ready": True}
-                        print("tournament_group_name", self.tournament_group_name , flush = True)
+                        print("Esta lleno", flush = True)
+                        TournamentConsumer.locked_tournaments.append(keys["tournament_key"])
+                        message = {"info": "UPDATE", "tournament_ready": True, "players": TournamentConsumer.four_player_tournaments[keys["tournament_key"]]}
                         await self.channel_layer.group_send(
                             self.tournament_group_name, {"type": "tournament.message", "message": message}
                         )
@@ -152,6 +163,11 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         await self.send(text_data = json.dumps({"message": message}))
 
     # Auxiliar methods
+    def generate_correct_uuid(self):
+        myuuid = uuid4()
+        myuuid = str(myuuid)
+        myuuid.replace("-","")
+        return myuuid
 
     def check_user_is_present(self, username, remove = False):
         
@@ -165,13 +181,18 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     for room_key in room_keys:
                         if username in TournamentConsumer.four_player_tournaments[tournament_key][room_key]:
                             # User found
+                            if tournament_key in TournamentConsumer.locked_tournaments:
+                                break
                             if remove:
                                 number_player = TournamentConsumer.four_player_tournaments[tournament_key][room_key].index(username)
+                                
+                                if tournament_key in TournamentConsumer.locked_tournaments:
+                                    if number_player == 0:
+                                        TournamentConsumer.four_player_tournaments_results[tournament_key][room_key] = TournamentConsumer.second_win
+                                    else:
+                                        TournamentConsumer.four_player_tournaments_results[tournament_key][room_key] = TournamentConsumer.first_win
                                 TournamentConsumer.four_player_tournaments[tournament_key][room_key].remove(username)
-                                if number_player == 0:
-                                    TournamentConsumer.four_player_tournaments_results[tournament_key][room_key] = TournamentConsumer.second_win
-                                else:
-                                    TournamentConsumer.four_player_tournaments_results[tournament_key][room_key] = TournamentConsumer.first_win
+
                             return True
         
         # By defect
@@ -179,17 +200,47 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
 
     def check_not_valid_rooms_4(self, room_key):
-        if room_key == "sala04" or room_key == "sala05" or room_key == "sala05":
+        if room_key == "sala04" or room_key == "sala05" or room_key == "sala06":
             return True
         return False
+
+    # Creates a tournament and add a username to it, returns tournament_key and room_key
+    def create_tournament(self, username):
+        myuuid = self.generate_correct_uuid()
+
+        # Defining rooms of my tournament
+        TournamentConsumer.four_player_tournaments[myuuid] = {
+            "sala00": [],
+            "sala01": [],
+            "sala02": [],
+            "sala03": [],
+            "sala04": [],
+            "sala05": [],
+            "sala06": [],
+        }
+
+        # Defining results of tournament created, undefined at the beginning
+        TournamentConsumer.four_player_tournaments_results[myuuid] = {
+            "sala00": TournamentConsumer.notdefined,
+            "sala01": TournamentConsumer.notdefined,
+            "sala02": TournamentConsumer.notdefined,
+            "sala03": TournamentConsumer.notdefined,
+            "sala04": TournamentConsumer.notdefined,
+            "sala05": TournamentConsumer.notdefined,
+            "sala06": TournamentConsumer.notdefined
+        }
+
+        TournamentConsumer.four_player_tournaments[myuuid]["sala00"].append(username)
+        return {"tournament_key": myuuid, "room_key": "sala00"}
 
     def get_slot_4(self, username):
         tournament_keys = TournamentConsumer.four_player_tournaments.keys()
 
         # Check number of tournament keys
-        if len(tournament_keys) < 0:
-            # TODO create tournament if there is no tournament created
-            pass
+        if len(tournament_keys) <= 0:
+            # Create tournaments if there is no one active
+            self.create_tournament(username)
+
         elif len(tournament_keys) > 0:
             for tournament_key in tournament_keys:
                 # Get room ids
@@ -199,8 +250,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         if len(TournamentConsumer.four_player_tournaments[tournament_key][room_key]) < 2 and not self.check_not_valid_rooms_4(room_key):
                             TournamentConsumer.four_player_tournaments[tournament_key][room_key].append(username)
                             return {"tournament_key": tournament_key, "room_key": room_key}
-            return {"tournament_key": "", "room_key": ""}
-            #TODO create tournament if all slots are full
+            # Create tournament if there is no slot for my user
+            return self.create_tournament(username)
+
 
     def check_tournament_full(self, tournament_key):
         if len(tournament_key):

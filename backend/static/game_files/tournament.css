@@ -296,6 +296,10 @@
         (var(--vertical-margin) / 2) - (var(--height-third-bracket) / 2));
 }
 
+#button-return-tournament {
+    color: white;
+}
+
 /* Its placed here due to cascade*/
 .no-display
 {
