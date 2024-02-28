@@ -81,15 +81,15 @@ window.fourPlayerTournament = function()
         {
             let $four_players_section = document.querySelector("#eight-players-tournament");
             let $first_column = document.querySelector("#first-col4");
-            let $tournament_buttton = document.querySelector("#tournament-button");        
+            let $second_column = document.querySelector("#second-col4");
+            let $tournament_buttton = document.querySelector("#tournament-button");
+
             // Check fields now
             if(keys.includes("info"))
             {
-                console.log(data_object);
                 // Check what type of info does return 
                 if(data_object["info"] === "FOUND" || data_object["info"] === "UPDATE")
                 {
-                    console.log(data_object["results"]);
                     let room = 0, player = 0;
 
                     const $first_column_children = $first_column.children;
@@ -113,6 +113,51 @@ window.fourPlayerTournament = function()
                                     }
                                     else if($most_internal_elem.tagName === "IMG")
                                     {
+                                        if(data_object["players"][`sala0${room}`][player] !== undefined)
+                                            $most_internal_elem.classList.remove("no-display");
+                                            if(data_object["results"][`sala0${room}`] === "first_win" && player === 0)
+                                                $most_internal_elem.src = "/static/img/check.png"
+                                            else if(data_object["results"][`sala0${room}`] === "first_win" && player === 1)
+                                                $most_internal_elem.src = "/static/img/cross.png"
+                                            
+                                            if(data_object["results"][`sala0${room}`] === "second_win" && player === 0)
+                                                $most_internal_elem.src = "/static/img/cross.png"
+                                            else if(data_object["results"][`sala0${room}`] === "second_win" && player === 1)
+                                                $most_internal_elem.src = "/static/img/check.png"                                
+                                    }
+                                });
+                                player++;
+                            }
+                        });
+
+                        room++;
+                        player = 0;
+                    });
+
+
+                    //Recorrer segunda columna
+
+                    const $second_column_children = $second_column.children;
+
+                    Array.from($second_column_children).forEach(elem =>{
+                        const $internal_elems = elem.children;
+                        Array.from($internal_elems).forEach(internal_elem => {
+                            if(internal_elem.localName === "div")
+                            {
+                                const $most_internal_elems = internal_elem.children;
+                                Array.from($most_internal_elems).forEach($most_internal_elem => {
+                                    if($most_internal_elem.tagName === "P")
+                                    {
+                                        $most_internal_elem.innerText = data_object["players"][`sala0${room}`][player];
+                                    }
+                                    else if($most_internal_elem.tagName === "DIV")
+                                    {
+                                        if(data_object["players"][`sala0${room}`][player] !== undefined)
+                                            $most_internal_elem.classList.add("no-display");
+                                    }
+                                    else if($most_internal_elem.tagName === "IMG")
+                                    {
+                                        console.log("room: ", room);
                                         if(data_object["players"][`sala0${room}`][player] !== undefined)
                                             $most_internal_elem.classList.remove("no-display");
                                             if(data_object["results"][`sala0${room}`] === "first_win" && player === 0)
