@@ -163,7 +163,15 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
                 elif data_json["info"] == "MATCH_ENDED":
                     winner = await sync_to_async(Match.get_winner)(f"{self.tournamentkey}{self.roomkey}")
-                    print(winner, flush = True)
+                    # If result is already not set, we set it now
+                    if TournamentConsumer.four_player_tournaments_results[self.tournament_key][self.roomkey] == TournamentConsumer.notdefined:
+                        index_winner = TournamentConsumer.four_player_tournaments[self.tournamentkey][self.roomkey].index(winner)
+                        if index_winner == 0:
+                            TournamentConsumer.four_player_tournaments_results[self.tournamentkey][self.roomkey] = TournamentConsumer.first_win
+                        else:
+                            TournamentConsumer.four_player_tournaments_results[self.tournamentkey][self.roomkey] = TournamentConsumer.second_win
+
+
 
     async def tournament_message(self, event):
         message = event["message"]

@@ -6,6 +6,12 @@
     justify-content: space-between;
     
 }
+
+.matchmaking-buttons
+{
+    display: flex;
+    justify-content: space-evenly;
+}
 .match-display
 {
     width: 100%;
