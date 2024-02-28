@@ -73,19 +73,22 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     first_win = "first_win"
     second_win = "second_win"
     notdefined = "undefined"
+
     matches_played = {
-        "01234": 3
+        "01234": 3,
     }
+
     locked_tournaments = []
+
     four_player_tournaments =  {
         "01234":
         {
             "sala00": ["jugador 1", "jugador 2"],
             "sala01": ["jugador 3", "jugador 4"],
-            "sala02": ["jugador 5", "jugador 6"],
-            "sala03": [],
+            "sala02": [],
+            "sala03": ["jugador 7", "jugador 8"],
             "sala04": ["jugador 1", "jugador 4"],
-            "sala05": ["jugador 5"],
+            "sala05": ["jugador 8"],
             "sala06": ["jugador 4"]
         }
     }
@@ -95,8 +98,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         {
             "sala00": first_win,
             "sala01": second_win,
-            "sala02": first_win,
-            "sala03": notdefined,
+            "sala02": notdefined,
+            "sala03": second_win,
             "sala04": second_win,
             "sala05": notdefined,
             "sala06": notdefined
@@ -111,7 +114,24 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             await self.close()
     
     async def disconnect(self, close_code):
-        pass
+        # Disconnecting user from groups
+        if self.own_group_name and self.own_group_name != "":
+            await self.channel_layer.group_discard(
+                self.own_group_name,
+                self.channel_name
+            )
+
+        if self.match_group_name and self.match_group_name != "":
+            await self.channel_layer.group_discard(
+                self.match_group_name,
+                self.channel_name
+            )
+        
+        if self.tournament_group_name and self.tournament_group_name != "":
+            await self.channel_layer.group_discard(
+                self.tournament_group_name,
+                self.channel_name
+            )
 
     async def receive(self, text_data):
         data_json = json.loads(text_data)
@@ -149,7 +169,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
                     # Check if tournament is full, and if its full we notify to all players
                     if self.check_tournament_full(keys["tournament_key"]):
-                        print("Esta lleno", flush = True)
                         TournamentConsumer.locked_tournaments.append(keys["tournament_key"])
                         message = {"info": "UPDATE", "tournament_ready": True, "players": TournamentConsumer.four_player_tournaments[keys["tournament_key"]],
                                     "results": TournamentConsumer.four_player_tournaments_results[self.tournamentkey]}
@@ -175,33 +194,52 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     if TournamentConsumer.four_player_tournaments_results[self.tournamentkey][self.roomkey] == TournamentConsumer.notdefined:
                         print(TournamentConsumer.four_player_tournaments[self.tournamentkey][self.roomkey], flush = True)
                         index_winner = TournamentConsumer.four_player_tournaments[self.tournamentkey][self.roomkey].index(winner)
+                        TournamentConsumer.matches_played[self.tournamentkey] = TournamentConsumer.matches_played[self.tournamentkey] + 1
+
                         if index_winner == 0:
-                            TournamentConsumer.matches_played = TournamentConsumer.matches_played[self.tournamentkey] + 1
                             TournamentConsumer.four_player_tournaments_results[self.tournamentkey][self.roomkey] = TournamentConsumer.first_win
                         else:
                             TournamentConsumer.four_player_tournaments_results[self.tournamentkey][self.roomkey] = TournamentConsumer.second_win
 
                     if winner == self.username:
-                        print("Entro en winner", flush = True)
-                        
+
+                        # First we leave room of earlier match
+                        await self.channel_layer.group_discard(
+                            self.match_group_name,
+                            self.channel_name
+                        )
                         # Update match room and join new room
                         self.update_match_winner()
-                        await self.channel_layer.group_add(self.match_group_name, self.channel_name)
-
                         self.match_group_name = f"{self.tournamentkey}{self.roomkey}"
+                        await self.channel_layer.group_add(self.match_group_name, self.channel_name)
 
 
                         message = {"info": "WIN"}
                         await self.channel_layer.group_send(
                             self.own_group_name, {"type": "tournament.message", "message": message}
                         )
+
+                        print(TournamentConsumer.matches_played, type(TournamentConsumer.matches_played), flush = True)
+                        if TournamentConsumer.matches_played[self.tournamentkey] == 4 or TournamentConsumer.matches_played[self.tournamentkey] == 6:
+                            # This means all matches of first round are played
+                            await self.channel_layer.group_add(self.match_group_name, self.channel_name)
+                            message = {"info": "NEW_ROUND_READY"}
+                            await self.channel_layer.group_send(
+                            self.match_group_name, {"type": "tournament.message", "message": message}
+                            )
+
+                            message = {"info": "UPDATE_YOUR_BUTTON"}
+                            await self.channel_layer.group_send(
+                                self.own_group_name, {"type": "tournament.message", "message": message}
+                            )
                     else:
                         # winner is the other guy
                         message = {"info": "DEFEAT"}
                         await self.channel_layer.group_send(
                             self.own_group_name, {"type": "tournament.message", "message": message}
                         )
-                        # TODO: here we have to disconnect this user
+                        # Disconnecting user who has lost
+                        self.disconnect(4001)
 
                 elif data_json["info"] == "UPDATE":
                     message = {"info": "UPDATE", "players": TournamentConsumer.four_player_tournaments[self.tournamentkey], 
@@ -210,6 +248,16 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     await self.channel_layer.group_send(
                         self.own_group_name, {"type": "tournament.message", "message": message}
                     )
+                
+                elif data_json["info"] == "NEW_MATCH":
+                    # This means client is requesting new match
+                    message = {"info": "MATCH_FOUND", "game_key": f"{self.tournamentkey}{self.roomkey}"}
+                    await self.channel_layer.group_send(
+                    self.match_group_name, {"type": "tournament.message", "message": message}
+                    )
+
+                    
+                    
 
     async def tournament_message(self, event):
         message = event["message"]
@@ -339,42 +387,39 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                             return {"tournament_key": tournament_key, "room_key": room_key}
         return {"tournament_key": "", "room_key": ""}
 
-        async def update_match_winner(self):
-            # First we leave room of earlier match
-            await self.channel_layer.group_discard(
-                self.match_group_name,
-                self.channel_name
-            )
-
-            if self.roomkey == "sala00":
-                if len(TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala04"] == 0):
-                    TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala04"].append(self.username)
-                else:
-                    TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala04"][0] = self.username
-                self.roomkey = "sala04"
-
-            elif self.roomkey == "sala01":
+    def update_match_winner(self):
+        print(self.roomkey, flush = True)
+        print(TournamentConsumer.four_player_tournaments[self.tournamentkey], flush = True)
+        if self.roomkey == "sala00":
+            if len(TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala04"]) == 0:
                 TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala04"].append(self.username)
-                self.roomkey = "sala04"
+            else:
+                TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala04"].insert(0, self.username)
+            self.roomkey = "sala04"
 
-            elif self.roomkey == "sala02":
-                if len(TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala05"] == 0):
-                    TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala05"].append(self.username)
-                else:
-                    TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala05"][0] = self.username
-                self.roomkey = "sala05"
+        elif self.roomkey == "sala01":
+            TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala04"].append(self.username)
+            self.roomkey = "sala04"
 
-            elif self.roomkey == "sala03":
+        elif self.roomkey == "sala02":
+            if len(TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala05"]) == 0:
+                print("Entro", flush = True)
                 TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala05"].append(self.username)
-                self.roomkey = "sala05"
+            else:
+                TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala05"].insert(0, self.username)
+            self.roomkey = "sala05"
 
-            elif self.roomkey == "sala04":
-                if len(TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala06"] == 0):
-                    TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala06"].append(self.username)
-                else:
-                    TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala06"][0] = self.username
-                self.roomkey = "sala06"
+        elif self.roomkey == "sala03":
+            TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala05"].append(self.username)
+            self.roomkey = "sala05"
 
-            if self.roomkey == "sala05":
+        elif self.roomkey == "sala04":
+            if len(TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala06"]) == 0:
                 TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala06"].append(self.username)
-                self.roomkey = "sala06"
+            else:
+                TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala06"].insert(self.username)
+            self.roomkey = "sala06"
+
+        elif self.roomkey == "sala05":
+            TournamentConsumer.four_player_tournaments[self.tournamentkey]["sala06"].append(self.username)
+            self.roomkey = "sala06"

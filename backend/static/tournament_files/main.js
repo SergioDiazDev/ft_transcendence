@@ -57,11 +57,14 @@ window.searchMatch = function()
 //TODO: Tenemos que hacer que si le damos de nuevo a matchmaking que se cierre si esta abierto
 //      y se vuelva a abrir 
 window.tournament_socket = undefined;
+let data_object = undefined;
+let last_winner = false;
+
 window.fourPlayerTournament = function()
 {
     let $four_players_section = document.querySelector("#eight-players-tournament");
     let $first_column = document.querySelector("#first-col4");
-    let $tournament_buttton = document.querySelector("#tournament-button");
+    let $tournament_button = document.querySelector("#tournament-button");
     tournament_socket = new WebSocket(`ws://${window.location.host}/ws/tournament/`);
 
     //Displaying tournament table
@@ -75,7 +78,7 @@ window.fourPlayerTournament = function()
 
     tournament_socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        const data_object = data["message"];
+        data_object = data["message"];
         const keys = Object.keys(data_object);
         if(keys.length > 0)
         {
@@ -83,7 +86,6 @@ window.fourPlayerTournament = function()
             let $first_column = document.querySelector("#first-col4");
             let $second_column = document.querySelector("#second-col4");
             let $third_column = document.querySelector("#third-col4");
-            let $tournament_buttton = document.querySelector("#tournament-button");
 
             // Check fields now
             if(keys.includes("info"))
@@ -158,7 +160,6 @@ window.fourPlayerTournament = function()
                                     }
                                     else if($most_internal_elem.tagName === "IMG")
                                     {
-                                        console.log("room: ", room);
                                         if(data_object["players"][`sala0${room}`][player] !== undefined)
                                             $most_internal_elem.classList.remove("no-display");
                                             if(data_object["results"][`sala0${room}`] === "first_win" && player === 0)
@@ -202,7 +203,6 @@ window.fourPlayerTournament = function()
                                     }
                                     else if($most_internal_elem.tagName === "IMG")
                                     {
-                                        console.log("room: ", room);
                                         if(data_object["players"][`sala0${room}`][player] !== undefined)
                                             $most_internal_elem.classList.remove("no-display");
                                             if(data_object["results"][`sala0${room}`] === "first_win" && player === 0)
@@ -230,20 +230,33 @@ window.fourPlayerTournament = function()
                 // Obtain game key to play
                 if(data_object["info"] === "MATCH_FOUND")
                 {
-                    $tournament_buttton.innerText = "Tournament Ready";
-                    $tournament_buttton.href = `/game/${data_object["game_key"]}`;
-                    window.playing_tournament = true;
-                    $tournament_buttton.classList.remove("disabled");
-                    $tournament_buttton.onclick = null;  
+                    setTimeout(() => {
+                        if(last_winner === false)
+                        {
+                            console.log(data_object["game_key"]);
+                            document.querySelector("#tournament-button").innerText = "Tournament Ready";
+                            document.querySelector("#tournament-button").href = `/game/${data_object["game_key"]}`;
+                            window.playing_tournament = true;
+                            document.querySelector("#tournament-button").classList.remove("disabled");
+                            document.querySelector("#tournament-button").onclick = null;        
+                        }
+                        
+                    }, 2000);
                 }
+
+                
 
                 if(data_object["info"] === "WIN")
                 {
                     console.log("WIN");
                     setTimeout(() => {
-                        document.querySelector("#button-return-tournament").innerText = "Back";
-                        document.querySelector("#button-return-tournament").href = `/tournament/`;
-                        document.querySelector("#button-return-tournament").addEventListener("click", removeBackButtonAndUpdate);
+                        if(last_winner === false)
+                        {
+                            document.querySelector("#button-return-tournament").innerText = "Back";
+                            document.querySelector("#button-return-tournament").href = `/tournament/`;
+                            document.querySelector("#button-return-tournament").addEventListener("click", removeBackButtonAndUpdate);    
+                        }
+
                     }, 500);
                 }
 
@@ -252,9 +265,29 @@ window.fourPlayerTournament = function()
                     console.log("DEFEAT");
                     setTimeout(() => {
                         document.querySelector("#button-return-tournament").innerText = "Home";
-                        document.querySelector("#button-return-tournament").href = `/home/`;
+                        document.querySelector("#button-return-tournament").href = `/`;
+                        window.tournament_socket = undefined;
                         document.querySelector("#button-return-tournament").addEventListener("click", removeBackButton);                   
                     }, 500);
+                }
+
+                if(data_object["info"] === "UPDATE_YOUR_BUTTON")
+                {
+                    console.log("WIN");
+                    setTimeout(() => {
+                        document.querySelector("#button-return-tournament").innerText = "Back";
+                        document.querySelector("#button-return-tournament").href = `/tournament/`;
+                        document.querySelector("#button-return-tournament").addEventListener("click", round_over);
+                        last_winner = true
+                    }, 200);
+                }
+                if(data_object["info"] === "NEW_ROUND_READY")
+                {
+                    setTimeout(() => {
+                        tournament_socket.send(JSON.stringify({
+                            info: "NEW_MATCH",
+                        }));
+                    }, 300);
                 }
             }
 
@@ -274,6 +307,7 @@ window.fourPlayerTournament = function()
 
 function removeBackButton(event) {
     document.querySelector("#button-return-tournament").removeEventListener("click", removeBackButton);
+    
     document.querySelector("#button-return-tournament").classList.add("no-display");
 }
 
@@ -281,10 +315,36 @@ function removeBackButtonAndUpdate(event)
 {
     removeBackButton(event);
     setTimeout(() => {
+
         window.tournament_socket.send(JSON.stringify(
             {
                 "info": "UPDATE",
             }
-            ));        
-    }, 100);
+            ));
+            const $tournament_button = document.querySelector("#tournament-button"); 
+            $tournament_button.href = null;
+            $tournament_button.classList.add("disabled");
+            $tournament_button.innerText = "Waiting...";       
+    }, 200);
+}
+
+
+function round_over(event)
+{
+    removeBackButton(event);
+    setTimeout(() => {
+
+        window.tournament_socket.send(JSON.stringify(
+            {
+                "info": "UPDATE",
+            }
+            ));
+            const $tournament_button = document.querySelector("#tournament-button"); 
+            $tournament_button.href = `/game/${data_object["game_key"]}`;
+            $tournament_button.classList.remove("disabled");
+            $tournament_button.innerText = "Tournament Ready";
+            $tournament_button.onclick = null;
+
+    }, 200);
+    console.log("Desde round_over: ", data_object);
 }
