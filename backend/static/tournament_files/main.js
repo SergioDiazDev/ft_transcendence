@@ -87,12 +87,14 @@ window.fourPlayerTournament = function()
         const data = JSON.parse(e.data);
         data_object = data["message"];
         const keys = Object.keys(data_object);
+        document.querySelector("#tournament-button").onclick = null;
         if(keys.length > 0)
         {
             let $four_players_section = document.querySelector("#eight-players-tournament");
             let $first_column = document.querySelector("#first-col4");
             let $second_column = document.querySelector("#second-col4");
             let $third_column = document.querySelector("#third-col4");
+
 
             // Check fields now
             if(keys.includes("info"))
@@ -340,7 +342,7 @@ function removeBackButtonAndUpdate(event)
             $tournament_button.href = null;
             $tournament_button.classList.add("disabled");
             $tournament_button.innerText = "Waiting...";       
-    }, 200);
+    }, 1000);
 }
 
 function eventLastWinner()

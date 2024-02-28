@@ -195,6 +195,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     )
 
                 elif data_json["info"] == "MATCH_ENDED":
+                    print(self.tournamentkey, self.roomkey, flush = True
+                    )
                     winner = await sync_to_async(Match.get_winner)(f"{self.tournamentkey}{self.roomkey}")
                     winner = str(winner)
 

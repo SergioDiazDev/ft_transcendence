@@ -58,10 +58,10 @@ class Match(models.Model):
 
     @classmethod
     def get_winner(cls, game_key):
-        matches = cls.objects.filter(game_url = game_key)
+        matches = cls.objects.filter(game_url=game_key)
         match = matches.last()
 
-        if match.end_match:
+        if match.match_ended == True:
             # if winner is 1 return a 1
             if match.player1_score > match.player2_score:
                 return match.player1

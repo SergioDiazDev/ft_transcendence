@@ -53,6 +53,7 @@ window.game_main = function game_main(gameId, vsAI) {
 				event.stopPropagation();
 				event.preventDefault();
 				document.querySelector("#button-return-tournament").removeEventListener("click", getDestiny);
+
 				window.tournament_socket.send(JSON.stringify(
 					{
 						info: "MATCH_ENDED",
