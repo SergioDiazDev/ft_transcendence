@@ -36,7 +36,9 @@ window.join_chat = function join_chat() {
 			chat_message.innerText = data.message;
 		}
 		chat_message.className = data.sender == user ?  "me" : "you";
-		document.querySelector("#chat-content").prepend(chat_message);
+		var chat_content = document.querySelector("#chat-content");
+		if (chat_content)
+			chat_content.prepend(chat_message);
 	}
 
 	function markChatAsRead(chat_id, user_name) {
