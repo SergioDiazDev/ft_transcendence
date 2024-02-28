@@ -285,7 +285,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     def generate_correct_uuid(self):
         myuuid = uuid4()
         myuuid = str(myuuid)
-        myuuid.replace("-","")
+        myuuid = myuuid.replace("-","")
         return myuuid
 
     def check_user_is_present(self, username, remove = False):
@@ -348,7 +348,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             "sala06": TournamentConsumer.notdefined
         }
 
-        TournamentConsumer.matches_played = 0
+        TournamentConsumer.matches_played[myuuid] = 0
 
         TournamentConsumer.four_player_tournaments[myuuid]["sala00"].append(username)
         return {"tournament_key": myuuid, "room_key": "sala00"}
