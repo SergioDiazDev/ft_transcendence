@@ -186,7 +186,15 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                         await self.channel_layer.group_send(
                             self.own_group_name, {"type": "tournament.message", "message": message}
                         )
+                        # TODO: here we have to disconnect this user
 
+                elif data_json["info"] == "UPDATE":
+                    print("update", flush = True)
+                    message = {"info": "UPDATE", "players": TournamentConsumer.four_player_tournaments[self.tournamentkey]}
+
+                    await self.channel_layer.group_send(
+                        self.own_group_name, {"type": "tournament.message", "message": message}
+                    )
 
     async def tournament_message(self, event):
         message = event["message"]

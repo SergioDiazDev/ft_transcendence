@@ -59,9 +59,9 @@ window.searchMatch = function()
 window.tournament_socket = undefined;
 window.fourPlayerTournament = function()
 {
-    const $four_players_section = document.querySelector("#eight-players-tournament");
-    const $first_column = document.querySelector("#first-col4");
-    const $tournament_buttton = document.querySelector("#tournament-button");
+    let $four_players_section = document.querySelector("#eight-players-tournament");
+    let $first_column = document.querySelector("#first-col4");
+    let $tournament_buttton = document.querySelector("#tournament-button");
     tournament_socket = new WebSocket(`ws://${window.location.host}/ws/tournament/`);
 
     //Displaying tournament table
@@ -79,6 +79,9 @@ window.fourPlayerTournament = function()
         const keys = Object.keys(data_object);
         if(keys.length > 0)
         {
+            let $four_players_section = document.querySelector("#eight-players-tournament");
+            let $first_column = document.querySelector("#first-col4");
+            let $tournament_buttton = document.querySelector("#tournament-button");        
             // Check fields now
             if(keys.includes("info"))
             {
@@ -136,7 +139,8 @@ window.fourPlayerTournament = function()
                     console.log("WIN");
                     setTimeout(() => {
                         document.querySelector("#button-return-tournament").innerText = "Back";
-                        document.querySelector("#button-return-tournament").href = `/tournament/`;    
+                        document.querySelector("#button-return-tournament").href = `/tournament/`;
+                        document.querySelector("#button-return-tournament").addEventListener("click", removeBackButtonAndUpdate);
                     }, 500);
                 }
 
@@ -168,4 +172,16 @@ window.fourPlayerTournament = function()
 function removeBackButton(event) {
     document.querySelector("#button-return-tournament").removeEventListener("click", removeBackButton);
     document.querySelector("#button-return-tournament").classList.add("no-display");
+}
+
+function removeBackButtonAndUpdate(event)
+{
+    removeBackButton(event);
+    setTimeout(() => {
+        window.tournament_socket.send(JSON.stringify(
+            {
+                "info": "UPDATE",
+            }
+            ));        
+    }, 100);
 }
