@@ -3,7 +3,7 @@
 window.searchMatch = function()
 {
     console.log("Starting web socket...");
-    const matchSock = new WebSocket(`ws://${window.location.host}/ws/matchmaking/`);
+    const matchSock = new WebSocket(`wss://${window.location.host}/ws/matchmaking/`);
     const button_tournament = document.querySelector("#button-tournament")
 
     matchSock.onopen = function(){
@@ -24,7 +24,7 @@ window.searchMatch = function()
                 enemy_name = data["message"]["player2"];
             else
                 enemy_name = data["message"]["player1"];
-            let avatar_endpoint = `http://${window.location.hostname}:${window.location.port}/accounts/profile/avatar/${enemy_name}/`;
+            let avatar_endpoint = `${window.location.protocol}//${window.location.hostname}/accounts/profile/avatar/${enemy_name}/`;
             console.log(avatar_endpoint);
             fetch(avatar_endpoint)
             .then(raw_data => {
@@ -32,8 +32,7 @@ window.searchMatch = function()
             })
             .then(({enemy_avatar}) => {
                 document.querySelector("#mm-player2").innerText = enemy_name;
-                document.querySelector("#mm-avatar-player2").src = `http://${window.location.hostname}:${window.location.port}/${enemy_avatar}`;
-                console.log(`http://${window.location.hostname}:${window.location.port}/${enemy_avatar}`);
+                document.querySelector("#mm-avatar-player2").src = `${window.location.protocol}//${window.location.hostname}/${enemy_avatar}`;
                 document.querySelector("#loader-tournament").classList.add("no-display");
                 document.querySelector("#mm-enemy-box").classList.toggle("no-display");
 

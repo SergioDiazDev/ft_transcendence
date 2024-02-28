@@ -5,7 +5,7 @@ window.join_chat = function join_chat() {
 	const csrfToken = document.getElementById('csrf-token').value;
 
 	const chatSocket = new WebSocket(
-		'ws://'
+		'wss://'
 		+ window.location.host
 		+ '/ws/chat/'
 		+ roomName

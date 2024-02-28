@@ -7,7 +7,7 @@ window.game_main = function game_main(gameId, vsAI) {
 
 	const slug = vsAI === "True" ? `wss/game_ai/${gameId}/` : `wss/game/${gameId}/`;
 
-	const gameSocket = new WebSocket(`ws://${window.location.host}/${slug}`);
+	const gameSocket = new WebSocket(`wss://${window.location.host}/${slug}`);
 	var game = new Game();
 	var gameContainer = document.getElementById("game-container");
 

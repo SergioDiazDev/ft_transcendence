@@ -39,7 +39,7 @@ function accept_friend(invitation_id) {
 		.then(response => response.json())
 		.then(json => {
 			if (json.status === "ok")
-				loadPanel("/accounts/friends_panel");
+				loadPanel("/accounts/friends_panel/");
 		});
 }
 
@@ -57,7 +57,7 @@ function block_friend(invitation_id) {
 			.then(response => response.json())
 			.then(json => {
 				if (json.status === "ok")
-					loadPanel("/accounts/friends_panel");
+					loadPanel("/accounts/friends_panel/");
 			});
 	}
 }
@@ -77,7 +77,7 @@ function block_friend_name(username) {
 			.then(response => response.json())
 			.then(json => {
 				if (json.status === "ok")
-					loadPanel("/accounts/friends_panel");
+					loadPanel("/accounts/friends_panel/");
 			});
 	}
 	
