@@ -54,23 +54,26 @@ window.searchMatch = function()
 
 //---------------------------- Tournaments --------------------------------
 
+//TODO: Tenemos que hacer que si le damos de nuevo a matchmaking que se cierre si esta abierto
+//      y se vuelva a abrir 
+window.tournament_socket = undefined;
 window.fourPlayerTournament = function()
 {
     const $four_players_section = document.querySelector("#eight-players-tournament");
     const $first_column = document.querySelector("#first-col4");
     const $tournament_buttton = document.querySelector("#tournament-button");
-    const match_sock = new WebSocket(`ws://${window.location.host}/ws/tournament/`);
+    tournament_socket = new WebSocket(`ws://${window.location.host}/ws/tournament/`);
 
     //Displaying tournament table
     $four_players_section.classList.remove("no-display");
 
-    match_sock.onopen = function() {
-        match_sock.send(JSON.stringify({
+    tournament_socket.onopen = function() {
+        tournament_socket.send(JSON.stringify({
             info: "SEARCHING4"
         }));
     }
 
-    match_sock.onmessage = function(e) {
+    tournament_socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const data_object = data["message"];
         const keys = Object.keys(data_object);
@@ -123,18 +126,16 @@ window.fourPlayerTournament = function()
                 {
                     $tournament_buttton.innerText = "Tournament Ready";
                     $tournament_buttton.href = `/game/${data_object["game_key"]}`;
+                    window.playing_tournament = true;
                     $tournament_buttton.classList.remove("disabled");
-                    $tournament_buttton.onclick = null;
-                    console.log(data_object["game_key"]);    
+                    $tournament_buttton.onclick = null;  
                 }
             }
 
             //Check if tournament is ready to play
             if(keys.includes("tournament_ready") && (data_object["tournament_ready"] === true))
             {
-                console.log("Le llega ready");
-                console.log(data_object);
-                match_sock.send(JSON.stringify({
+                tournament_socket.send(JSON.stringify({
                     info: "READY"
                 }));                   
             }

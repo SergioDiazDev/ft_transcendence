@@ -5,6 +5,10 @@ import {announceGoal, getPositionVector, OBJECTS_Z, countdown, announcePlayers} 
 window.game_main = function game_main(gameId, vsAI) {
 	document.querySelector("#game-button").remove();
 
+	// Check if mode tournament is on
+	if(window.playing_tournament === true)
+		document.querySelector("#button-return-tournament").classList.remove("no-display");
+
 	const slug = vsAI === "True" ? `wss/game_ai/${gameId}/` : `wss/game/${gameId}/`;
 
 	const gameSocket = new WebSocket(`ws://${window.location.host}/${slug}`);
@@ -41,6 +45,22 @@ window.game_main = function game_main(gameId, vsAI) {
 		document.removeEventListener("keyup", keyupHandler);
 		game.remove(game.pad1, game.pad2, game.ball);
 		finish = true;
+
+		// Solo se ejecuta si estamos en modo torneo
+		if (window.tournament_socket !== undefined)
+		{
+			document.querySelector("#button-return-tournament").addEventListener("click", () => {
+				window.tournament_socket.send(JSON.stringify(
+					{
+						info: "MATCH_ENDED",
+					}
+				));
+				document.querySelector("#button-return-tournament").classList.add("no-display");
+			});
+			//Last step before leaving game, disable button 
+
+		}
+
 	};
 
 	function messageHandler(event) {

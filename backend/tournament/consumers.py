@@ -1,9 +1,12 @@
 import os
 
 from channels.generic.websocket import AsyncWebsocketConsumer
+from asgiref.sync import sync_to_async
 
 from uuid import uuid4
 import json
+
+from game.models import Match
 
 class MatchmakingConsumer(AsyncWebsocketConsumer):
     users_searching = []
@@ -72,7 +75,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     notdefined = "undefined"
     locked_tournaments = []
     four_player_tournaments =  {
-        "1234":
+        "01234":
         {
             "sala00": ["jugador 1", "jugador 2"],
             "sala01": ["jugador 3", "jugador 4"],
@@ -115,7 +118,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 if data_json["info"] == "SEARCHING4":
                     self.check_user_is_present(self.username, remove = True)
                     keys = self.get_slot_4(self.username)
-                    print(keys, flush = True)
+                    self.tournamentkey = keys["tournament_key"]
+                    self.roomkey = keys["room_key"]
                     # Define names of each group
                     self.own_group_name = f"{keys["tournament_key"]}{keys["room_key"]}{self.username}"
                     self.match_group_name = f"{keys["tournament_key"]}{keys["room_key"]}"
@@ -156,6 +160,10 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                     await self.channel_layer.group_send(
                     self.match_group_name, {"type": "tournament.message", "message": message}
                     )
+
+                elif data_json["info"] == "MATCH_ENDED":
+                    winner = await sync_to_async(Match.get_winner)(f"{self.tournamentkey}{self.roomkey}")
+                    print(winner, flush = True)
 
     async def tournament_message(self, event):
         message = event["message"]

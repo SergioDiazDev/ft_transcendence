@@ -55,3 +55,16 @@ class Match(models.Model):
     def get_match_pictures(cls, match_id):
         match = cls.objects.get(id=match_id)
         return (match.player1.avatar.name, match.player2.avatar.name)
+
+    @classmethod
+    def get_winner(cls, game_key):
+        matches = cls.objects.filter(game_url = game_key)
+        match = matches.last()
+
+        if match.end_match:
+            # if winner is 1 return a 1
+            if match.player1_score > match.player2_score:
+                return match.player1
+            else:
+                # winner is 2 return a 2
+                return match.player2

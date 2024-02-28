@@ -100,6 +100,16 @@
     top: calc(( (768px - var(--button-height)) / 2) + 130px);
 }
 
+.button-back-tournament {
+    position: absolute;
+    width: 300px;
+    min-width: 300px;
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    top: 100px;
+    left: calc((100vw - 300px) / 2);
+}
 .tournament-selection-button:hover {
     text-decoration: none;
     color: white;
@@ -296,9 +306,6 @@
         (var(--vertical-margin) / 2) - (var(--height-third-bracket) / 2));
 }
 
-#button-return-tournament {
-    color: white;
-}
 
 /* Its placed here due to cascade*/
 .no-display
