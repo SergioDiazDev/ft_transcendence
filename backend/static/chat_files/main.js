@@ -30,7 +30,7 @@ window.join_chat = function join_chat() {
 	function addMessage(data, user) {
 		var chat_message = document.createElement("p");
 
-		if (data.message.startsWith('<a link href="/game/') && data.message.endsWith('">Hi! I would like to invite you to play a game. Do you accept?</a>')) {
+		if (data.message.startsWith('<a style="color: #fff;" link href="/game/') && data.message.endsWith('">Hi! I would like to invite you to play a game. Do you accept?</a>')) {
 			chat_message.innerHTML = data.message;
 		} else {
 			chat_message.innerText = data.message;
@@ -92,7 +92,7 @@ window.close_chat = function close_chat() {
 }
 
 window.invite_game = function invite_game(id_chat){
-	var message = '<a link href="/game/' + id_chat + '">Hi! I would like to invite you to play a game. Do you accept?</a>';
+	var message = '<a style="color: #fff;" link href="/game/' + id_chat + '">Hi! I would like to invite you to play a game. Do you accept?</a>';
 	document.getElementById('chat-message-input').value = message;
 	document.getElementById('chat-message-submit').click();
 }
