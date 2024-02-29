@@ -3,6 +3,7 @@
 {# <link rel="stylesheet" href="{% static 'game_files/resets.css' %}"> #}
 
 <main id="game-body" class="small-no-whitespace">
+	<button class="button_tournament" onclick="window.join_tournament()" style="visibility: hidden;">Next</button>
 	<div id="game-container" class="small-no-whitespace">
 		<button class="nav-button" onclick="game_main('{{ game_id }}', '{{ vs_ai }}')" id="game-button">Join the game</button>
 		<div class="game-vars">
@@ -16,4 +17,5 @@
 			</div>
 		</div>
 	</div>
+	<h1 class="eres_un_champions"></h1>
 </main>
