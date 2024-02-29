@@ -1,3 +1,4 @@
+
 window.join_chat = function join_chat() {
 	window.isChatting = true;
 	const roomName = JSON.parse(document.getElementById('room-name').textContent);
@@ -28,7 +29,12 @@ window.join_chat = function join_chat() {
 
 	function addMessage(data, user) {
 		var chat_message = document.createElement("p");
-		chat_message.innerText = data.message;
+
+		if (data.message.startsWith('<a link href="/game/') && data.message.endsWith('">Hi! I would like to invite you to play a game. Do you accept?</a>')) {
+			chat_message.innerHTML = data.message;
+		} else {
+			chat_message.innerText = data.message;
+		}
 		chat_message.className = data.sender == user ?  "me" : "you";
 		document.querySelector("#chat-content").prepend(chat_message);
 	}
@@ -44,9 +50,9 @@ window.join_chat = function join_chat() {
 		})
 			.then(response => {
 				if (response.ok) {
-					console.log('Mensaje marcado como leído en la base de datos');
+					//console.log('Mensaje marcado como leído en la base de datos');
 				} else {
-					console.error('Error al marcar el mensaje como leído');
+					console.error('Error al marcar el mensaje como leído');//Borrar?
 				}
 			})
 			.catch(error => {
@@ -81,4 +87,10 @@ window.close_chat = function close_chat() {
 
 	}
 	window.isChatting = false;
+}
+
+window.invite_game = function invite_game(id_chat){
+	var message = '<a link href="/game/' + id_chat + '">Hi! I would like to invite you to play a game. Do you accept?</a>';
+	document.getElementById('chat-message-input').value = message;
+	document.getElementById('chat-message-submit').click();
 }

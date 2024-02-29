@@ -12,7 +12,8 @@ def room(request, room_name):
         return HttpResponseForbidden("You are not allowed to join this chat room.")
     return render(request, "chat/room.html", {"room_name": room_name,
                                               "a_name": chat.player_a.username,
-                                              "b_name": chat.player_b.username })
+                                              "b_name": chat.player_b.username,
+                                              "id_chat": chat.id })
 
 def chat_view(request, user1, user2):
     # Buscar o crear la sala de chat y obtener su ID
@@ -28,10 +29,9 @@ def mark_chat_as_read(request, chat_id, user_name):
 
         # Actualizar la variable unread del chat
         if chat.player_a == player:
-            chat.unread_A = False
-        elif chat.player_b == player:
-            chat.unread_B = False
-        chat.save()
+            Chat.objects.filter(id=chat_id).update(unread_A=False)
+        if chat.player_b == player:
+            Chat.objects.filter(id=chat_id).update(unread_B=False)
 
         return JsonResponse({'success': True})
     except (Player.DoesNotExist, Chat.DoesNotExist):

@@ -162,7 +162,9 @@
     height: 30vw;
     align-items: center;
     justify-content: space-between;
+    overflow: hidden;
 }
+
 
 .title-img-container {
     width: 100%;
@@ -178,7 +180,10 @@
 .title-option > p{
     text-align: center;
     color: #FFFFFF;
-    font-size: 40px;
+    font-size: 1.2rem;
+    
+    
+    
 }
 
 #transcendence-container {
@@ -204,6 +209,20 @@
     flex-grow: 1;
 }
 
+.friends-record2 {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.friends-record2 input[type="text"] {
+    flex: 0 0 80%; /* Ocupa el 80% del espacio disponible */
+}
+
+.friends-record2 article {
+    flex: 0 0 20%; /* Ocupa el 20% del espacio disponible */
+    overflow: hidden;
+}
+
 #chat-container {
     min-height: 100%;
     border: 3px solid #C3A5EC;
@@ -213,6 +232,20 @@
 
 .chat-controls {
     display: flex;
+    align-items: center;
+}
+
+#chat-message-invite {
+    color: #7857DC; /* Cambia el color del icono */
+    vertical-align: middle;
+    margin-right: 10px; /* Añade un margen a la derecha del icono */
+    margin-left: 10px; /* Añade un margen a la izquierda del icono */
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+#chat-message-invite:hover {
+    color: #FFA500; /* Cambia el color del icono al pasar el cursor sobre él */
 }
 
 #chat-message-submit {
@@ -233,7 +266,7 @@
     display: flex;
     flex-direction: column;
     height: calc(100vh - 5em);
-    width: 20vw;
+    /*width: 20vw;*/
 }
 
 #add-friend-container {
