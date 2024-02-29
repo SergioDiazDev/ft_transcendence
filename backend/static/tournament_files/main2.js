@@ -1,5 +1,6 @@
-document.addEventListener("DOMContentLoaded", function() {
-    window.join_tournament = function() {
+window.join_tournament = function() {
+		document.querySelector("#tournament-button").remove();
+		document.querySelector("#tournament-display").classList.remove("hidden");
         var tournamentSocket = new WebSocket("ws://" + window.location.host + "/ws/tournament/");
         tournamentSocket.onmessage = messageHandler;
 
@@ -8,42 +9,18 @@ document.addEventListener("DOMContentLoaded", function() {
         function messageHandler(event) {
             const messageData = JSON.parse(event.data);
             if (messageData.type === "status") {
-                // Modificado para que coincida con la estructura HTML
-                document.querySelector(".team1").innerHTML = "";
-                document.querySelector(".team2").innerHTML = "";
-                document.querySelector(".team3").innerHTML = "";
-                console.log("matches:", messageData);
+				document.querySelector("#transcendence-app").innerHTML = html_tournament;
                 renderMatches(messageData);
             } else if (messageData.type === "new_game") {
                 var game_button = document.createElement("a");
                 game_button.href = "/game/" + messageData.game_id + "/";
                 game_button.setAttribute("link", "");
                 game_button.text = "Go to the game";
-
-				var currentButton = document.querySelector(".button_tournament");
-                currentButton.replaceWith(game_button);
-				
-                //document.querySelector("#transcendence-app").prepend(game_button);
-                console.log("new game for you: ", messageData.game_id);
+				game_button.id = "goto-game-button";
+				game_button.className = "nav-link nav-button";
+                document.querySelector("#eight-players-tournament").appendChild(game_button);
             } else if (messageData.type === "winner") {
-                var winner_text = document.createElement("h1");
-                // Corregido para establecer el texto correctamente
-                winner_text.textContent = "And the winner is: " + messageData.winner + " !";
-				
-				winner_text.style.position = "fixed"; // Cambiamos la posición a fija
-				winner_text.style.top = "50%";
-				winner_text.style.left = "50%";
-				winner_text.style.transform = "translate(-50%, -50%)";
-				winner_text.style.color = "yellow";
-				winner_text.style.fontSize = "24px";
-				winner_text.style.fontWeight = "bold";
-				winner_text.style.margin = "auto"; // Centra horizontalmente
-				winner_text.style.padding = "0"; // Sin relleno
-				winner_text.style.border = "none"; // Sin borde
-
-				var currentButton = document.querySelector(".eres_un_champions");
-                currentButton.replaceWith(winner_text);
-                //document.querySelector("#transcendence-app").prepend(winner_text);
+				document.querySelector("#transcendence-app").innerHTML = `<h1 id="game-winner">And the winner is ${messageData.winner}!</h1>`;
                 window.playing_tournament = false;
                 tournamentSocket.close();
             }
@@ -51,23 +28,91 @@ document.addEventListener("DOMContentLoaded", function() {
 
         function renderMatches(json) {
             if (json.match1) {
-                var p = document.createElement("p");
-                p.textContent = json.match1[0] + " vs " + json.match1[1];
-                // Modificado para que coincida con la estructura HTML
-                document.querySelector(".team1").appendChild(p);
+                document.querySelector("#match1_player1").textContent = json.match1[0];
+                document.querySelector("#match1_player2").textContent = json.match1[1];
             }
             if (json.match2) {
-                var p = document.createElement("p");
-                p.textContent = json.match2[0] + " vs " + json.match2[1];
-                // Modificado para que coincida con la estructura HTML
-                document.querySelector(".team2").appendChild(p);
+                document.querySelector("#match2_player1").textContent = json.match2[0];
+                document.querySelector("#match2_player2").textContent = json.match2[1];
             }
             if (json.match3) {
-                var p = document.createElement("p");
-                p.textContent = json.match3[0] + " vs " + json.match3[1];
-                // Modificado para que coincida con la estructura HTML
-                document.querySelector(".team3").appendChild(p);
+                document.querySelector("#match3_player1").textContent = json.match3[0];
+                document.querySelector("#match3_player2").textContent = json.match3[1];
             }
         }
-    }
-});
+    };
+
+var html_tournament = `
+<main class="container" id="main-container"  style="display: flex; align-items: center; justify-content: center;">
+    <section class="tournament-display" id="tournament-display">
+
+        <section id="eight-players-tournament" class="tournament-table">
+            <h2>Tournament Mode</h2>
+            <hr class="tournament-separator">
+
+            <div  class="col-matches-disposition">
+                <div class="first-bracket"> <!-- First bracket --> 
+                    <hr class="upper-bracket-horizontal4">
+                    <hr class="upper-bracket-horizontal4">
+                    <hr class="upper-bracket-horizontal4">
+                </div>
+                <div class="second-bracket"> <!-- Second bracket --> 
+                    <hr class="upper-bracket-horizontal4">
+                    <hr class="upper-bracket-horizontal4">
+                    <hr class="upper-bracket-horizontal4">
+                </div>
+                <div class="third-bracket"> <!-- Second bracket --> 
+                    <hr class="upper-bracket-horizontal4">
+                    <hr class="upper-bracket-horizontal4">
+                    <hr class="upper-bracket-horizontal4">
+                </div>
+                <div id="second-col4" class="col4"> <!-- Segunda columna -->
+                    <div class="match-col4 second-col-4">
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p id="match1_player1">Pending</p>
+                        </div>
+                        <hr>
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p id="match1_player2">Pending</p>
+                            </div>   
+                    </div>
+                
+                    <div class="match-col4 second-col-4">
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p id="match2_player1">Pending</p>
+                        </div>
+                        <hr>
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p id="match2_player2">Pending</p>
+                        </div>   
+                    </div>
+                </div> <!-- Acaba segunda columna -->
+
+                <div id="third-col4" class="col4">
+                        <div class="match-col4 third-col-4"> <!-- Tercera columna -->
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p id="match3_player1">Pending</p>
+                        </div>
+                        <hr>
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p id="match3_player2">Pending</p>
+                        </div>
+                    </div>
+                </div> <!-- Acaba tercera columna -->
+            </div>
+
+        </section>
+    </section>
+</main>`;

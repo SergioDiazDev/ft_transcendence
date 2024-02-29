@@ -1,75 +1,339 @@
-.container {
-    max-width: 800px;
-    margin: 5rem auto;
-    padding: 20px;
-}
-
-.chat-container {
-    min-height: 100%;
-    border: 3px solid #C3A5EC;
-    background-color: #302D3D;
-    border-radius: 10px;
-    padding: 20px;
-    justify-content: center; /* Centrar verticalmente */
-    align-items: center;
-
-}
-
-.bracket {
+.matchmaking-display
+{
     display: flex;
     flex-direction: column;
-    align-items: center;
-}
-
-/* Estilos comunes para los enfrentamientos */
-.match {
-    display: flex;
-    flex-direction: column;
-    background-color: #C3A5EC;
-    border-radius: 10px;
     align-items: center;
     justify-content: space-between;
-    margin: 1rem;
-    overflow: hidden;
+    
 }
 
-/* Estilos para la primera ronda */
-.round1 {
+.matchmaking-buttons
+{
     display: flex;
-    flex-direction: row;
+    justify-content: space-evenly;
 }
-
-/* Estilos para la segunda ronda y la final */
-.round2 {
+.match-display
+{
+    width: 100%;
+    margin-top: 20vh;
     display: flex;
-    flex-direction: column;
-    /*background-color: #C3A5EC;*/
-    border-radius: 10px;
     align-items: center;
     justify-content: space-between;
-    overflow: hidden;
+    margin-bottom: 20vh;
 }
 
-/* Estilos para los equipos */
-.team1,
-.team2,
-.team3 {
-    width: 10rem;
-    height: 4rem;
-    margin: 1rem;
+.text
+{
+    color: white;
+    font-size: 25px;
+    text-align: center;
+}
+
+.vs-text
+{
+    text-shadow: 2px 2px blue;
+    font-size: 100px;
+}
+
+.loader {
+    --d:22px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    color: #25b09b;
+    margin-right: 10%;
+    box-shadow: 
+      calc(1*var(--d))      calc(0*var(--d))     0 0,
+      calc(0.707*var(--d))  calc(0.707*var(--d)) 0 1px,
+      calc(0*var(--d))      calc(1*var(--d))     0 2px,
+      calc(-0.707*var(--d)) calc(0.707*var(--d)) 0 3px,
+      calc(-1*var(--d))     calc(0*var(--d))     0 4px,
+      calc(-0.707*var(--d)) calc(-0.707*var(--d))0 5px,
+      calc(0*var(--d))      calc(-1*var(--d))    0 6px;
+    animation: l27 1s infinite steps(8);
+  }
+@keyframes l27 {
+    100% {transform: rotate(1turn)}
+}
+
+/* HTML: <div class="loader2"></div> */
+.loader2 {
+    width: 25px;
+    aspect-ratio: 4;
+    background: radial-gradient(circle closest-side,#FFF 90%,#0000) 0/calc(100%/3) 100% no-repeat;
+    animation: l2 1s steps(3) infinite;
+  }
+  @keyframes l2 {to{background-position: 150%}}
+
+.tournament-display {
     display: flex;
     justify-content: center;
-    text-align: center;
     align-items: center;
-    font-size: medium;
+    
 }
 
-.button_tournament{
+#goto-game-button {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    top: 120px;
+    left: 750px;
+    text-align: center;
+}
+
+#game-winner {
+    color: white;
+    font-size: 61px;
+    position: absolute;
+    top: 50%;
+    left: 115px;
+}
+
+.tournament-selection
+{
+    margin-top: 50vh;
+    min-width: 90vw;
+    height:10vh;
+    display: flex;
+    justify-content: space-evenly;
+}
+.tournament-selection-button {
+    --button-width: 400px;
+    --button-height: 100px;
+	background-color: #7857DC;
+	color: white;
+	border-radius: 2rem;
+	font-size: 2rem;
+	text-decoration: none;
+	text-align: center;
+	border-width: 1px;
+	border-color: white;
+	border-style: solid;
+	min-height: var(--button-height);
+    max-height: var(--button-height);
+	min-width: var(--button-width);
+	/*padding: 2rem;*/
+	font-weight: 900;
+	z-index: 101;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.button-back-tournament {
+    position: absolute;
+    width: 300px;
+    min-width: 300px;
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    top: 100px;
+    left: calc((100vw - 300px) / 2);
+}
+.tournament-selection-button:hover {
+    text-decoration: none;
+    color: white;
+}
+
+
+/* Tournament table */
+
+.tournament-table {
+
+    --width-panel-tournament: 1024px;
+    --height-panel-tournament: 768px;
+    --heigh-paragraph-tournament: 38.4px;
+    --separator: 4px;
+    --margin-text-tournament: 20px;
+    --vertical-height: 100px;
+    --height-col4: calc(var(--height-panel-tournament) - var(--separator) - var(--heigh-paragraph-tournament) - var(--margin-text-tournament));
+    --vertical-margin: calc((var(--height-col4) - (4 * var(--vertical-height))) / 5);
+    position: absolute;
+    min-width: var(--width-panel-tournament);
+    min-height: var(--height-panel-tournament);
+    width: var(--width-panel-tournament);
+    height: var(--height-panel-tournament);
+    top: 130px;
+    left: 50px;
+    z-index: 101;
+    background-color: gray;
+    font-family: 'IBM Plex Mono';
+    font-weight: 600;
+    font-size: 1rem;
+    color: white;
+}
+
+.col-matches-disposition
+{
+    --space-between-columns4: 40px;
+    --width-match4: calc((var(--width-panel-tournament) - (3 * var(--space-between-columns4))) / 3);
+    display: flex;
+}
+
+.tournament-table > h2
+{
+    text-align: center;
+    margin-bottom: var(--margin-text-tournament);
+}
+
+.tournament-separator {
+    border-top: calc(var(--separator) / 2) solid black;
+    border-bottom: calc(var(--separator) / 2) solid black;
+    opacity: 1;
+}
+
+.col4 
+{
+    
+    min-height: var(--height-col4);
+    height: var(--height-col4);
+    width: calc(var(--width-panel-tournament) / 3);
+}
+
+.match-col4{
+    --side-size: 25px;
+    width: var(--width-match4);
+    height: var(--vertical-height);
     background-color: #7857DC;
+    margin-left: calc(var(--space-between-columns4) / 2);
+    border: 2px solid black;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    font-size: xx-large;
-    border-radius: 20%;
-
+    justify-content: space-evenly;
+    margin-bottom: var(--vertical-margin);
+    border-radius: 10px;
 }
+
+.match-col4 > hr {
+    --border-intern-hr: 1px;
+    border-top: var(--border-intern-hr) solid black;
+    border-bottom: var(--border-intern-hr) solid black;
+    opacity: 1;
+    margin: 0;
+}
+
+.match-col4 p {
+    margin: 0;
+    margin-right: 40px;
+}
+
+.match-col4:first-child {
+    margin-top: var(--vertical-margin);
+}
+.match-col4 > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.match-col4 .status-img {
+
+    max-height: var(--side-size);
+    max-width: var(--side-size);
+    height: var(--side-size);
+    width: var(--side-size);
+    margin-left: 50px; 
+}
+
+/* Second column*/
+.second-col-4:nth-of-type(1) {
+    position: relative;
+    top: calc((var(--vertical-height) / 2) + (var(--vertical-margin) / 2));
+}
+
+.second-col-4:nth-of-type(2)
+{
+    position: relative;
+    top: calc(var(--vertical-height) + (var(--vertical-height) / 2) + var(--vertical-margin) + (var(--vertical-margin) / 2));
+}
+
+/* Third column*/
+
+.third-col-4 {
+    position: relative;
+    top: calc(var(--vertical-height) + var(--vertical-margin) + (var(--vertical-height) / 2) + (var(--vertical-margin) / 2));
+}
+
+/* 4 players tournament brackets*/
+
+.upper-bracket-horizontal4 {
+    --vertical-offset: var(--separator) + var(--heigh-paragraph-tournament) + var(--margin-text-tournament);
+    --height-bracket: calc((var(--vertical-margin) / 2) + (var(--vertical-height) / 2 ));
+    --width-border: 1.5px;
+    color: black;
+    position: absolute;
+    border-top: var(--width-border) solid black;
+    border-bottom: var(--width-border) solid black;
+    width: var(--height-bracket);
+    left: calc(var(--width-match4) + (var(--space-between-columns4) / 2) - (var(--height-bracket) / 2) + 15px);
+    top: calc(var(--vertical-offset) + var(--vertical-margin) - var(--width-border) + (var(--vertical-height) / 2) + 
+        (var(--height-bracket) / 2));
+    rotate: 90deg;
+    opacity: 1;
+}
+
+.upper-bracket-horizontal4:nth-of-type(2) {
+    rotate: 0deg;
+    width: 15px;
+    top: calc( var(--separator) + var(--heigh-paragraph-tournament) + var(--margin-text-tournament) + var(--vertical-margin) - var(--width-border) + 
+    (var(--vertical-height) / 2) + var(--height-bracket));
+    left: calc(var(--width-match4) + (var(--space-between-columns4) / 2) + 15px);
+}
+
+.upper-bracket-horizontal4:nth-of-type(3) 
+{
+    top: calc(var(--vertical-offset) - var(--width-border) + (2 * var(--vertical-margin))
+        + var(--vertical-height) + (var(--vertical-height) / 2) - (var(--width-border) * 2) - (var(--height-bracket) / 2));
+}
+
+/* Second bracket for 4 players*/
+.second-bracket .upper-bracket-horizontal4 {
+    top: calc(var(--vertical-offset) + (3 * var(--vertical-margin)) + (2 * var(--vertical-height)) + (var(--vertical-height) / 2)
+        + (var(--height-bracket) / 2));
+}
+
+.second-bracket .upper-bracket-horizontal4:nth-of-type(2)
+{
+    top: calc(var(--vertical-offset) + (3 * var(--vertical-margin)) + (2 * var(--vertical-height)) + (var(--vertical-height) / 2)
+        + var(--height-bracket));
+}
+
+.second-bracket .upper-bracket-horizontal4:nth-of-type(3) {
+    top: calc(var(--vertical-offset) + (4 * var(--vertical-margin)) + (3 * var(--vertical-height)) + (var(--vertical-height) / 2)
+        - (var(--height-bracket) / 2));
+}
+
+/* Third bracket fpr 4 players*/
+.third-bracket .upper-bracket-horizontal4 {
+    --up-third-bracket: calc(var(--vertical-offset) + var(--vertical-margin) + (var(--vertical-margin) / 2) + var(--vertical-height));
+    --down-third-bracket: calc(var(--vertical-offset) + (2 * var(--vertical-height)) + (2 * var(--vertical-margin)) +
+        (var(--vertical-margin) / 2));
+    --height-third-bracket: calc(var(--down-third-bracket) - var(--up-third-bracket));
+    width: var(--height-third-bracket);
+    left: calc((2 * var(--width-match4)) + (3 * (var(--space-between-columns4) / 2) ) - (var(--height-third-bracket) / 2) + 15px );
+    top: calc(var(--up-third-bracket) + (var(--height-third-bracket) / 2));
+}
+
+.third-bracket .upper-bracket-horizontal4:nth-of-type(2) {
+    rotate: 0deg;
+    width: 15px;
+    top: calc(var(--vertical-offset) + (2 * var(--vertical-margin)) + (2 * var(--vertical-height)) + (var(--vertical-margin) / 2));
+    left: calc((2 * var(--width-match4)) + var(--space-between-columns4) + (var(--space-between-columns4) / 2 ) + 15px);
+}
+
+.third-bracket .upper-bracket-horizontal4:nth-of-type(3){
+    top: calc(var(--vertical-offset) + (3 * var(--vertical-margin)) + (3 * var(--vertical-height)) +
+        (var(--vertical-margin) / 2) - (var(--height-third-bracket) / 2));
+}
+
+
+/* Its placed here due to cascade*/
+.no-display
+{
+    display: none;
+}
+
+.disabled {
+    pointer-events: none;
+    cursor: default;
+ }

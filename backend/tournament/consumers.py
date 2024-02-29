@@ -81,7 +81,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         self.user = str(self.scope["user"])
 
         async with self.update_lock:
-            if self.user not in self.waiting_room:
+            if self.user not in self.waiting_room and len(self.waiting_room) < 4:
                 self.waiting_room.append(self.user)
                 self.player_channels.append(self.channel_name)
                 await self.accept()
@@ -91,8 +91,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 id = str(uuid4())
                 self.rooms[id] = {"players": copy.deepcopy(self.waiting_room),
                                   "channels": copy.deepcopy(self.player_channels)}
-                self.waiting_room = []
-                self.player_channels = []
+
+                self.waiting_room.clear()
+                self.player_channels.clear()
 
                 for channel in self.rooms[id]["channels"]:
                     await self.channel_layer.group_add(id, channel)
@@ -100,6 +101,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 asyncio.create_task(self.tournament_loop(id))
 
     async def disconnect(self, close_code):
+        """ async with self.update_lock:
+            for room in self.rooms:
+                if "players" in room.keys():
+                    for player in room["players"]:
+                        if player == self.user:
+                            room["players"].remove(self.user)
+        """
         await self.channel_layer.group_discard(
 			self.user, self.channel_name
 		)
@@ -137,8 +145,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
 
     async def tournament_loop(self, id):
-        print("sala creada", id, flush=True)
-
         async with self.update_lock:
             room = self.rooms[id]
 
@@ -152,8 +158,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             id, {"type": "tournament_status", "match1": match1, "match2": match2, "match3": []}
         )
 
-        asyncio.sleep(5)
         # aqui se les manda mensajes a cada jugador
+        asyncio.sleep(5)
         for user, channel in zip(room["players"], room["channels"]):
             if user in match1:
                 game_id = match1_id
@@ -164,6 +170,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         # get winners
         winner1 = await sync_to_async(Match.get_winner)(match1_id)
         winner2 = await sync_to_async(Match.get_winner)(match2_id)
+
         while not winner1 or not winner2:
             asyncio.sleep(5)
             if not winner1:
@@ -172,12 +179,12 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 winner2 = await sync_to_async(Match.get_winner)(match2_id)
 
         winner_match = [winner1.username, winner2.username]
-        print("winner match:", winner_match, flush= True)
+        print("winner_match", winner_match)
 
+        asyncio.sleep(5)
         await self.channel_layer.group_send(
             id, {"type": "tournament_status", "match1": match1, "match2": match2, "match3": winner_match}
         )
-        asyncio.sleep(5)
 
         winner_match_id = str(uuid4())
         for user, channel in zip(room["players"], room["channels"]):

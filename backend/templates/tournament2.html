@@ -1,22 +1,74 @@
-<main class="container" id="main-container">
-    <div>
-        <section class="chat-container">
-            <div class="bracket">
-                <div class="round1">
-                    <div class="match">
-                        <div class="team1">Player1<br>Player2</div>
-                    </div>
-                    <div class="match">
-                        <div class="team2">Player3<br>Player4</div>
-                    </div>
+<main class="container" id="main-container"  style="display: flex; align-items: center; justify-content: center;">
+    <section class="tournament-display hidden" id="tournament-display">
+
+        <section id="eight-players-tournament" class="tournament-table">
+            <h2>Tournament Mode</h2>
+            <hr class="tournament-separator">
+
+            <div  class="col-matches-disposition">
+                <div class="first-bracket"> <!-- First bracket --> 
+                    <hr class="upper-bracket-horizontal4">
+                    <hr class="upper-bracket-horizontal4">
+                    <hr class="upper-bracket-horizontal4">
                 </div>
-                <div class="round2">
-                    <div class="match">
-                        <div class="team3">Final</div>
-        			</div>
-            	</div>
-                <button class="button_tournament" onclick="window.join_tournament()">Next</button>
+                <div class="second-bracket"> <!-- Second bracket --> 
+                    <hr class="upper-bracket-horizontal4">
+                    <hr class="upper-bracket-horizontal4">
+                    <hr class="upper-bracket-horizontal4">
+                </div>
+                <div class="third-bracket"> <!-- Second bracket --> 
+                    <hr class="upper-bracket-horizontal4">
+                    <hr class="upper-bracket-horizontal4">
+                    <hr class="upper-bracket-horizontal4">
+                </div>
+                <div id="second-col4" class="col4"> <!-- Segunda columna -->
+                    <div class="match-col4 second-col-4">
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p id="match1_player1">Pending</p>
+                        </div>
+                        <hr>
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p id="match1_player2">Pending</p>
+                            </div>   
+                    </div>
+                
+                    <div class="match-col4 second-col-4">
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p id="match2_player1">Pending</p>
+                        </div>
+                        <hr>
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p id="match2_player2">Pending</p>
+                        </div>   
+                    </div>
+                </div> <!-- Acaba segunda columna -->
+
+                <div id="third-col4" class="col4">
+                        <div class="match-col4 third-col-4"> <!-- Tercera columna -->
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p id="match3_player1">Pending</p>
+                        </div>
+                        <hr>
+                        <div>
+                            <img class="no-display status-img" src="/static/img/undefined.png" alt="Imagen resultado">
+                            <div class="loader2 status-img"></div>
+                            <p id="match3_player2">Pending</p>
+                        </div>
+                    </div>
+                </div> <!-- Acaba tercera columna -->
             </div>
+
         </section>
-    </div>
+    </section>
+    <button id="tournament-button" class="tournament-selection-button" onclick="window.join_tournament()">Start Tournament</button>
 </main>
