@@ -1,0 +1,8 @@
+localhost {
+    reverse_proxy backend:8000
+}
+
+# I don't know the way of generatid valid SSL certs for hosting on 42 PCs
+# c3r1s1.42malaga.com {
+#   reverse_proxy backend:8000
+# }

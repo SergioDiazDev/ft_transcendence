@@ -140,18 +140,9 @@
 		searchMatch();
 	}
 
-	function handlePlayerTournament(event)
-	{
-		event.stopPropagation();
-		event.preventDefault();
-		event.target.classList.add("disabled");
-		event.target.innerText = "Searching Tournament...";		
-		fourPlayerTournament();
-
-	}
-	loadPanel("/accounts/friends_panel");
+	loadPanel("/accounts/friends_panel/");
 	// Long polling to check if the friends got updated
-	setInterval(loadPanel, 5000, "/accounts/friends_panel");
+	setInterval(loadPanel, 5000, "/accounts/friends_panel/");
 	</script>
 </body>
 </html>

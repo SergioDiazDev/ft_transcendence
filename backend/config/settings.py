@@ -32,7 +32,10 @@ if debug_flag == "False":
 else:
     DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost']
+
+# This should help when trying to host it on 42
+# ALLOWED_HOSTS = ['localhost', "*.42malaga.com"]
 
 
 # Application definition
@@ -144,7 +147,7 @@ LOGIN_REDIRECT_URL = '/'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Madrid'
 
 USE_I18N = True
 
@@ -152,18 +155,23 @@ USE_TZ = True
 
 
 # Setting up Cors params
-CORS_ALLOWED_ORIGINS = [
-        "http://127.0.0.1:5500",
-        "http://localhost:5500",
 
+CSRF_TRUSTED_ORIGINS = [ 'https://localhost',
+                        #'https://c3r3s3.42malaga.com',
+                        ]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https:\/\/localhost$",
+    # This should help when trying to host it on 42
+    # r"^^https:\/\/\w+\.42malaga\.com$",
 ]
+
 CORS_ALLOW_CREDENTIALS = True
 
     # Setting up CSRF Token
 CSRF_COOKIE_AGE = 86400
-CSRF_TRUSTED_ORIGINS = [ 'http://localhost:5500', 'http://127.0.0.1:5500' ]
 CSRF_COOKIE_HTTPONLY = False
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 

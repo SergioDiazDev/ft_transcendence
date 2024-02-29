@@ -9,8 +9,6 @@ services:
     image: postgres:15.5-alpine3.18
     container_name: postgresql
     hostname: postgresql
-    ports:
-      - "5432:5432"
     networks:
       - transcendence-network
     environment:
@@ -30,8 +28,6 @@ services:
     build: backend/
     networks:
       - transcendence-network
-    ports:
-      - "8000:8000"
     environment:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       POSTGRES_USER: "${POSTGRES_USER}"
@@ -39,11 +35,35 @@ services:
       DJANGO_DEBUG: "True"  # if this value is not set or set to anything not 'False', django will
                             # run in production mode
       DJANGO_SECRET_KEY: "${DJANGO_SECRET_KEY}"
+    healthcheck:
+      test: ["CMD-SHELL", "python manage.py check"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
     depends_on:
       postgresql:
         condition: service_healthy
     volumes:
       - backend:/app
+    restart: unless-stopped
+  caddy:
+    image: caddy:alpine
+    container_name: caddy
+    depends_on:
+      backend:
+        condition: service_healthy
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    networks:
+      - transcendence-network
+    volumes:
+      - $PWD/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/caddy/data:/data
+      - $PWD/caddy/conf:/config
     restart: unless-stopped
 
 volumes:
