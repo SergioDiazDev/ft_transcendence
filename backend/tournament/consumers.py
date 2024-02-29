@@ -25,7 +25,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        print("Disconnect", flush = True)
+        # print("Disconnect", flush = True)
 
     async def receive(self, text_data):
         data_json = json.loads(text_data)
@@ -52,7 +52,7 @@ class MatchmakingConsumer(AsyncWebsocketConsumer):
                 )
                 del MatchmakingConsumer.users_searching[0]
             
-        print(MatchmakingConsumer.users_searching, flush = True)
+        # print(MatchmakingConsumer.users_searching, flush = True)
 
 
 
@@ -180,7 +180,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 winner2 = await sync_to_async(Match.get_winner)(match2_id)
 
         winner_match = [winner1.username, winner2.username]
-        print("winner_match", winner_match)
+        # print("winner_match", winner_match)
 
         asyncio.sleep(5)
         await self.channel_layer.group_send(

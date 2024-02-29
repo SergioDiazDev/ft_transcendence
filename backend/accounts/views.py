@@ -164,5 +164,5 @@ def blockFriendName(request, username):
 def getAvatar(request, username):
 	 user = Player.objects.get(username = username)
 	 user_avatar = str(user.avatar)
-	 print(user_avatar, flush = True)
+	#  print(user_avatar, flush = True)
 	 return JsonResponse({"enemy_avatar": user_avatar})
