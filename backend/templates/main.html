@@ -140,6 +140,18 @@
 		searchMatch();
 	}
 
+	// Function to generate uuid url for IA button
+	function generateIAUrl(event)
+	{
+		setTimeout(() => {
+			const $button_ia = document.getElementById("button-ia");
+			$button_ia.classList.remove("disabled");
+
+			let myuuid = crypto.randomUUID().replaceAll("-", "");
+			$button_ia.href = `/game/${myuuid}/1`;
+			
+		}, 200);
+	}
 	loadPanel("/accounts/friends_panel/");
 	// Long polling to check if the friends got updated
 	setInterval(loadPanel, 5000, "/accounts/friends_panel/");
