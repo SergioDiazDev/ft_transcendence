@@ -62,8 +62,8 @@
 	function handleArrowsNavigation(href) {
 		if (blockNavigation)
 			return ;
-		console.log("Going into arrows");
-		console.log(href);
+		// console.log("Going into arrows");
+		// console.log(href);
 		if (href === "/")
 			loadPage("/home");
 		else
@@ -120,7 +120,7 @@
  	document.addEventListener('DOMContentLoaded', handleInitialLoad);
 
 	window.addEventListener('popstate', (event) => {
-		console.log(event);
+		// console.log(event);
 		if (event.state.path)
 			handleArrowsNavigation(event.state.path);
 	});

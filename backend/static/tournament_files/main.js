@@ -2,7 +2,7 @@
 
 window.searchMatch = function()
 {
-    console.log("Starting web socket...");
+    // console.log("Starting web socket...");
     const matchSock = new WebSocket(`wss://${window.location.host}/ws/matchmaking/`);
     const button_tournament = document.querySelector("#button-tournament")
 
@@ -25,7 +25,7 @@ window.searchMatch = function()
             else
                 enemy_name = data["message"]["player1"];
             let avatar_endpoint = `${window.location.protocol}//${window.location.hostname}/accounts/profile/avatar/${enemy_name}/`;
-            console.log(avatar_endpoint);
+            // console.log(avatar_endpoint);
             fetch(avatar_endpoint)
             .then(raw_data => {
                 return raw_data.json();
@@ -241,7 +241,7 @@ window.fourPlayerTournament = function()
                     setTimeout(() => {
                         if(last_winner === false)
                         {
-                            console.log(data_object["game_key"]);
+                            // console.log(data_object["game_key"]);
                             document.querySelector("#tournament-button").innerText = "Tournament Ready";
                             document.querySelector("#tournament-button").href = `/game/${data_object["game_key"]}`;
                             window.playing_tournament = true;
@@ -256,7 +256,7 @@ window.fourPlayerTournament = function()
 
                 if(data_object["info"] === "WIN")
                 {
-                    console.log("WIN");
+                    // console.log("WIN");
                     setTimeout(() => {
                         if(last_winner === false)
                         {
@@ -270,7 +270,7 @@ window.fourPlayerTournament = function()
 
                 if(data_object["info"] === "DEFEAT")
                 {
-                    console.log("DEFEAT");
+                    // console.log("DEFEAT");
                     setTimeout(() => {
                         document.querySelector("#button-return-tournament").innerText = "Home";
                         document.querySelector("#button-return-tournament").href = `/`;
@@ -281,7 +281,7 @@ window.fourPlayerTournament = function()
 
                 if(data_object["info"] === "UPDATE_YOUR_BUTTON")
                 {
-                    console.log("WIN");
+                    // console.log("WIN");
                     setTimeout(() => {
                         document.querySelector("#button-return-tournament").innerText = "Back";
                         document.querySelector("#button-return-tournament").href = `/tournament/`;
@@ -367,5 +367,5 @@ function round_over(event)
             $tournament_button.onclick = null;
 
     }, 200);
-    console.log("Desde round_over: ", data_object);
+    // console.log("Desde round_over: ", data_object);
 }

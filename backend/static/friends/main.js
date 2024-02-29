@@ -1,5 +1,5 @@
 function friend_html(username, id) {
-	console.log(username, id);
+	// console.log(username, id);
 	return (`<section class="row">
 	<div>
 		<button onclick="make_friend('${username}')"> ${username} </button>
