@@ -1,4 +1,8 @@
 localhost {
+	handle_path /static/* {
+    	root * /static
+    	file_server
+	}
     reverse_proxy backend:8000
 }
 

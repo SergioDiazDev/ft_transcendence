@@ -64,6 +64,7 @@ services:
       - $PWD/caddy/Caddyfile:/etc/caddy/Caddyfile
       - $PWD/caddy/data:/data
       - $PWD/caddy/conf:/config
+      - $PWD/backend/static/:/static/
     restart: unless-stopped
 
 volumes:
