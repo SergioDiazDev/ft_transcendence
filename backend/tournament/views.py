@@ -7,4 +7,4 @@ def matchmaking(request):
     return render(request, "matchmaking.html", {"user": user})
 
 def tournament(request):
-    return render(request, "tournament.html")
+    return render(request, "tournament2.html")

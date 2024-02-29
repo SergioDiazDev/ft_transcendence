@@ -60,6 +60,8 @@ class Match(models.Model):
     def get_winner(cls, game_key):
         matches = cls.objects.filter(game_url=game_key)
         match = matches.last()
+        if not match:
+            return None
 
         if match.match_ended == True:
             # if winner is 1 return a 1
