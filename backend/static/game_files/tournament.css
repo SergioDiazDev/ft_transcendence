@@ -37,29 +37,31 @@
 .round1 {
     display: flex;
     flex-direction: row;
-    margin-bottom: 20px;
 }
 
 /* Estilos para la segunda ronda y la final */
 .round2 {
     display: flex;
     flex-direction: column;
-    background-color: #C3A5EC;
+    /*background-color: #C3A5EC;*/
     border-radius: 10px;
     align-items: center;
     justify-content: space-between;
-    margin: 1rem;
     overflow: hidden;
 }
 
 /* Estilos para los equipos */
-.team {
+.team1,
+.team2,
+.team3 {
     width: 10rem;
     height: 4rem;
+    margin: 1rem;
     display: flex;
     justify-content: center;
+    text-align: center;
     align-items: center;
-    font-size: larger;
+    font-size: medium;
 }
 
 .button_tournament{
