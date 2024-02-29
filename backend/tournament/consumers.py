@@ -9,6 +9,7 @@ from uuid import uuid4
 import json
 
 from game.models import Match
+from .models import Tournament
 
 class MatchmakingConsumer(AsyncWebsocketConsumer):
     users_searching = []
@@ -200,6 +201,19 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             id, {"type": "winner", "winner": winner.username }
         )
+
+        if (winner == winner1):
+            await sync_to_async(Tournament.objects.create)(
+                id=id,
+                winner=winner,
+                second=winner2
+            )
+        else:
+            await sync_to_async(Tournament.objects.create)(
+                id=id,
+                winner=winner,
+                second=winner1
+            )
 
         # clear user channels
         async with self.update_lock:

@@ -18,6 +18,7 @@ from game.models import Match
 from datetime import datetime, timedelta, timezone
 
 from django.contrib.auth.decorators import login_required
+from tournament.models import Tournament
 
 def signup(request):
 	if request.method == "POST":
@@ -76,7 +77,10 @@ def profile(request, username=None):
 	#TODO: Add pagination to the matches in the backend
 	win_rate = round(matches_won / matches.count() * 100) if matches.count() > 0 else 0
 
-	return render(request, 'profile.html', context={"user": user, "matches": matches, "matches_won": matches_won, "win_rate": win_rate})
+	tournaments_win = Tournament.objects.filter(winner=user.id).count()
+	tournaments_second = Tournament.objects.filter(second=user.id).count()
+
+	return render(request, 'profile.html', context={"user": user, "matches": matches, "matches_won": matches_won, "win_rate": win_rate, "tournaments_win": tournaments_win, "tournaments_second": tournaments_second})
 
 @login_required
 def edit_profile(request):
