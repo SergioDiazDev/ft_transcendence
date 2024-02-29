@@ -1,7 +1,7 @@
 window.join_tournament = function() {
 		document.querySelector("#tournament-button").remove();
 		document.querySelector("#tournament-display").classList.remove("hidden");
-        var tournamentSocket = new WebSocket("ws://" + window.location.host + "/ws/tournament/");
+        var tournamentSocket = new WebSocket("wss://" + window.location.host + "/ws/tournament/");
         tournamentSocket.onmessage = messageHandler;
 
         window.playing_tournament = true;

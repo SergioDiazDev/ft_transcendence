@@ -64,7 +64,7 @@ window.fourPlayerTournament = function()
     let $four_players_section = document.querySelector("#eight-players-tournament");
     let $first_column = document.querySelector("#first-col4");
     let $tournament_button = document.querySelector("#tournament-button");
-    tournament_socket = new WebSocket(`ws://${window.location.host}/ws/tournament/`);
+    tournament_socket = new WebSocket(`wss://${window.location.host}/ws/tournament/`);
 
     //Displaying tournament table
     $four_players_section.classList.remove("no-display");
